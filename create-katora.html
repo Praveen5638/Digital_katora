@@ -117,7 +117,7 @@
         <div class="create-workspace-grid">
             
             <!-- LEFT: FORM / CREATION CONTROLS -->
-            <form class="create-form-panel" id="katoraCreationForm" onsubmit="submitKatora(event)">
+            <form class="create-form-panel" id="katoraCreationForm" novalidate onsubmit="submitKatora(event)">
                 
                 <!-- 5. PHOTO UPLOAD SECTION -->
                 <section class="create-form-section" aria-label="Photo Upload">
@@ -185,7 +185,7 @@
                         <label class="create-input-label" for="createNameInput">
                             <span>आपका नाम / उपनाम (Nickname) <span style="color: var(--coral-light);">*</span></span>
                         </label>
-                        <input type="text" id="createNameInput" class="create-text-input" placeholder="जैसे: राहुल शर्मा / Chai Lover" required>
+                        <input type="text" id="createNameInput" class="create-text-input" placeholder="जैसे: राहुल शर्मा / Chai Lover">
                     </div>
 
                     <div class="create-input-group" style="margin-bottom: 0;">
@@ -214,7 +214,7 @@
                             <span>मुख्य कारण / हेडलाइन (Headline) <span style="color: var(--coral-light);">*</span></span>
                             <span style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);" id="reasonCharCount">0 / 120</span>
                         </label>
-                        <textarea id="createReasonInput" class="create-textarea-input" style="height: 75px;" placeholder="जैसे: Sharma ji ke tapri par udhaar ho gaya hai, dukan ke aage se nikal nahi pa raha!" maxlength="120" required></textarea>
+                        <textarea id="createReasonInput" class="create-textarea-input" style="height: 75px;" placeholder="जैसे: Sharma ji ke tapri par udhaar ho gaya hai, dukan ke aage se nikal nahi pa raha!" maxlength="120"></textarea>
                     </div>
 
                     <div class="create-input-group" style="margin-bottom: 0;">
@@ -222,7 +222,7 @@
                             <span>विस्तृत कहानी (Short Personal Story) <span style="color: var(--coral-light);">*</span></span>
                             <span style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);" id="storyCharCount">0 / 350</span>
                         </label>
-                        <textarea id="createStoryInput" class="create-textarea-input" placeholder="दोस्तों को बताएं कि आप कितने लाचार हैं और ये पैसे आपको कैसे बचाएंगे..." maxlength="350" required></textarea>
+                        <textarea id="createStoryInput" class="create-textarea-input" placeholder="दोस्तों को बताएं कि आप कितने लाचार हैं और ये पैसे आपको कैसे बचाएंगे..." maxlength="350"></textarea>
                     </div>
 
                     <!-- Reactive Character Mood Helper -->
@@ -299,7 +299,7 @@
                             <label class="create-input-label" for="createUpiInput">
                                 <span>आपकी UPI ID <span style="color: var(--coral-light);">*</span></span>
                             </label>
-                            <input type="text" id="createUpiInput" class="create-text-input" placeholder="उदा: yourname@okhdfcbank / yourname@paytm" required>
+                            <input type="text" id="createUpiInput" class="create-text-input" placeholder="उदा: yourname@okhdfcbank / yourname@paytm">
                             <div id="upiValidationIndicator" style="margin-top: 0.4rem; font-size: 0.85rem;"></div>
                         </div>
                     </div>
@@ -377,7 +377,7 @@
                     </div>
 
                     <!-- 15. SUBMISSION CTA BUTTON -->
-                    <button type="submit" id="submitKatoraBtn" class="btn btn-primary-gradient btn-lg btn-glow-pulse" style="width: 100%; font-size: 1.2rem; padding: 1.1rem;">
+                    <button type="button" id="submitKatoraBtn" onclick="submitKatora(event)" class="btn btn-primary-gradient btn-lg btn-glow-pulse" style="width: 100%; font-size: 1.2rem; padding: 1.1rem; cursor: pointer;">
                         <span>🥣</span> Katora Jama Karo &rarr;
                     </button>
                     <div style="font-size: 0.78rem; color: var(--text-muted); text-align: center; margin-top: 0.75rem;">

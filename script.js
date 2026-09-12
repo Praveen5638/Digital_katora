@@ -3018,38 +3018,61 @@ function updateStepperProgress() {
   if (sGoal) sGoal.className = `stepper-node ${createFormData.targetAmount > 0 ? 'completed' : ''}`;
   if (sPayment) sPayment.className = `stepper-node ${createFormData.upiId ? 'completed' : ''}`;
   
-  const allReady = createFormData.name && createFormData.reason && createFormData.upiId;
+  const allReady = createFormData.name && createFormData.reason && (createFormData.upiId || createFormData.customQr);
   if (sReview) sReview.className = `stepper-node ${allReady ? 'active' : ''}`;
 }
+
+// Live Preview CTA Click Handler
+window.handlePreviewCtaClick = function() {
+  playCoinChime();
+  launchConfetti(0.5, 0.45, 60);
+  showToast('🪙 TING! Yeh live preview test hai. Katora jama karne ke baad doston ko direct UPI payment button milega! 😂🥣');
+  const img = document.getElementById('prevMediaImg');
+  if (img) {
+    img.style.transition = 'transform 0.3s ease';
+    img.style.transform = 'scale(1.08) rotate(3deg)';
+    setTimeout(() => { img.style.transform = ''; }, 350);
+  }
+};
 
 // Submit Form Handler
 let isSubmittingKatora = false;
 
-function submitKatora(event) {
-  if (event) event.preventDefault();
+window.submitKatora = function(event) {
+  if (event) {
+    if (typeof event.preventDefault === 'function') event.preventDefault();
+    if (typeof event.stopPropagation === 'function') event.stopPropagation();
+  }
   if (isSubmittingKatora) return;
 
   const nameVal = (document.getElementById('createNameInput')?.value || createFormData.name || '').trim();
   const reasonVal = (document.getElementById('createReasonInput')?.value || createFormData.reason || '').trim();
   const storyVal = (document.getElementById('createStoryInput')?.value || createFormData.story || reasonVal || '').trim();
   const goalVal = parseInt(document.getElementById('createGoalInput')?.value) || createFormData.targetAmount || 1000;
-  const upiVal = (document.getElementById('createUpiInput')?.value || createFormData.upiId || '').trim();
+  let upiVal = (document.getElementById('createUpiInput')?.value || createFormData.upiId || '').trim();
   const categoryVal = document.getElementById('createCategorySelect')?.value || createFormData.category || 'chai';
 
   if (!nameVal) {
     showToast('कृपया अपना नाम या उपनाम डालें!', 'error');
-    document.getElementById('createNameInput')?.focus();
+    const el = document.getElementById('createNameInput');
+    if (el) { el.focus(); el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
     return;
   }
   if (!reasonVal) {
     showToast('कृपया पैसे क्यों चाहिए उसका कारण लिखें!', 'error');
-    document.getElementById('createReasonInput')?.focus();
+    const el = document.getElementById('createReasonInput');
+    if (el) { el.focus(); el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
     return;
   }
-  if (!upiVal) {
+  if (!upiVal && !createFormData.customQr) {
     showToast('कृपया अपनी UPI ID दर्ज करें ताकि दान सीधा आपको मिले!', 'error');
-    document.getElementById('createUpiInput')?.focus();
+    const el = document.getElementById('createUpiInput');
+    if (el) { el.focus(); el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
     return;
+  }
+
+  if (!upiVal && createFormData.customQr) {
+    upiVal = 'katora.qr@upi';
   }
 
   isSubmittingKatora = true;
@@ -3059,7 +3082,7 @@ function submitKatora(event) {
     submitBtn.innerHTML = '<span>⏳</span> कटोरा प्रोसेस हो रहा है...';
   }
 
-  // 1. Save to Persistent LocalStorage DataStore
+  // 1. Save to Persistent LocalStorage & Sync to Supabase Cloud
   const newKatora = window.dataStore ? window.dataStore.createKatora({
     title: reasonVal,
     tagline: reasonVal,
@@ -3089,12 +3112,16 @@ function submitKatora(event) {
     succLink.href = `katora-detail.html?id=${newKatora.id}`;
   }
   if (succShareBtn && newKatora) {
-    succShareBtn.onclick = () => openShareKatoraModal(newKatora.id);
+    succShareBtn.onclick = () => {
+      if (window.openShareKatoraModal) {
+        window.openShareKatoraModal(newKatora.id);
+      }
+    };
   }
 
   if (modal) modal.classList.add('active');
 
-  // 4. Redirect after short celebration animation (with created=1 param to trigger auto-celebration & share sheet)
+  // 4. Redirect after short celebration animation if user doesn't click share
   setTimeout(() => {
     isSubmittingKatora = false;
     if (submitBtn) {
@@ -3106,8 +3133,8 @@ function submitKatora(event) {
     } else {
       window.location.href = 'katoras.html';
     }
-  }, 1800);
-}
+  }, 2200);
+};
 
 
 // ═════════════════════════════════════════════════════════════════════
