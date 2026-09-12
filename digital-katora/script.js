@@ -414,56 +414,74 @@ window.handleQrImageUpload = function(event) {
 
 // 8. Helper: Generate Gareeb Ka Katora Card HTML
 function createGareebCardHTML(k) {
-  const pct = Math.min(100, Math.round((k.currentAmount / k.targetAmount) * 100));
+  const current = k.currentAmount || 0;
+  const target = k.targetAmount || 1000;
+  const pct = Math.min(100, Math.round((current / target) * 100));
   const tapeTexts = ['🩹 100% असली गरीब', '🪡 फटा हुआ जेब', '📉 खाली वॉलेट', '☕ चाय की कमी', '🍕 भूखी आत्मा'];
   const tapeText = tapeTexts[Math.abs(k.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0)) % tapeTexts.length];
   
-  return `
-    <div class="katora-card">
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <span class="katora-cat-pill">${k.categoryName || 'मीम और देसी'}</span>
-        <span class="garib-pill-badge">${tapeText}</span>
-      </div>
+  const avatarContent = k.image ? 
+    `<img src="${k.image}" alt="${k.creator}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">` : 
+    `<span style="font-size: 1.6rem;">${k.avatar || '🥣'}</span>`;
 
-      <div style="display: flex; align-items: center; gap: 0.75rem;">
-        <div class="avatar-ring-garib" title="Aluminium Steel Katora">
-          <div class="avatar-inner-garib">
-            ${k.image ? `<img src="${k.image}" alt="${k.creator}">` : (k.avatar || '🥣')}
+  return `
+    <div class="katora-card bhikhari-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+          <span class="katora-cat-pill">${k.categoryName || 'मीम और देसी'}</span>
+          <span class="garib-pill-badge bhikhari-tape-tag">${tapeText}</span>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.85rem;">
+          <div class="avatar-ring-garib" title="${k.creator}">
+            <div class="avatar-inner-garib">
+              ${avatarContent}
+            </div>
+          </div>
+          <div style="flex: 1; min-width: 0;">
+            <h4 class="katora-creator-name" style="margin: 0; font-size: 1.05rem;">
+              <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: inline-block; max-width: 150px;">${k.creator}</span>
+              <span style="color: var(--green); font-size: 0.85rem;" title="Verified Beggar">✓</span>
+            </h4>
+            <span style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);">UPI: ${k.upiId}</span>
           </div>
         </div>
-        <div style="flex: 1; min-width: 0;">
-          <h4 class="katora-creator-name">
-            <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${k.creator}</span>
-            <span style="color: var(--green); font-size: 0.82rem;" title="Verified Beggar">✓</span>
-          </h4>
-          <span style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);">लक्ष्य: ₹${k.targetAmount.toLocaleString('en-IN')}</span>
-        </div>
+
+        <h3 class="katora-headline" style="font-size: 1.1rem; margin-bottom: 0.4rem; line-height: 1.3;">${k.title}</h3>
+        <p class="katora-story-snippet" style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem; line-height: 1.4;">"${k.tagline || k.story}"</p>
       </div>
 
-      <h3 class="katora-headline">${k.title}</h3>
-      <p class="katora-story-snippet">"${k.tagline || k.story}"</p>
+      <div>
+        <div class="garib-progress-wrap" style="margin-bottom: 1rem;">
+          <div class="garib-progress-labels" style="font-size: 0.8rem; margin-bottom: 0.35rem;">
+            <span class="garib-raised-val" style="font-weight: 700;">₹${current.toLocaleString('en-IN')} <small style="font-weight: 500; font-size: 0.75rem; color: var(--text-muted);">/ ₹${target.toLocaleString('en-IN')}</small></span>
+            <span class="garib-goal-val" style="font-weight: 800; color: ${pct >= 100 ? 'var(--green-light)' : 'var(--gold-light)'};">${pct}% भरा 🥣</span>
+          </div>
+          <div class="garib-meter-track" style="height: 7px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden;">
+            <div class="garib-meter-fill" style="width: ${pct}%; height: 100%; background: ${pct >= 100 ? 'var(--green-gradient)' : 'var(--gold-gradient)'}; border-radius: 4px;"></div>
+          </div>
+          <div class="garib-status-pill" style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-top: 0.4rem; color: var(--text-muted);">
+            <span>👥 ${k.donations ? k.donations.length : 0} दयालु दानी</span>
+            <span>${pct >= 100 ? '🎉 पूरा हुआ' : `⚡ ₹${Math.max(0, target - current).toLocaleString('en-IN')} बाकी`}</span>
+          </div>
+        </div>
 
-      <div class="garib-progress-wrap">
-        <div class="garib-progress-labels">
-          <span class="garib-raised-val">₹${k.currentAmount.toLocaleString('en-IN')} <small style="font-weight: 500; font-size: 0.75rem; color: var(--text-muted);">इकट्ठा हुआ</small></span>
-          <span class="garib-goal-val">${pct}%</span>
+        <div class="quick-chanda-chips" style="display: flex; gap: 0.4rem; align-items: center; margin-bottom: 0.85rem; flex-wrap: wrap;">
+          <span class="chanda-chip-label" style="font-size: 0.75rem; color: var(--text-muted);">🪙 शगुन:</span>
+          <button class="chanda-chip-btn" onclick="openDonationModal('${k.creator.replace(/'/g, "\\'")}', '${k.id}', 10)">₹10</button>
+          <button class="chanda-chip-btn" onclick="openDonationModal('${k.creator.replace(/'/g, "\\'")}', '${k.id}', 21)">₹21</button>
+          <button class="chanda-chip-btn" onclick="openDonationModal('${k.creator.replace(/'/g, "\\'")}', '${k.id}', 51)">₹51</button>
+          <button class="chanda-chip-btn" onclick="openDonationModal('${k.creator.replace(/'/g, "\\'")}', '${k.id}', 101)">₹101</button>
         </div>
-        <div class="garib-meter-track">
-          <div class="garib-meter-fill" style="width: ${pct}%;"></div>
-        </div>
-        <div class="garib-status-pill">
-          <span>👥 ${k.donations ? k.donations.length : 0} दानवीर</span>
-          <span>${pct >= 100 ? '🎉 लक्ष्य पूरा' : pct > 75 ? '⚡ पूरा होने वाला है' : '🚨 भारी जरूरत'}</span>
-        </div>
-      </div>
 
-      <div style="display: flex; gap: 0.5rem; margin-top: auto; padding-top: 0.25rem;">
-        <a href="katora-detail.html?id=${k.id}" class="btn btn-glass" style="flex: 1; padding: 0.55rem 0.6rem; font-size: 0.84rem; min-height: 38px;">
-          कटोरा देखें 🥣
-        </a>
-        <button class="btn btn-paisa-green" style="flex: 1.3; padding: 0.55rem 0.6rem; font-size: 0.86rem; min-height: 38px;" onclick="openDonationModal('${k.creator.replace(/'/g, "\\'")}', '${k.id}', 51)">
-          <span>🪙</span> डालें ₹51
-        </button>
+        <div style="display: flex; gap: 0.5rem;">
+          <a href="katora-detail.html?id=${k.id}" class="btn btn-glass" style="flex: 1; padding: 0.6rem 0.5rem; font-size: 0.82rem; min-height: 38px; text-align: center;">
+            कटोरा देखें 🥣
+          </a>
+          <button class="btn btn-paisa-green" style="flex: 1.3; padding: 0.6rem 0.6rem; font-size: 0.85rem; min-height: 38px;" onclick="openDonationModal('${k.creator.replace(/'/g, "\\'")}', '${k.id}', 51)">
+            <span>🪙</span> डालें ₹51
+          </button>
+        </div>
       </div>
     </div>
   `;
@@ -485,15 +503,28 @@ function renderIndexPage() {
     if (colEl) colEl.textContent = `₹${stats.totalCollected.toLocaleString('en-IN')}`;
     if (donEl) donEl.textContent = `${stats.totalDonors.toLocaleString('en-IN')}+`;
     if (actEl) actEl.textContent = `${stats.activeKatoras.toLocaleString('en-IN')}+`;
-    if (hapEl) hapEl.textContent = `28,120+`;
+    if (hapEl) hapEl.textContent = stats.activeKatoras > 0 ? `${(stats.totalDonors * 3).toLocaleString('en-IN')}+` : '0';
   }
 
   // Render Trending Katoras Cards if present
-  const trendingGrid = document.querySelector('.trending-katoras-grid') || document.querySelector('.katora-grid');
-  if (trendingGrid && (window.location.pathname.includes('index.html') || window.location.pathname.endsWith('/') || window.location.pathname === '')) {
-    const trending = window.dataStore?.getKatoras({ sort: 'trending' }).slice(0, 3) || [];
+  const trendingGrid = document.getElementById('indexKatorasGrid') || document.querySelector('.trending-katoras-grid') || document.querySelector('.katora-grid');
+  if (trendingGrid) {
+    const trending = window.dataStore?.getKatoras({ sort: 'trending' }) || [];
     if (trending.length > 0) {
       trendingGrid.innerHTML = trending.map(k => createGareebCardHTML(k)).join('');
+    } else {
+      trendingGrid.innerHTML = `
+        <div class="empty-katora-state" style="grid-column: 1 / -1; text-align: center; padding: 3.5rem 1.5rem; background: var(--bg-surface); border-radius: var(--radius-lg); border: 2px dashed rgba(108, 92, 231, 0.35); box-shadow: var(--shadow-card);">
+          <div style="font-size: 3.8rem; margin-bottom: 0.75rem; animation: floatMascot 3s infinite ease-in-out;">🥣 ✨</div>
+          <h3 style="font-size: 1.6rem; margin-bottom: 0.5rem; color: var(--text-primary);">Abhi Koi Katora Nahi Bana Hai!</h3>
+          <p style="color: var(--text-secondary); max-width: 500px; margin: 0 auto 1.75rem; font-size: 1rem; line-height: 1.6;">
+            Sabse pehle apna digital katora banayein aur dosto ke sath share karke seedha UPI chanda paayein! 😂
+          </p>
+          <a href="create-katora.html" class="btn btn-primary-gradient btn-lg btn-glow-pulse" style="font-size: 1.05rem; padding: 0.85rem 2.2rem; display: inline-flex; align-items: center; gap: 0.5rem;">
+            <span>🥣</span> Apna Katora Banao (30s) &rarr;
+          </a>
+        </div>
+      `;
     }
   }
 
@@ -727,9 +758,13 @@ function renderFeaturedKatora() {
 
   const katoras = window.dataStore.getKatoras({ sort: 'trending' });
   const featured = katoras.find(k => k.featured) || katoras[0];
-  if (!featured) return;
+  if (!featured) {
+    featuredBox.style.display = 'none';
+    return;
+  }
+  featuredBox.style.display = 'block';
 
-  const pct = Math.min(100, Math.round((featured.currentAmount / featured.targetAmount) * 100));
+  const pct = Math.min(100, Math.round(((featured.currentAmount || 0) / (featured.targetAmount || 1)) * 100));
 
   featuredBox.innerHTML = `
     <div class="featured-katora-banner">
@@ -768,8 +803,8 @@ function renderFeaturedKatora() {
           <div class="garib-progress-wrap" style="max-width: 480px; margin: 0.5rem 0;">
             <div class="garib-progress-labels">
               <span class="garib-raised-val" style="font-size: 1.15rem;">
-                ₹${featured.currentAmount.toLocaleString('en-IN')} 
-                <small style="font-weight: 500; font-size: 0.82rem; color: var(--text-muted);">/ ₹${featured.targetAmount.toLocaleString('en-IN')} इकट्ठा हुआ</small>
+                ₹${(featured.currentAmount || 0).toLocaleString('en-IN')} 
+                <small style="font-weight: 500; font-size: 0.82rem; color: var(--text-muted);">/ ₹${(featured.targetAmount || 1000).toLocaleString('en-IN')} इकट्ठा हुआ</small>
               </span>
               <span class="garib-goal-val" style="font-size: 0.95rem; font-weight: 800; color: var(--gold-light);">${pct}%</span>
             </div>
@@ -777,8 +812,8 @@ function renderFeaturedKatora() {
               <div class="garib-meter-fill" style="width: ${pct}%;"></div>
             </div>
             <div class="garib-status-pill">
-              <span>👥 ${featured.donations ? featured.donations.length : 87} Donors</span>
-              <span>⚡ पूरा होने वाला है</span>
+              <span>👥 ${featured.donations ? featured.donations.length : 0} Donors</span>
+              <span>⚡ ${pct >= 100 ? 'पूरा हुआ' : 'मदद चालू है'}</span>
             </div>
           </div>
 
@@ -799,13 +834,20 @@ function renderFeaturedKatora() {
 
 function renderRecentlyHelped() {
   const track = document.getElementById('recentlyHelpedTrack');
+  const section = document.querySelector('.recently-helped-section');
   if (!track || !window.dataStore) return;
 
   const katoras = window.dataStore.getKatoras();
-  const helped = katoras.slice(0, 6);
+  const helped = katoras.filter(k => k.donations && k.donations.length > 0).slice(0, 6);
+
+  if (helped.length === 0) {
+    if (section) section.style.display = 'none';
+    return;
+  }
+  if (section) section.style.display = 'block';
 
   track.innerHTML = helped.map(k => {
-    const recentDonation = k.donations && k.donations.length > 0 ? k.donations[k.donations.length - 1] : { amount: 51, donorName: 'Anonymous' };
+    const recentDonation = k.donations[k.donations.length - 1] || { amount: 51, donorName: 'Anonymous' };
     return `
       <div class="recently-helped-card" onclick="openDonationModal('${k.creator.replace(/'/g, "\\'")}', '${k.id}', 1)" style="cursor: pointer;">
         <div class="avatar-ring-garib" style="width: 44px; height: 44px; flex-shrink: 0;">
@@ -1151,21 +1193,32 @@ function renderProfilePage() {
   const user = window.dataStore.getUserProfile();
   const katoras = window.dataStore.getKatoras();
 
-  const userKatoras = katoras.filter(k => k.creator.toLowerCase().includes(user.name.toLowerCase()) || k.id === 'katora-chai-fund');
+  const userKatoras = katoras.filter(k => k.creator.toLowerCase().includes(user.name.toLowerCase()) || k.creator.toLowerCase() === 'aapka naam');
 
   // Stats Counters
   const balanceEl = document.getElementById('profile-balance');
-  if (balanceEl) balanceEl.textContent = `₹${(user.totalReceived || 4250).toLocaleString('en-IN')}`;
+  if (balanceEl) balanceEl.textContent = `₹${(user.totalReceived || 0).toLocaleString('en-IN')}`;
 
   const withdrawBtn = document.getElementById('withdraw-funds-btn');
   if (withdrawBtn) {
-    withdrawBtn.onclick = () => window.withdrawFunds(user.totalReceived || 4250);
+    withdrawBtn.onclick = () => window.withdrawFunds(user.totalReceived || 0);
   }
 
   // User Katoras Grid
   const grid = document.querySelector('.profile-katoras-grid') || document.querySelector('.katora-grid');
   if (grid && window.location.pathname.includes('profile.html')) {
-    grid.innerHTML = userKatoras.map(k => createGareebCardHTML(k)).join('');
+    if (userKatoras.length > 0) {
+      grid.innerHTML = userKatoras.map(k => createGareebCardHTML(k)).join('');
+    } else {
+      grid.innerHTML = `
+        <div style="grid-column: 1 / -1; text-align: center; padding: 3rem 1.5rem; background: var(--bg-surface); border-radius: var(--radius-lg); border: 1.5px dashed var(--border-glow);">
+          <div style="font-size: 3rem; margin-bottom: 0.5rem;">🥣</div>
+          <h4 style="margin-bottom: 0.5rem; font-size: 1.2rem;">Aapne abhi tak koi katora nahi banaya hai</h4>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.25rem;">Apna katora banayein aur seedha UPI par chanda paayein!</p>
+          <a href="create-katora.html" class="btn btn-primary-gradient"><span>🥣</span> Apna Katora Banao</a>
+        </div>
+      `;
+    }
   }
 }
 
@@ -1457,10 +1510,29 @@ function renderKatoraDetailPage() {
   if (!profileHero) return; // Not on katora-detail.html
 
   const params = new URLSearchParams(window.location.search);
-  const katoraId = params.get('id') || 'katora-chai-fund';
+  const katoraId = params.get('id');
 
   if (!window.dataStore) return;
-  const katora = window.dataStore.getKatoraById(katoraId) || window.dataStore.getKatoras()[0];
+  const katora = katoraId ? window.dataStore.getKatoraById(katoraId) : window.dataStore.getKatoras()[0];
+  
+  if (!katora) {
+    if (profileHero) {
+      profileHero.innerHTML = `
+        <div style="grid-column: 1 / -1; text-align: center; padding: 4rem 1.5rem; background: var(--bg-surface); border-radius: var(--radius-lg); border: 1.5px dashed var(--border-glow);">
+          <div style="font-size: 4rem; margin-bottom: 1rem; animation: floatMascot 3s infinite ease-in-out;">🥣 💨</div>
+          <h2 style="font-size: 1.8rem; margin-bottom: 0.75rem; color: var(--text-primary);">Yeh Katora Abhi Maujood Nahi Hai!</h2>
+          <p style="color: var(--text-secondary); max-width: 480px; margin: 0 auto 2rem; font-size: 1rem; line-height: 1.6;">
+            Aap apna naya katora bana sakte hain ya home page par jaa kar doosre broke dosto ki madad kar sakte hain. 😂
+          </p>
+          <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+            <a href="index.html" class="btn btn-glass btn-lg"><span>🏠</span> Home Par Jayein</a>
+            <a href="create-katora.html" class="btn btn-primary-gradient btn-lg btn-glow-pulse"><span>🥣</span> Apna Katora Banao</a>
+          </div>
+        </div>
+      `;
+    }
+    return;
+  }
   currentDetailKatora = katora;
   currentModalKatoraId = katora.id;
 
