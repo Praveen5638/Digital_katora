@@ -116,6 +116,11 @@ const BASE_VERIFIED_DONORS = [
   }
 ];
 
+const SUPABASE_CONFIG = {
+  url: 'https://rlwhlnkpvjyevjtrvmmc.supabase.co',
+  key: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsd2hsbmtwdmp5ZXZqdHJ2bW1jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkyMTMwMzUsImV4cCI6MjEwNDc4OTAzNX0.aIu5_nrA5MCZnv5A2uazi5YEcJ2O26k_EAnJi3bJnoI'
+};
+
 class DataStore {
   constructor() {
     this.storageKey = 'dk_katoras_data_v4';
@@ -155,6 +160,9 @@ class DataStore {
       localStorage.setItem(this.userKey, JSON.stringify(SEED_USER));
     }
     this.recomputeGlobalStats();
+
+    // Asynchronously synchronize with Supabase Cloud Database
+    this.syncFromSupabase();
   }
 
   getKatoras({ category = 'all', search = '', sort = 'trending' } = {}) {
@@ -264,6 +272,10 @@ class DataStore {
 
     this.recomputeGlobalStats();
     window.dispatchEvent(new CustomEvent('dk_data_updated', { detail: { action: 'create', katora: newKatora } }));
+    
+    // Cloud sync to Supabase
+    this.postKatoraToSupabase(newKatora);
+
     return newKatora;
   }
 
@@ -291,6 +303,10 @@ class DataStore {
     this.saveUserProfile(user);
 
     window.dispatchEvent(new CustomEvent('dk_cheer_added', { detail: { katoraId, cheer, katora } }));
+    
+    // Cloud sync to Supabase donations
+    this.postDonationToSupabase(katoraId, { donorName: cheer.donorName, amount: 0, message: cheer.message, utr: null });
+
     return { katora, cheer };
   }
 
@@ -327,6 +343,16 @@ class DataStore {
 
     this.recomputeGlobalStats();
     window.dispatchEvent(new CustomEvent('dk_donation_added', { detail: { katoraId, donation: verifiedDonation, katora } }));
+    
+    // Cloud sync to Supabase donations and update katora amount
+    this.postDonationToSupabase(katoraId, {
+      donorName: verifiedDonation.donorName,
+      amount: verifiedDonation.amount,
+      message: verifiedDonation.message,
+      utr: 'VERIFIED'
+    });
+    this.patchKatoraAmountToSupabase(katoraId, katora.currentAmount);
+
     return { katora, donation: verifiedDonation };
   }
 
@@ -336,6 +362,9 @@ class DataStore {
     localStorage.setItem(this.storageKey, JSON.stringify(katoras));
     this.recomputeGlobalStats();
     window.dispatchEvent(new CustomEvent('dk_data_updated', { detail: { action: 'delete', id } }));
+    
+    // Cloud delete from Supabase
+    this.deleteKatoraFromSupabase(id);
   }
 
   toggleFeatured(id) {
@@ -346,6 +375,177 @@ class DataStore {
       localStorage.setItem(this.storageKey, JSON.stringify(katoras));
       this.recomputeGlobalStats();
       window.dispatchEvent(new CustomEvent('dk_data_updated', { detail: { action: 'toggleFeatured', id } }));
+    }
+  }
+
+  // ==================== SUPABASE CLOUD SYNC ENGINE ====================
+  async syncFromSupabase() {
+    try {
+      const [kRes, dRes] = await Promise.all([
+        fetch(`${SUPABASE_CONFIG.url}/rest/v1/katoras?select=*&order=created_at.desc`, {
+          headers: {
+            'apikey': SUPABASE_CONFIG.key,
+            'Authorization': 'Bearer ' + SUPABASE_CONFIG.key
+          }
+        }),
+        fetch(`${SUPABASE_CONFIG.url}/rest/v1/donations?select=*&order=created_at.desc`, {
+          headers: {
+            'apikey': SUPABASE_CONFIG.key,
+            'Authorization': 'Bearer ' + SUPABASE_CONFIG.key
+          }
+        })
+      ]);
+
+      if (!kRes.ok) return;
+      const cloudKatoras = await kRes.json();
+      const cloudDonations = dRes.ok ? await dRes.json() : [];
+
+      if (Array.isArray(cloudKatoras) && cloudKatoras.length > 0) {
+        const donationMap = {};
+        if (Array.isArray(cloudDonations)) {
+          cloudDonations.forEach(d => {
+            if (d.katora_id) {
+              if (!donationMap[d.katora_id]) donationMap[d.katora_id] = [];
+              donationMap[d.katora_id].push({
+                id: d.id,
+                donorName: d.donor_name || 'Generous Friend',
+                amount: d.amount || 0,
+                message: d.message || '',
+                timestamp: d.created_at,
+                utr: d.utr
+              });
+            }
+          });
+        }
+
+        const mappedKatoras = cloudKatoras.map(ck => ({
+          id: ck.id,
+          title: ck.title || 'Digital Katora',
+          tagline: ck.tagline || '',
+          creator: ck.creator || 'User',
+          avatar: '🥣',
+          image: ck.image || 'mascot-beggar-3d.jpg',
+          category: ck.category || 'chai',
+          categoryName: ck.category_name || 'Chai & Food',
+          targetAmount: Number(ck.target_amount) || 1000,
+          currentAmount: Number(ck.current_amount) || 0,
+          upiId: ck.upi_id || 'katora@upi',
+          urgent: Boolean(ck.urgent),
+          featured: true,
+          verified: Boolean(ck.verified),
+          status: ck.status || 'active',
+          createdAt: ck.created_at || new Date().toISOString(),
+          story: ck.story || '',
+          customQr: ck.custom_qr || null,
+          socialCheers: (donationMap[ck.id] || []).filter(d => (d.amount || 0) === 0 || !d.utr),
+          verifiedDonations: (donationMap[ck.id] || []).filter(d => (d.amount || 0) > 0 && d.utr).map(d => ({
+            ...d,
+            status: 'verified'
+          }))
+        }));
+
+        const localKatoras = this.getKatoras();
+        const cloudIds = new Set(mappedKatoras.map(k => k.id));
+        const localOnly = localKatoras.filter(k => k && k.id && !cloudIds.has(k.id));
+        
+        // Sync any local offline katoras to cloud
+        localOnly.forEach(lk => this.postKatoraToSupabase(lk));
+
+        const merged = [...mappedKatoras, ...localOnly];
+        localStorage.setItem(this.storageKey, JSON.stringify(merged));
+        this.recomputeGlobalStats();
+        window.dispatchEvent(new CustomEvent('dk_data_updated', { detail: { source: 'supabase_sync', count: merged.length } }));
+      }
+    } catch (e) {
+      console.warn('Supabase sync info (operating with local storage):', e);
+    }
+  }
+
+  async postKatoraToSupabase(k) {
+    try {
+      const payload = {
+        id: k.id,
+        creator: k.creator || 'Aapka Naam',
+        title: k.title || 'Digital Katora',
+        tagline: k.tagline || '',
+        story: k.story || '',
+        category: k.category || 'chai',
+        category_name: k.categoryName || 'Chai & Food',
+        target_amount: k.targetAmount || 1000,
+        current_amount: k.currentAmount || 0,
+        upi_id: k.upiId || 'katora@upi',
+        image: k.image || 'mascot-beggar-3d.jpg',
+        status: k.status || 'active',
+        urgent: Boolean(k.urgent),
+        verified: Boolean(k.verified)
+      };
+
+      await fetch(`${SUPABASE_CONFIG.url}/rest/v1/katoras`, {
+        method: 'POST',
+        headers: {
+          'apikey': SUPABASE_CONFIG.key,
+          'Authorization': 'Bearer ' + SUPABASE_CONFIG.key,
+          'Content-Type': 'application/json',
+          'Prefer': 'resolution=merge-duplicates'
+        },
+        body: JSON.stringify(payload)
+      });
+    } catch (e) {
+      console.warn('Could not push katora to Supabase:', e);
+    }
+  }
+
+  async postDonationToSupabase(katoraId, donation) {
+    try {
+      const payload = {
+        katora_id: katoraId,
+        donor_name: donation.donorName || 'Generous Friend',
+        amount: donation.amount || 0,
+        message: donation.message || '',
+        utr: donation.utr || null
+      };
+
+      await fetch(`${SUPABASE_CONFIG.url}/rest/v1/donations`, {
+        method: 'POST',
+        headers: {
+          'apikey': SUPABASE_CONFIG.key,
+          'Authorization': 'Bearer ' + SUPABASE_CONFIG.key,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+    } catch (e) {
+      console.warn('Could not push donation to Supabase:', e);
+    }
+  }
+
+  async patchKatoraAmountToSupabase(katoraId, newAmount) {
+    try {
+      await fetch(`${SUPABASE_CONFIG.url}/rest/v1/katoras?id=eq.${katoraId}`, {
+        method: 'PATCH',
+        headers: {
+          'apikey': SUPABASE_CONFIG.key,
+          'Authorization': 'Bearer ' + SUPABASE_CONFIG.key,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ current_amount: newAmount })
+      });
+    } catch (e) {
+      console.warn('Could not update katora amount in Supabase:', e);
+    }
+  }
+
+  async deleteKatoraFromSupabase(id) {
+    try {
+      await fetch(`${SUPABASE_CONFIG.url}/rest/v1/katoras?id=eq.${id}`, {
+        method: 'DELETE',
+        headers: {
+          'apikey': SUPABASE_CONFIG.key,
+          'Authorization': 'Bearer ' + SUPABASE_CONFIG.key
+        }
+      });
+    } catch (e) {
+      console.warn('Could not delete katora from Supabase:', e);
     }
   }
 
