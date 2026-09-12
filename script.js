@@ -1101,40 +1101,7 @@ function renderKatoraDetailPage() {
   });
 }
 
-// D. CREATE-KATORA.HTML
-function submitKatora(event) {
-  if (event) event.preventDefault();
-
-  const name = document.getElementById('creatorNameInput')?.value?.trim() || 'Desi Beggar';
-  const reason = document.getElementById('creatorReasonInput')?.value?.trim() || 'Chai ke paise do!';
-  const target = parseInt(document.getElementById('targetAmountInput')?.value) || 1000;
-  const upi = document.getElementById('upiIdInput')?.value?.trim() || 'merekatora@upi';
-  const avatar = document.getElementById('avatarEmojiInput')?.value?.trim() || '🥣';
-
-  if (!reason || !upi) {
-    showToast('Kripya reason aur UPI ID bharo!', 'error');
-    return;
-  }
-
-  const newKatora = window.dataStore.createKatora({
-    title: reason.length > 50 ? reason.substring(0, 50) + '...' : reason,
-    story: reason,
-    creator: name,
-    targetAmount: target,
-    upiId: upi,
-    category: 'chai',
-    avatar: avatar,
-    customQr: uploadedQrDataUrl // Stores uploaded QR code dataURL
-  });
-
-  playCoinChime();
-  launchConfetti(0.5, 0.4, 80);
-  showToast('🎉 Katora successfully created! Redirecting to your bowl...');
-
-  setTimeout(() => {
-    window.location.href = `katora-detail.html?id=${newKatora.id}`;
-  }, 1200);
-}
+// D. CREATE-KATORA.HTML (Handled by section 18 below)
 
 // E. LEADERBOARD.HTML (Handled by section 17 below)
 
@@ -2226,7 +2193,7 @@ let createFormData = {
 let qrCameraStream = null;
 
 function initCreateKatoraPage() {
-  const formWrap = document.getElementById('createKatoraFormWrap');
+  const formWrap = document.getElementById('createKatoraFormWrap') || document.getElementById('katoraCreationForm') || document.getElementById('createNameInput');
   if (!formWrap) return; // Not on create-katora.html
 
   // 1. Text & Numeric Input Listeners
@@ -2311,6 +2278,12 @@ function initCreateKatoraPage() {
 
   // Setup Photo Drag & Drop
   setupPhotoDropzone();
+
+  // Attach explicit submit listener on form if present
+  const formElem = document.getElementById('katoraCreationForm');
+  if (formElem) {
+    formElem.onsubmit = submitKatora;
+  }
 
   // Initial Render
   updateLivePreview();
@@ -2595,17 +2568,24 @@ function submitKatora(event) {
   if (event) event.preventDefault();
   if (isSubmittingKatora) return;
 
-  if (!createFormData.name) {
+  const nameVal = (document.getElementById('createNameInput')?.value || createFormData.name || '').trim();
+  const reasonVal = (document.getElementById('createReasonInput')?.value || createFormData.reason || '').trim();
+  const storyVal = (document.getElementById('createStoryInput')?.value || createFormData.story || reasonVal || '').trim();
+  const goalVal = parseInt(document.getElementById('createGoalInput')?.value) || createFormData.targetAmount || 1000;
+  const upiVal = (document.getElementById('createUpiInput')?.value || createFormData.upiId || '').trim();
+  const categoryVal = document.getElementById('createCategorySelect')?.value || createFormData.category || 'chai';
+
+  if (!nameVal) {
     showToast('कृपया अपना नाम या उपनाम डालें!', 'error');
     document.getElementById('createNameInput')?.focus();
     return;
   }
-  if (!createFormData.reason) {
+  if (!reasonVal) {
     showToast('कृपया पैसे क्यों चाहिए उसका कारण लिखें!', 'error');
     document.getElementById('createReasonInput')?.focus();
     return;
   }
-  if (!createFormData.upiId) {
+  if (!upiVal) {
     showToast('कृपया अपनी UPI ID दर्ज करें ताकि दान सीधा आपको मिले!', 'error');
     document.getElementById('createUpiInput')?.focus();
     return;
@@ -2618,41 +2598,48 @@ function submitKatora(event) {
     submitBtn.innerHTML = '<span>⏳</span> कटोरा प्रोसेस हो रहा है...';
   }
 
+  // 1. Save to Persistent LocalStorage DataStore
+  const newKatora = window.dataStore ? window.dataStore.createKatora({
+    title: reasonVal,
+    tagline: reasonVal,
+    creator: nameVal,
+    category: categoryVal,
+    targetAmount: goalVal,
+    upiId: upiVal,
+    story: storyVal || reasonVal,
+    image: createFormData.image || 'mascot-beggar-3d.jpg',
+    customQr: createFormData.customQr || null,
+    urgent: false
+  }) : { id: 'katora-' + Date.now() };
+
+  // 2. Play Audio & Confetti
+  playCoinChime();
+  launchConfetti(0.5, 0.45, 80);
+  showToast('🎉 बधाई हो! कटोरा सफलतापूर्वक बन गया!');
+
+  // 3. Open Success Celebration Modal if available
+  const modal = document.getElementById('submissionSuccessModal');
+  const succName = document.getElementById('succKatoraName');
+  const succLink = document.getElementById('succViewKatoraLink');
+
+  if (succName) succName.textContent = nameVal;
+  if (succLink && newKatora) {
+    succLink.href = `katora-detail.html?id=${newKatora.id}`;
+  }
+
+  if (modal) modal.classList.add('active');
+
+  // 4. Redirect after short celebration animation
   setTimeout(() => {
-    // 1. Save to Persistent LocalStorage DataStore
-    const newKatora = window.dataStore?.createKatora({
-      title: createFormData.reason,
-      tagline: createFormData.reason,
-      creator: createFormData.name,
-      category: createFormData.category,
-      targetAmount: createFormData.targetAmount,
-      upiId: createFormData.upiId,
-      story: createFormData.story || createFormData.reason,
-      image: createFormData.image || 'mascot-beggar-3d.jpg',
-      customQr: createFormData.customQr || null,
-      urgent: false
-    });
-
-    // 2. Play Audio & Confetti
-    playCoinChime();
-    launchConfetti(0.5, 0.45, 80);
-
-    // 3. Open Success Celebration Modal
-    const modal = document.getElementById('submissionSuccessModal');
-    const succName = document.getElementById('succKatoraName');
-    const succLink = document.getElementById('succViewKatoraLink');
-
-    if (succName) succName.textContent = createFormData.name;
-    if (succLink && newKatora) {
-      succLink.href = `katora-detail.html?id=${newKatora.id}`;
-    }
-
-    if (modal) modal.classList.add('active');
-
     isSubmittingKatora = false;
     if (submitBtn) {
       submitBtn.disabled = false;
       submitBtn.innerHTML = '<span>🥣</span> Katora Jama Karo &rarr;';
+    }
+    if (newKatora && newKatora.id) {
+      window.location.href = `katora-detail.html?id=${newKatora.id}`;
+    } else {
+      window.location.href = 'katoras.html';
     }
   }, 1200);
 }
