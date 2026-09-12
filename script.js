@@ -1397,10 +1397,52 @@ function initCustomCursor() {
   });
 }
 
+// 11B. Native Mobile Bottom App Navigation
+function initMobileBottomNav() {
+  if (document.getElementById('mobileBottomNavBar')) return;
+  const path = window.location.pathname.toLowerCase();
+  const isHome = path.endsWith('index.html') || path.endsWith('/') || path === '';
+  const isExplore = path.includes('katoras.html');
+  const isCreate = path.includes('create-katora.html');
+  const isLeaderboard = path.includes('leaderboard.html');
+  const isProfile = path.includes('profile.html');
+
+  const nav = document.createElement('nav');
+  nav.id = 'mobileBottomNavBar';
+  nav.className = 'mobile-bottom-nav';
+  nav.setAttribute('aria-label', 'Mobile Bottom Navigation');
+  nav.innerHTML = `
+    <a href="index.html" class="mobile-nav-item ${isHome ? 'active' : ''}">
+      <span class="mobile-nav-icon">🏠</span>
+      <span class="mobile-nav-label">Home</span>
+    </a>
+    <a href="katoras.html" class="mobile-nav-item ${isExplore ? 'active' : ''}">
+      <span class="mobile-nav-icon">🔍</span>
+      <span class="mobile-nav-label">Katore</span>
+    </a>
+    <a href="create-katora.html" class="mobile-nav-item mobile-nav-center ${isCreate ? 'active' : ''}">
+      <div class="mobile-nav-bowl-btn">
+        <span>🥣</span>
+      </div>
+      <span class="mobile-nav-label" style="font-weight: 800; color: #FFD93D;">Banao</span>
+    </a>
+    <a href="leaderboard.html" class="mobile-nav-item ${isLeaderboard ? 'active' : ''}">
+      <span class="mobile-nav-icon">👑</span>
+      <span class="mobile-nav-label">Top Daan</span>
+    </a>
+    <a href="profile.html" class="mobile-nav-item ${isProfile ? 'active' : ''}">
+      <span class="mobile-nav-icon">👤</span>
+      <span class="mobile-nav-label">Profile</span>
+    </a>
+  `;
+  document.body.appendChild(nav);
+}
+
 // 12. Master Initialization
 document.addEventListener('DOMContentLoaded', () => {
   initTheme();
   initCustomCursor();
+  initMobileBottomNav();
   init3DCardTilt();
   initFAQAccordion();
   startLiveActivityFeed();
