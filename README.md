@@ -19,14 +19,14 @@ Digital Katora is a playful, meme-powered social micro-tipping community web app
 
 ## 🚀 Getting Started
 
-Simply open `digital-katora/index.html` in your favorite web browser or serve it using any static web server:
+Simply open `index.html` in your favorite web browser or serve it using any static web server:
 
 ```bash
 # Using Python
-python -m http.server 8000 --directory digital-katora
+python -m http.server 8000
 
 # Using Node (serve / http-server / live-server)
-npx serve digital-katora
+npx serve .
 ```
 
 Then visit `http://localhost:8000` in your browser.
@@ -36,7 +36,6 @@ Then visit `http://localhost:8000` in your browser.
 ## 📁 Project Structure
 
 ```text
-digital-katora/
 ├── index.html               # Main Landing & Home Page
 ├── about.html               # Story, Philosophy & Crew
 ├── achievements.html        # Badges & Milestones
@@ -53,6 +52,7 @@ digital-katora/
 ├── style.css                # Global Stylesheet & Design System
 ├── script.js                # Core App Logic & Interactions
 ├── data-store.js            # State & LocalStorage Management
+├── netlify.toml             # Netlify Deployment Configuration
 └── *.png / *.jpg            # 3D Mascots & Visual Assets
 ```
 
