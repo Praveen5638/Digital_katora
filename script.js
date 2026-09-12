@@ -474,12 +474,15 @@ function createGareebCardHTML(k) {
           <button class="chanda-chip-btn" onclick="openDonationModal('${k.creator.replace(/'/g, "\\'")}', '${k.id}', 101)">₹101</button>
         </div>
 
-        <div style="display: flex; gap: 0.5rem;">
-          <a href="katora-detail.html?id=${k.id}" class="btn btn-glass" style="flex: 1; padding: 0.6rem 0.5rem; font-size: 0.82rem; min-height: 38px; text-align: center;">
+        <div style="display: flex; gap: 0.4rem;">
+          <a href="katora-detail.html?id=${k.id}" class="btn btn-glass" style="flex: 1; padding: 0.5rem 0.4rem; font-size: 0.8rem; min-height: 38px; text-align: center;">
             कटोरा देखें 🥣
           </a>
-          <button class="btn btn-paisa-green" style="flex: 1.3; padding: 0.6rem 0.6rem; font-size: 0.85rem; min-height: 38px;" onclick="openDonationModal('${k.creator.replace(/'/g, "\\'")}', '${k.id}', 51)">
+          <button class="btn btn-paisa-green" style="flex: 1.2; padding: 0.5rem 0.5rem; font-size: 0.82rem; min-height: 38px;" onclick="openDonationModal('${k.creator.replace(/'/g, "\\'")}', '${k.id}', 51)">
             <span>🪙</span> डालें ₹51
+          </button>
+          <button class="btn btn-glass" style="padding: 0.5rem 0.6rem; min-width: 38px; min-height: 38px;" onclick="openShareKatoraModal('${k.id}')" title="Share Katora">
+            <span>📤</span>
           </button>
         </div>
       </div>
@@ -740,12 +743,15 @@ function createExploreCardHTML(k) {
       </div>
 
       <!-- Primary Card CTA -->
-      <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
-        <a href="katora-detail.html?id=${k.id}" class="btn btn-glass btn-sm" style="flex: 1; min-height: 38px; font-size: 0.82rem;" title="View Details">
+      <div style="display: flex; gap: 0.4rem; margin-top: 0.5rem;">
+        <a href="katora-detail.html?id=${k.id}" class="btn btn-glass btn-sm" style="flex: 1; min-height: 38px; font-size: 0.8rem; padding: 0.4rem 0.5rem;" title="View Details">
           🥣 देखें
         </a>
-        <button class="btn btn-primary-gradient btn-sm" style="flex: 1.4; min-height: 38px; font-size: 0.85rem;" onclick="openDonationModal('${k.creator.replace(/'/g, "\\'")}', '${k.id}', 1)">
+        <button class="btn btn-primary-gradient btn-sm" style="flex: 1.3; min-height: 38px; font-size: 0.82rem; padding: 0.4rem 0.5rem;" onclick="openDonationModal('${k.creator.replace(/'/g, "\\'")}', '${k.id}', 1)">
           <span>🪙</span> DALO ₹1 😂
+        </button>
+        <button class="btn btn-glass btn-sm" style="padding: 0.4rem 0.6rem; min-width: 38px;" onclick="openShareKatoraModal('${k.id}')" title="Share Katora">
+          <span>📤</span>
         </button>
       </div>
     </div>
@@ -1357,11 +1363,457 @@ function initMobileBottomNav() {
   document.body.appendChild(nav);
 }
 
+// 11C. Universal Mobile Navigation Drawer Engine
+function initMobileNavDrawer() {
+  // 1. Inject Hamburger Button into Navbar if not present
+  const navWrap = document.querySelector('.navbar .nav-wrap') || document.querySelector('.navbar .container') || document.querySelector('.navbar');
+  if (navWrap && !document.getElementById('mobileNavToggleBtn')) {
+    const toggleBtn = document.createElement('button');
+    toggleBtn.id = 'mobileNavToggleBtn';
+    toggleBtn.className = 'mobile-nav-toggle-btn';
+    toggleBtn.setAttribute('aria-label', 'Open Mobile Menu');
+    toggleBtn.innerHTML = `<span>☰</span>`;
+    
+    const rightActions = navWrap.querySelector('.nav-right-actions');
+    if (rightActions) {
+      rightActions.insertBefore(toggleBtn, rightActions.firstChild);
+    } else {
+      navWrap.appendChild(toggleBtn);
+    }
+
+    toggleBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openMobileNavDrawer();
+    });
+  }
+
+  // 2. Inject Drawer Overlay & Panel if not present
+  if (!document.getElementById('mobileNavDrawerOverlay')) {
+    const path = window.location.pathname.toLowerCase();
+    const isHome = path.endsWith('index.html') || path.endsWith('/') || path === '';
+    const isKatoras = path.includes('katoras.html');
+    const isCreate = path.includes('create-katora.html');
+    const isDemo = path.includes('donation-animation.html');
+    const isLeaderboard = path.includes('leaderboard.html');
+    const isProfile = path.includes('profile.html');
+    const isAchievements = path.includes('achievements.html');
+    const isAbout = path.includes('about.html');
+    const isFaq = path.includes('faq.html');
+    const isContact = path.includes('contact.html');
+
+    const drawerOverlay = document.createElement('div');
+    drawerOverlay.id = 'mobileNavDrawerOverlay';
+    drawerOverlay.className = 'mobile-nav-drawer-overlay';
+    drawerOverlay.innerHTML = `
+      <div class="mobile-nav-drawer-panel" id="mobileNavDrawerPanel">
+        <!-- Header -->
+        <div class="drawer-header">
+          <a href="index.html" class="brand-logo" style="text-decoration:none; display:flex; align-items:center; gap:0.5rem;">
+            <div class="logo-bowl-glow" style="width:32px; height:32px; font-size:1.1rem; display:flex; align-items:center; justify-content:center;">🥣</div>
+            <span style="font-weight:800; font-size:1.15rem; color:var(--text-primary);">Digital <span class="gradient-text">Katora</span></span>
+          </a>
+          <button class="drawer-close-btn" id="drawerCloseBtn" aria-label="Close Menu">✕</button>
+        </div>
+
+        <!-- Quick CTA -->
+        <div class="drawer-cta-wrap">
+          <a href="create-katora.html" class="btn btn-primary-gradient btn-glow-pulse" style="width:100%; justify-content:center; padding:0.75rem 1rem; font-size:0.95rem;">
+            <span>🥣</span> Apna Katora Banao
+          </a>
+        </div>
+
+        <!-- Navigation Links -->
+        <div class="drawer-links-list">
+          <a href="index.html" class="drawer-link-item ${isHome ? 'active' : ''}">
+            <span class="drawer-link-icon">🏠</span>
+            <span>Home</span>
+          </a>
+          <a href="katoras.html" class="drawer-link-item ${isKatoras ? 'active' : ''}">
+            <span class="drawer-link-icon">🔍</span>
+            <span>Explore Katoras</span>
+          </a>
+          <a href="create-katora.html" class="drawer-link-item ${isCreate ? 'active' : ''}">
+            <span class="drawer-link-icon">🥣</span>
+            <span>Create Katora</span>
+          </a>
+          <a href="donation-animation.html" class="drawer-link-item ${isDemo ? 'active' : ''}">
+            <span class="drawer-link-icon">🪙</span>
+            <span>Coin Cinema Demo</span>
+          </a>
+          <a href="leaderboard.html" class="drawer-link-item ${isLeaderboard ? 'active' : ''}">
+            <span class="drawer-link-icon">👑</span>
+            <span>Leaderboard</span>
+          </a>
+          <a href="profile.html" class="drawer-link-item ${isProfile ? 'active' : ''}">
+            <span class="drawer-link-icon">👤</span>
+            <span>My Profile & Wallet</span>
+          </a>
+          <a href="achievements.html" class="drawer-link-item ${isAchievements ? 'active' : ''}">
+            <span class="drawer-link-icon">🏺</span>
+            <span>Achievements</span>
+          </a>
+          <a href="about.html" class="drawer-link-item ${isAbout ? 'active' : ''}">
+            <span class="drawer-link-icon">📖</span>
+            <span>About Us</span>
+          </a>
+          <a href="faq.html" class="drawer-link-item ${isFaq ? 'active' : ''}">
+            <span class="drawer-link-icon">❓</span>
+            <span>FAQ & Rules</span>
+          </a>
+          <a href="contact.html" class="drawer-link-item ${isContact ? 'active' : ''}">
+            <span class="drawer-link-icon">📬</span>
+            <span>Contact Us</span>
+          </a>
+        </div>
+
+        <!-- Footer -->
+        <div class="drawer-footer">
+          <button class="btn btn-glass btn-sm" onclick="toggleThemeGlobal()" style="width:100%; justify-content:center; gap:0.5rem;">
+            <span>🌓</span> Theme Toggle
+          </button>
+          <div style="text-align:center; font-size:0.75rem; color:var(--text-muted);">
+            Digital Katora &bull; India's #1 Meme Tip Jar
+          </div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(drawerOverlay);
+
+    // Event handlers
+    const closeBtn = document.getElementById('drawerCloseBtn');
+    if (closeBtn) closeBtn.addEventListener('click', closeMobileNavDrawer);
+
+    drawerOverlay.addEventListener('click', (e) => {
+      if (e.target === drawerOverlay) closeMobileNavDrawer();
+    });
+
+    drawerOverlay.querySelectorAll('.drawer-link-item').forEach(link => {
+      link.addEventListener('click', closeMobileNavDrawer);
+    });
+  }
+}
+
+function openMobileNavDrawer() {
+  const drawer = document.getElementById('mobileNavDrawerOverlay');
+  if (drawer) {
+    drawer.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function closeMobileNavDrawer() {
+  const drawer = document.getElementById('mobileNavDrawerOverlay');
+  if (drawer) {
+    drawer.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+}
+
+function toggleThemeGlobal() {
+  const current = document.documentElement.getAttribute('data-theme') || 'dark';
+  const next = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('dk_theme', next);
+  showToast(`🎨 Theme: ${next.toUpperCase()}`);
+}
+
+// ═════════════════════════════════════════════════════════════════════
+// 11D. UNIVERSAL "SHARE MY KATORA" MODAL ENGINE
+// ═════════════════════════════════════════════════════════════════════
+window.activeShareData = null;
+
+function initShareKatoraSystem() {
+  if (document.getElementById('katoraShareModalOverlay')) return;
+
+  const overlay = document.createElement('div');
+  overlay.id = 'katoraShareModalOverlay';
+  overlay.className = 'katora-share-overlay';
+  overlay.setAttribute('role', 'dialog');
+  overlay.setAttribute('aria-modal', 'true');
+  overlay.setAttribute('aria-labelledby', 'katoraShareModalTitle');
+  overlay.innerHTML = `
+    <div class="katora-share-modal" id="katoraShareModalPanel">
+      <!-- Header -->
+      <div class="share-modal-header">
+        <div style="display:flex; align-items:center; gap:0.5rem;">
+          <span style="font-size:1.4rem;">📤</span>
+          <div>
+            <h3 id="katoraShareModalTitle" style="font-size:1.15rem; font-weight:800; margin:0; color:var(--text-primary);">कटोरा शेयर करें</h3>
+            <span style="font-size:0.75rem; color:var(--gold-light); font-family:var(--font-mono); font-weight:700;">SHARE & COLLECT CHANDA</span>
+          </div>
+        </div>
+        <button class="drawer-close-btn" onclick="closeShareKatoraModal()" aria-label="Close Share Modal">✕</button>
+      </div>
+
+      <!-- Katora Live Preview Card -->
+      <div class="share-preview-card" id="shareModalPreviewCard">
+        <div class="share-preview-hero">
+          <div class="share-preview-avatar">
+            <img id="shareModalAvatar" src="mascot-beggar-3d.jpg" alt="Mascot">
+          </div>
+          <div style="flex:1; min-width:0;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <h4 id="shareModalCreator" style="font-size:1rem; font-weight:800; margin:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:180px;">राहुल</h4>
+              <span id="shareModalCategory" style="font-size:0.7rem; font-weight:700; color:var(--primary-light); background:rgba(108,92,231,0.15); padding:0.15rem 0.5rem; border-radius:var(--radius-pill);">🏷️ Chai</span>
+            </div>
+            <p id="shareModalHeadline" style="font-size:0.82rem; color:var(--text-secondary); margin:0.25rem 0 0; font-style:italic; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">"Sharma ji ke tapri par udhaar..."</p>
+          </div>
+        </div>
+
+        <!-- Progress Mini Bar -->
+        <div style="margin-top:0.25rem;">
+          <div style="display:flex; justify-content:space-between; font-size:0.75rem; font-family:var(--font-mono); margin-bottom:0.25rem;">
+            <span id="shareModalRaised" style="color:var(--green-light); font-weight:700;">₹391</span>
+            <span id="shareModalGoal" style="color:var(--text-muted);">/ ₹500 (78%)</span>
+          </div>
+          <div style="height:6px; background:rgba(255,255,255,0.08); border-radius:4px; overflow:hidden;">
+            <div id="shareModalFill" style="width:78%; height:100%; background:var(--gold-gradient); border-radius:4px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pre-formatted Viral Meme Copy -->
+      <div class="share-copy-box">
+        <div style="font-size:0.72rem; color:var(--text-muted); font-weight:700; font-family:var(--font-mono); margin-bottom:0.25rem; text-transform:uppercase;">💬 Viral Meme Message:</div>
+        <div id="shareModalCopyText" style="font-size:0.85rem; color:var(--text-primary); line-height:1.45;">🥺 Bhai/Behen thoda daan kardo! Mere katore mein direct UPI se chanda daalo aur punya kamao!</div>
+      </div>
+
+      <!-- Primary Action Buttons (Grid 2x2) -->
+      <div class="share-actions-grid">
+        <button type="button" class="share-btn-platform share-btn-wa" onclick="executeKatoraShare('whatsapp')">
+          <span style="font-size:1.2rem;">💬</span>
+          <span>WhatsApp</span>
+        </button>
+        <button type="button" class="share-btn-platform share-btn-copy" id="shareModalCopyBtn" onclick="executeKatoraShare('copy')">
+          <span style="font-size:1.1rem;">📋</span>
+          <span id="shareModalCopyBtnLabel">Copy Link</span>
+        </button>
+        <button type="button" class="share-btn-platform share-btn-tw" onclick="executeKatoraShare('twitter')">
+          <span style="font-size:1.1rem;">🐦</span>
+          <span>Twitter / X</span>
+        </button>
+        <button type="button" class="share-btn-platform share-btn-native" onclick="executeKatoraShare('native')">
+          <span style="font-size:1.1rem;">🚀</span>
+          <span>More Apps</span>
+        </button>
+      </div>
+
+      <!-- Direct URL Bar -->
+      <div class="share-direct-url-box">
+        <input type="text" id="shareModalUrlInput" readonly value="" onclick="this.select()">
+        <button type="button" class="btn btn-glass btn-sm" onclick="executeKatoraShare('copy')" style="padding:0.35rem 0.75rem; font-size:0.78rem;">
+          Copy
+        </button>
+      </div>
+
+      <!-- QR Code Quick Toggle View -->
+      <div style="margin-top:1rem; text-align:center;">
+        <button type="button" class="btn btn-glass btn-sm" onclick="toggleShareQrPreview()" style="font-size:0.78rem; border-color:rgba(255,184,0,0.3); color:var(--gold-light) !important;">
+          <span>📱</span> In-Person QR Code (Live Scan)
+        </button>
+        <div id="shareModalQrContainer" style="display:none; margin-top:0.75rem; padding:0.75rem; background:#FFF; border-radius:12px; width:160px; height:160px; margin-left:auto; margin-right:auto; box-shadow:0 8px 25px rgba(0,0,0,0.4);">
+          <img id="shareModalQrImg" src="" alt="UPI QR Code" style="width:100%; height:100%; object-fit:contain;">
+        </div>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) closeShareKatoraModal();
+  });
+}
+
+window.openShareKatoraModal = function(katoraId, kObj) {
+  initShareKatoraSystem();
+
+  let k = kObj;
+  if (!k && window.dataStore) {
+    if (katoraId) {
+      k = window.dataStore.getKatoraById(katoraId);
+    }
+    if (!k && window.currentDetailKatora) {
+      k = window.currentDetailKatora;
+    }
+    if (!k) {
+      const all = window.dataStore.getKatoras();
+      k = all && all.length > 0 ? all[0] : null;
+    }
+  }
+
+  if (!k) {
+    showToast('कटोरा डेटा लोड नहीं हो सका!', 'error');
+    return;
+  }
+
+  // Canonical shareable URL
+  const kId = k.id || 'katora-chai-fund';
+  const baseUrl = window.location.origin + window.location.pathname.replace(/[^/]*$/, '');
+  const shareUrl = `${baseUrl}katora-detail.html?id=${encodeURIComponent(kId)}`;
+
+  const raised = k.currentAmount || 0;
+  const target = k.targetAmount || 1000;
+  const pct = Math.min(100, Math.round((raised / target) * 100));
+
+  const memeText = `🥺 Bhai/Behen thoda daan kardo! Mere "${k.tagline || k.title || 'Emergency Fund'}" katore mein direct UPI se chanda daalo aur punya kamao: ${shareUrl}`;
+
+  window.activeShareData = {
+    katora: k,
+    shareUrl: shareUrl,
+    memeText: memeText
+  };
+
+  // Populate Modal Fields
+  const avatar = document.getElementById('shareModalAvatar');
+  const creator = document.getElementById('shareModalCreator');
+  const cat = document.getElementById('shareModalCategory');
+  const headline = document.getElementById('shareModalHeadline');
+  const raisedEl = document.getElementById('shareModalRaised');
+  const goalEl = document.getElementById('shareModalGoal');
+  const fillEl = document.getElementById('shareModalFill');
+  const copyText = document.getElementById('shareModalCopyText');
+  const urlInput = document.getElementById('shareModalUrlInput');
+  const qrImg = document.getElementById('shareModalQrImg');
+
+  if (avatar) avatar.src = k.image || 'mascot-beggar-3d.jpg';
+  if (creator) creator.textContent = k.creator || 'Gareeb Dost';
+  if (cat) cat.textContent = `🏷️ ${k.categoryName || 'Desi'}`;
+  if (headline) headline.textContent = `"${k.tagline || k.title}"`;
+  if (raisedEl) raisedEl.textContent = `₹${raised.toLocaleString('en-IN')}`;
+  if (goalEl) goalEl.textContent = `/ ₹${target.toLocaleString('en-IN')} (${pct}%)`;
+  if (fillEl) fillEl.style.width = `${pct}%`;
+  if (copyText) copyText.textContent = memeText;
+  if (urlInput) urlInput.value = shareUrl;
+
+  if (qrImg) {
+    if (k.customQr) {
+      qrImg.src = k.customQr;
+    } else {
+      const upiUri = `upi://pay?pa=${encodeURIComponent(k.upiId || 'katora@upi')}&pn=${encodeURIComponent(k.creator)}&am=51&cu=INR&tn=${encodeURIComponent('Digital Katora Donation')}`;
+      qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&margin=2&data=${encodeURIComponent(upiUri)}`;
+    }
+  }
+
+  // Show Modal
+  const overlay = document.getElementById('katoraShareModalOverlay');
+  if (overlay) {
+    overlay.classList.add('active');
+    if (navigator.vibrate) navigator.vibrate(25);
+  }
+};
+
+window.closeShareKatoraModal = function() {
+  const overlay = document.getElementById('katoraShareModalOverlay');
+  if (overlay) overlay.classList.remove('active');
+  const qrBox = document.getElementById('shareModalQrContainer');
+  if (qrBox) qrBox.style.display = 'none';
+};
+
+window.toggleShareQrPreview = function() {
+  const qrBox = document.getElementById('shareModalQrContainer');
+  if (qrBox) {
+    qrBox.style.display = qrBox.style.display === 'none' ? 'block' : 'none';
+  }
+};
+
+window.executeKatoraShare = function(platform) {
+  if (!window.activeShareData) {
+    if (window.currentDetailKatora) {
+      window.openShareKatoraModal(window.currentDetailKatora.id);
+    } else {
+      window.openShareKatoraModal();
+    }
+    if (!window.activeShareData) return;
+  }
+
+  const { shareUrl, memeText, katora } = window.activeShareData;
+
+  if (platform === 'whatsapp') {
+    window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(memeText)}`, '_blank');
+  } else if (platform === 'twitter') {
+    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(memeText)}`, '_blank');
+  } else if (platform === 'copy') {
+    copyTextToClipboard(shareUrl, () => {
+      playCoinChime();
+      showToast('📋 कटोरा लिंक कॉपी हो गया! WhatsApp पर दोस्तों को भेजें!');
+      const btn = document.getElementById('shareModalCopyBtn');
+      const label = document.getElementById('shareModalCopyBtnLabel');
+      if (btn && label) {
+        btn.classList.add('copied');
+        label.textContent = '✓ Copied!';
+        setTimeout(() => {
+          btn.classList.remove('copied');
+          label.textContent = 'Copy Link';
+        }, 2500);
+      }
+    });
+  } else if (platform === 'native') {
+    if (navigator.share) {
+      navigator.share({
+        title: `Digital Katora — ${katora.creator}`,
+        text: memeText,
+        url: shareUrl
+      }).catch((err) => {
+        if (err.name !== 'AbortError') {
+          copyTextToClipboard(shareUrl);
+        }
+      });
+    } else {
+      copyTextToClipboard(shareUrl, () => {
+        playCoinChime();
+        showToast('📋 Link copied to clipboard! Share anywhere!');
+      });
+    }
+  }
+};
+
+function copyTextToClipboard(text, onSuccess) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => {
+      if (onSuccess) onSuccess();
+    }).catch(() => {
+      fallbackCopyText(text, onSuccess);
+    });
+  } else {
+    fallbackCopyText(text, onSuccess);
+  }
+}
+
+function fallbackCopyText(text, onSuccess) {
+  const textArea = document.createElement('textarea');
+  textArea.value = text;
+  textArea.style.position = 'fixed';
+  textArea.style.top = '0';
+  textArea.style.left = '0';
+  textArea.style.opacity = '0';
+  document.body.appendChild(textArea);
+  textArea.focus();
+  textArea.select();
+  try {
+    document.execCommand('copy');
+    if (onSuccess) onSuccess();
+  } catch (e) {
+    prompt('Copy this link:', text);
+  }
+  document.body.removeChild(textArea);
+}
+
+// Global ESC hotkey for all modals
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeShareKatoraModal();
+    closeMobileNavDrawer();
+    closeDonationModal();
+  }
+});
+
 // 12. Master Initialization
 document.addEventListener('DOMContentLoaded', () => {
   initTheme();
   initCustomCursor();
   initMobileBottomNav();
+  initMobileNavDrawer();
+  initShareKatoraSystem();
   init3DCardTilt();
   initFAQAccordion();
   startLiveActivityFeed();
@@ -1580,6 +2032,16 @@ function renderKatoraDetailPage() {
 
   // 8. Render Similar Recommendations
   renderSimilarKatoras(katora);
+
+  // 9. Auto trigger celebration & share sheet if freshly created or share param
+  if (params.get('created') === '1' || params.get('share') === '1') {
+    setTimeout(() => {
+      playCoinChime();
+      launchConfetti(0.5, 0.4, 75);
+      showToast('🎉 आपका कटोरा लाइव है! अब दोस्तों के साथ शेयर करें!');
+      openShareKatoraModal(katora.id);
+    }, 450);
+  }
 }
 
 // Donor Wall Rendering
@@ -2621,15 +3083,19 @@ function submitKatora(event) {
   const modal = document.getElementById('submissionSuccessModal');
   const succName = document.getElementById('succKatoraName');
   const succLink = document.getElementById('succViewKatoraLink');
+  const succShareBtn = document.getElementById('succShareKatoraBtn');
 
   if (succName) succName.textContent = nameVal;
   if (succLink && newKatora) {
     succLink.href = `katora-detail.html?id=${newKatora.id}`;
   }
+  if (succShareBtn && newKatora) {
+    succShareBtn.onclick = () => openShareKatoraModal(newKatora.id);
+  }
 
   if (modal) modal.classList.add('active');
 
-  // 4. Redirect after short celebration animation
+  // 4. Redirect after short celebration animation (with created=1 param to trigger auto-celebration & share sheet)
   setTimeout(() => {
     isSubmittingKatora = false;
     if (submitBtn) {
@@ -2637,11 +3103,11 @@ function submitKatora(event) {
       submitBtn.innerHTML = '<span>🥣</span> Katora Jama Karo &rarr;';
     }
     if (newKatora && newKatora.id) {
-      window.location.href = `katora-detail.html?id=${newKatora.id}`;
+      window.location.href = `katora-detail.html?id=${newKatora.id}&created=1`;
     } else {
       window.location.href = 'katoras.html';
     }
-  }, 1200);
+  }, 1800);
 }
 
 
@@ -2770,6 +3236,9 @@ function renderAdminPage() {
             <div style="display: inline-flex; gap: 0.4rem;">
               <button type="button" class="btn btn-primary-gradient btn-sm" onclick="openAdminReviewModal('${k.id}')" style="font-size: 0.8rem; padding: 0.35rem 0.85rem;">
                 <span>🔍</span> Review
+              </button>
+              <button type="button" class="btn btn-glass btn-sm" onclick="openShareKatoraModal('${k.id}')" title="Share Katora" style="font-size: 0.8rem; padding: 0.35rem 0.6rem;">
+                <span>📤</span>
               </button>
               ${!isApproved ? `
                 <button type="button" class="btn btn-glass btn-sm" onclick="adminQuickApprove('${k.id}')" style="font-size: 0.8rem; padding: 0.35rem 0.65rem; color: var(--green-light) !important; border-color: rgba(0, 184, 148, 0.3);">

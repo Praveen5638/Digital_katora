@@ -176,10 +176,15 @@
                     </div>
                 </div>
 
-                <!-- Primary Conversion CTA -->
-                <button class="btn btn-primary-gradient btn-lg btn-glow-pulse profile-hero-cta-btn" onclick="donateFromDetailPage()">
-                    <span>🥣</span> Katora Mein Dalo ₹51 😂
-                </button>
+                <!-- Primary Conversion CTA Group -->
+                <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1.5rem;">
+                    <button class="btn btn-primary-gradient btn-lg btn-glow-pulse profile-hero-cta-btn" style="flex: 1.4; min-width: 200px;" onclick="donateFromDetailPage()">
+                        <span>🥣</span> Katora Mein Dalo ₹51 😂
+                    </button>
+                    <button class="btn btn-glass btn-lg" style="flex: 1; min-width: 160px; border-color: rgba(108, 92, 231, 0.4); color: #A29BFE !important;" onclick="openShareKatoraModal(currentDetailKatora?.id)">
+                        <span>📤</span> Share Katora
+                    </button>
+                </div>
             </div>
         </section>
 
@@ -402,15 +407,18 @@
             </div>
 
             <!-- Share Buttons Row -->
-            <div class="share-buttons-row">
-                <button type="button" class="btn btn-glass" onclick="shareOnWhatsApp()" style="border-color: rgba(37, 211, 102, 0.4); color: #25D366 !important;">
+            <div class="share-buttons-row" style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; margin-top: 1.25rem;">
+                <button type="button" class="btn btn-glass" onclick="executeKatoraShare('whatsapp')" style="border-color: rgba(37, 211, 102, 0.4); color: #25D366 !important;">
                     <span>💬</span> WhatsApp Par Bhejo
                 </button>
-                <button type="button" class="btn btn-glass" onclick="shareOnTwitter()" style="border-color: rgba(29, 161, 242, 0.4); color: #1DA1F2 !important;">
+                <button type="button" class="btn btn-glass" onclick="executeKatoraShare('twitter')" style="border-color: rgba(29, 161, 242, 0.4); color: #1DA1F2 !important;">
                     <span>🐦</span> Twitter / X
                 </button>
-                <button type="button" class="btn btn-glass" onclick="copyKatoraShareLink()" style="border-color: rgba(255, 184, 0, 0.4); color: var(--gold-light) !important;">
+                <button type="button" class="btn btn-glass" onclick="executeKatoraShare('copy')" style="border-color: rgba(255, 184, 0, 0.4); color: var(--gold-light) !important;">
                     <span>📋</span> Copy Link
+                </button>
+                <button type="button" class="btn btn-primary-gradient" onclick="openShareKatoraModal(currentDetailKatora?.id)">
+                    <span>✨</span> Share Modal & QR &rarr;
                 </button>
             </div>
         </section>
