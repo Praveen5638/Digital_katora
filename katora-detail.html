@@ -597,18 +597,13 @@
                     </a>
                 </div>
 
-                <!-- UTR Ref Input (Optional) -->
-                <div style="margin-bottom: 1rem;">
-                    <input type="text" id="modal-utr-input" style="width: 100%; height: 42px; padding: 0 1rem; background: var(--bg-elevated); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); font-family: var(--font-mono); font-size: 0.88rem; color: var(--text-primary); text-align: center; outline: none;" placeholder="12-digit UPI UTR / Ref No. (Optional)">
-                </div>
-
                 <!-- Verification Confirm Button -->
                 <div style="display: flex; gap: 0.6rem;">
                     <button type="button" class="btn btn-glass" style="flex: 1;" onclick="goToModalStep1()">
                         &larr; Back
                     </button>
                     <button type="button" class="btn btn-paisa-green btn-lg" style="flex: 2; font-size: 1.05rem;" onclick="verifyAndSubmitPayment()">
-                        <span>✅</span> Maine Pay Kar Diya!
+                        <span>❤️</span> I Helped This Katora
                     </button>
                 </div>
             </div>
@@ -654,10 +649,10 @@
                 <!-- Celebration Info -->
                 <div class="modal-success-banner" style="margin-top: 1rem;">
                     <div class="modal-success-title">
-                        🎉 <span class="gradient-text-green" id="modalSuccessAmtDisplay">₹51</span> ट्रांसफर सफल!
+                        🎉 THANK YOU! Katora ko pyaar mila ❤️
                     </div>
                     <p class="modal-success-sub" id="modalSuccessSub">
-                        सिक्का कटोरे में गिर चुका है और कर्मा आशीर्वाद प्राप्त हुआ! ✨
+                        Aapka support katora creator tak pahunch gaya! ✨
                     </p>
                 </div>
 
@@ -667,7 +662,7 @@
                         <span style="font-size: 0.85rem; font-weight: 700; color: var(--gold-light); display: flex; align-items: center; gap: 0.35rem;">
                             🏺 पुण्य का घड़ा
                         </span>
-                        <span class="punya-points-badge" id="modalEarnedPunyaPts">+102 Punya</span>
+                        <span class="punya-points-badge" id="modalEarnedPunyaPts">+102 Karma</span>
                     </div>
                     <div class="ghada-meter-track" style="height: 10px;">
                         <div class="ghada-meter-fill" id="modalGhadaMeterFill" style="width: 82%;"></div>
@@ -678,10 +673,13 @@
                     </div>
                 </div>
 
-                <!-- Manual Close Button -->
-                <div style="margin-top: 1.15rem;">
-                    <button type="button" class="btn btn-glass btn-sm" onclick="closeDonationModal()" style="width: 100%; border-color: rgba(0, 184, 148, 0.4); color: var(--green-light) !important;">
-                        <span>✅</span> बढ़िया! (Band Karein)
+                <!-- Action Buttons: Share & Close -->
+                <div style="margin-top: 1.15rem; display: flex; flex-direction: column; gap: 0.5rem;">
+                    <button type="button" class="btn btn-primary" onclick="if(window.openShareKatoraModal && window.currentModalKatoraId){ closeDonationModal(); openShareKatoraModal(window.currentModalKatoraId); } else { closeDonationModal(); }" style="width: 100%;">
+                        <span>📤</span> Share This Katora
+                    </button>
+                    <button type="button" class="btn btn-glass btn-sm" onclick="closeDonationModal()" style="width: 100%;">
+                        <span>✅</span> Done (Band Karein)
                     </button>
                 </div>
             </div>

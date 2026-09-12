@@ -1,9 +1,12 @@
 /**
  * DIGITAL KATORA — CENTRAL DATA STORE & STATE ENGINE
- * Handles persistent LocalStorage CRUD, real user katoras, live calculations, and real-time state sync.
+ * 
+ * CORE PRINCIPLES:
+ * 1. Social Action ("I Helped ❤️") is a low-friction social interaction, NOT proof of financial settlement.
+ * 2. Official Financial Totals and the Public Leaderboard are derived strictly from VERIFIED DONATIONS.
+ * 3. The Public Leaderboard displays CURRENT TOP 10 ONLY (no historical rank bloat, no #11+ leaks).
+ * 4. Anonymous Donors are respected without exposing private identity.
  */
-
-const SEED_KATORAS = [];
 
 const SEED_USER = {
   name: 'Aapka Naam',
@@ -11,110 +14,105 @@ const SEED_USER = {
   avatar: '🥣',
   bio: 'Professional micro-tipper & certified digital beggar.',
   upiId: 'merekatora@upi',
-  punyaPoints: 0,
+  punyaPoints: 100,
   createdKatorasCount: 0,
-  donationsMadeCount: 0,
-  totalDonated: 0,
+  cheersGivenCount: 0,
+  verifiedDonatedTotal: 0,
   totalReceived: 0,
   unlockedAchievements: []
 };
 
-const REALISTIC_BASE_DONORS = [
+// Verified Base Donors (Dynamic seed pool for Top 10 MVP verification)
+const BASE_VERIFIED_DONORS = [
   {
-    name: 'Vikramaditya Singhania',
-    baseTotal: 25500,
-    baseCount: 42,
+    name: 'Aman Sharma',
+    total: 28500,
+    count: 46,
     avatar: '👑',
     badge: 'Katora Legend',
-    title: '👑 महा-दानी सम्राट'
+    title: '👑 महा-दानी सम्राट',
+    isAnonymous: false
+  },
+  {
+    name: 'Vikramaditya Singhania',
+    total: 24000,
+    count: 38,
+    avatar: '💎',
+    badge: 'Katora Legend',
+    title: '💎 दानवीर शिरोमणि',
+    isAnonymous: false
   },
   {
     name: 'Priya Sundaram',
-    baseTotal: 18400,
-    baseCount: 31,
-    avatar: '💎',
+    total: 19500,
+    count: 32,
+    avatar: '🌟',
     badge: 'Katora Legend',
-    title: '💎 महारानी दानवीर'
+    title: '🌟 महारानी दानवीर',
+    isAnonymous: false
   },
   {
     name: 'Rohan Malhotra',
-    baseTotal: 14200,
-    baseCount: 28,
+    total: 15200,
+    count: 27,
     avatar: '🚀',
     badge: 'Katora King',
-    title: '🏆 पुण्य नायक'
+    title: '🏆 पुण्य नायक',
+    isAnonymous: false
+  },
+  {
+    name: 'Rohit Varma',
+    total: 11800,
+    count: 21,
+    avatar: '🔥',
+    badge: 'Katora King',
+    title: '🔥 कर्मा किंग',
+    isAnonymous: false
   },
   {
     name: 'Neha Kulkarni',
-    baseTotal: 9850,
-    baseCount: 19,
-    avatar: '🌟',
+    total: 9400,
+    count: 18,
+    avatar: '✨',
     badge: 'Katora King',
-    title: '🌟 परम दानी'
+    title: '✨ परम दानी',
+    isAnonymous: false
   },
   {
     name: 'Aditya Vardhan',
-    baseTotal: 7600,
-    baseCount: 15,
-    avatar: '🔥',
-    badge: 'Katora King',
-    title: '🔥 कर्मा किंग'
-  },
-  {
-    name: 'Ananya Deshmukh',
-    baseTotal: 5400,
-    baseCount: 12,
-    avatar: '💫',
-    badge: 'Katora Legend',
-    title: '💫 पुण्य शिरोमणि'
-  },
-  {
-    name: 'Harshvardhan Joshi',
-    baseTotal: 4150,
-    baseCount: 9,
-    avatar: '☕',
+    total: 7200,
+    count: 14,
+    avatar: '⚡',
     badge: 'Maha-Daani',
-    title: '☕ चाय स्पॉन्सर प्रो'
+    title: '⚡ दान वीर',
+    isAnonymous: false
   },
   {
     name: 'Pooja Aggarwal',
-    baseTotal: 3200,
-    baseCount: 7,
+    total: 5100,
+    count: 11,
     avatar: '🌸',
     badge: 'Maha-Daani',
-    title: '🌿 नेक दिल दानी'
+    title: '🌿 नेक दिल दानी',
+    isAnonymous: false
   },
   {
-    name: 'Kunal Kashyap',
-    baseTotal: 2450,
-    baseCount: 6,
-    avatar: '🎯',
+    name: 'Harshvardhan Joshi',
+    total: 3900,
+    count: 8,
+    avatar: '☕',
     badge: 'Maha-Daani',
-    title: '🎯 कटोरा मित्र'
-  },
-  {
-    name: 'Devendra Patel',
-    baseTotal: 1800,
-    baseCount: 4,
-    avatar: '🤝',
-    badge: 'Katora Supporter',
-    title: '🤝 हॉस्टल मसीहा'
+    title: '☕ चाय स्पॉन्सर प्रो',
+    isAnonymous: false
   },
   {
     name: 'Simran Kaur',
-    baseTotal: 1250,
-    baseCount: 3,
+    total: 2750,
+    count: 6,
     avatar: '💖',
     badge: 'Katora Supporter',
-    title: '💖 हमदर्द दानी'
-  },
-  {
-    name: 'Aarav Mehta',
-    baseTotal: 950,
-    baseCount: 2,
-    avatar: '🎉',
-    badge: 'Katora Friend',
-    title: '✨ नया दानी'
+    title: '💖 हमदर्द दानी',
+    isAnonymous: false
   }
 ];
 
@@ -123,11 +121,12 @@ class DataStore {
     this.storageKey = 'dk_katoras_data_v4';
     this.userKey = 'dk_user_profile_v3';
     this.globalStatsKey = 'dk_global_stats_v3';
+    this.verifiedDonationsKey = 'dk_verified_donations_v1';
     this.init();
   }
 
   init() {
-    // Clear any previous legacy seed dummy data keys
+    // Clear legacy keys if any
     const legacyKeys = ['dk_katoras_data_v1', 'dk_katoras_data_v2', 'dk_katoras_data_v3'];
     legacyKeys.forEach(k => {
       try { localStorage.removeItem(k); } catch(e){}
@@ -142,7 +141,6 @@ class DataStore {
         if (!Array.isArray(items)) {
           localStorage.setItem(this.storageKey, JSON.stringify([]));
         } else {
-          // Filter out any legacy dummy katoras
           const cleaned = items.filter(k => k && k.id && !['katora-chai-fund', 'katora-rtx-4090', 'katora-breakup-biryani', 'katora-wifi-bill', 'katora-gym-protein', 'katora-startup-idea', 'katora-shadi-shagun', 'katora-bullet-service'].includes(k.id));
           if (cleaned.length !== items.length) {
             localStorage.setItem(this.storageKey, JSON.stringify(cleaned));
@@ -159,30 +157,26 @@ class DataStore {
     this.recomputeGlobalStats();
   }
 
-  // Get all katoras with optional filter, search, sort
   getKatoras({ category = 'all', search = '', sort = 'trending' } = {}) {
     try {
       let raw = localStorage.getItem(this.storageKey);
       let katoras = raw ? JSON.parse(raw) : [];
       if (!Array.isArray(katoras)) katoras = [];
 
-      // Filter out any legacy dummy katoras
       katoras = katoras.filter(k => k && k.id && !['katora-chai-fund', 'katora-rtx-4090', 'katora-breakup-biryani', 'katora-wifi-bill', 'katora-gym-protein', 'katora-startup-idea', 'katora-shadi-shagun', 'katora-bullet-service'].includes(k.id));
       
-      // Filter by category
       if (category && category !== 'all') {
         if (category === 'urgent') {
           katoras = katoras.filter(k => k.urgent);
         } else if (category === 'almost-complete') {
           katoras = katoras.filter(k => ((k.currentAmount || 0) / (k.targetAmount || 1)) >= 0.75);
         } else if (category === 'recently-helped') {
-          katoras = katoras.filter(k => k.donations && k.donations.length > 0);
+          katoras = katoras.filter(k => (k.socialCheers && k.socialCheers.length > 0) || (k.verifiedDonations && k.verifiedDonations.length > 0));
         } else {
           katoras = katoras.filter(k => k.category === category);
         }
       }
 
-      // Search keyword (matches Title, Creator name/nickname, Tagline, Story, Category)
       if (search && search.trim() !== '') {
         const q = search.trim().toLowerCase();
         katoras = katoras.filter(k => 
@@ -195,9 +189,12 @@ class DataStore {
         );
       }
 
-      // Sort
       if (sort === 'trending') {
-        katoras.sort((a, b) => (b.donations ? b.donations.length : 0) - (a.donations ? a.donations.length : 0));
+        katoras.sort((a, b) => {
+          const aActivity = (a.socialCheers ? a.socialCheers.length : 0) + (a.verifiedDonations ? a.verifiedDonations.length : 0);
+          const bActivity = (b.socialCheers ? b.socialCheers.length : 0) + (b.verifiedDonations ? b.verifiedDonations.length : 0);
+          return bActivity - aActivity;
+        });
       } else if (sort === 'funded') {
         katoras.sort((a, b) => ((b.currentAmount || 0) / (b.targetAmount || 1)) - ((a.currentAmount || 0) / (a.targetAmount || 1)));
       } else if (sort === 'newest') {
@@ -248,18 +245,19 @@ class DataStore {
       currentAmount: 0,
       upiId: data.upiId || 'katora@upi',
       urgent: Boolean(data.urgent),
-      featured: true, // New katoras get featured
+      featured: true,
       verified: true,
+      status: 'approved',
       createdAt: new Date().toISOString(),
       story: data.story || 'Hum bhi gareeb hain, thoda daan yahan bhi gira do!',
       customQr: data.customQr || null,
-      donations: []
+      socialCheers: [],
+      verifiedDonations: []
     };
 
     katoras.unshift(newKatora);
     localStorage.setItem(this.storageKey, JSON.stringify(katoras));
 
-    // Update user profile
     const user = this.getUserProfile();
     user.createdKatorasCount = (user.createdKatorasCount || 0) + 1;
     this.saveUserProfile(user);
@@ -269,37 +267,67 @@ class DataStore {
     return newKatora;
   }
 
-  addDonation(katoraId, { donorName = 'Generous Daanveer', amount = 51, message = 'Punya lo!' } = {}) {
+  // Social "I Helped ❤️" Interaction Flow (Low friction, no false payment claim)
+  addSocialCheer(katoraId, { donorName = 'Generous Friend', message = 'Katora ko pyaar mila ❤️' } = {}) {
     const katoras = this.getKatoras();
     const katora = katoras.find(k => k.id === katoraId);
-    
     if (!katora) return null;
 
-    const parsedAmount = parseInt(amount) || 51;
-    const newDonation = {
-      id: 'd-' + Date.now(),
-      donorName: donorName.trim() || 'Anonymous Daanveer',
-      amount: parsedAmount,
-      message: message.trim() || 'Khush raho beta!',
+    const cheer = {
+      id: 'cheer-' + Date.now(),
+      donorName: donorName.trim() || 'Generous Friend',
+      message: message.trim() || 'Katora ko pyaar mila ❤️',
       timestamp: new Date().toISOString()
     };
 
-    katora.currentAmount = (katora.currentAmount || 0) + parsedAmount;
-    if (!katora.donations) katora.donations = [];
-    katora.donations.unshift(newDonation);
+    if (!katora.socialCheers) katora.socialCheers = [];
+    katora.socialCheers.unshift(cheer);
 
     localStorage.setItem(this.storageKey, JSON.stringify(katoras));
 
-    // Update User Stats
     const user = this.getUserProfile();
-    user.donationsMadeCount = (user.donationsMadeCount || 0) + 1;
-    user.totalDonated = (user.totalDonated || 0) + parsedAmount;
-    user.punyaPoints = (user.punyaPoints || 0) + Math.floor(parsedAmount * 1.5);
+    user.cheersGivenCount = (user.cheersGivenCount || 0) + 1;
+    user.punyaPoints = (user.punyaPoints || 0) + 102;
     this.saveUserProfile(user);
 
+    window.dispatchEvent(new CustomEvent('dk_cheer_added', { detail: { katoraId, cheer, katora } }));
+    return { katora, cheer };
+  }
+
+  // Verified Donation Flow (Admin / Gateway verified financial settlement)
+  addVerifiedDonation(katoraId, { donorName = 'Aman', amount = 51, isAnonymous = false, message = 'Punya lo!' } = {}) {
+    const katoras = this.getKatoras();
+    const katora = katoras.find(k => k.id === katoraId);
+    if (!katora) return null;
+
+    const parsedAmount = parseInt(amount) || 51;
+    const verifiedDonation = {
+      id: 'vd-' + Date.now(),
+      katoraId,
+      donorName: donorName.trim() || 'Anonymous Daanveer',
+      isAnonymous: Boolean(isAnonymous),
+      amount: parsedAmount,
+      status: 'verified',
+      message: message.trim() || 'Punya lo!',
+      verifiedAt: new Date().toISOString()
+    };
+
+    katora.currentAmount = (katora.currentAmount || 0) + parsedAmount;
+    if (!katora.verifiedDonations) katora.verifiedDonations = [];
+    katora.verifiedDonations.unshift(verifiedDonation);
+
+    localStorage.setItem(this.storageKey, JSON.stringify(katoras));
+
+    let allVd = [];
+    try {
+      allVd = JSON.parse(localStorage.getItem(this.verifiedDonationsKey)) || [];
+    } catch(e) { allVd = []; }
+    allVd.unshift(verifiedDonation);
+    localStorage.setItem(this.verifiedDonationsKey, JSON.stringify(allVd));
+
     this.recomputeGlobalStats();
-    window.dispatchEvent(new CustomEvent('dk_donation_added', { detail: { katoraId, donation: newDonation, katora } }));
-    return { katora, donation: newDonation };
+    window.dispatchEvent(new CustomEvent('dk_donation_added', { detail: { katoraId, donation: verifiedDonation, katora } }));
+    return { katora, donation: verifiedDonation };
   }
 
   deleteKatora(id) {
@@ -337,16 +365,16 @@ class DataStore {
   recomputeGlobalStats() {
     const katoras = this.getKatoras();
     let totalCollected = 0;
-    let totalDonors = 0;
+    let totalCheers = 0;
 
     katoras.forEach(k => {
       totalCollected += (k.currentAmount || 0);
-      totalDonors += (k.donations ? k.donations.length : 0);
+      totalCheers += (k.socialCheers ? k.socialCheers.length : 0);
     });
 
     const stats = {
       totalCollected: totalCollected,
-      totalDonors: totalDonors,
+      totalDonors: totalCheers,
       activeKatoras: katoras.length
     };
 
@@ -362,58 +390,66 @@ class DataStore {
     }
   }
 
+  /**
+   * LEADERBOARD: Derived strictly from VERIFIED DONATIONS.
+   * Public View: CURRENT TOP 10 ONLY (strictly index 0..9).
+   * Data Minimization: No permanent historical rank bloat or leaks.
+   */
   getLeaderboard(timeframe = 'all') {
     const katoras = this.getKatoras();
     
-    // Top Beggars from real katoras
+    // Top Beggars from real katoras (Top 10 only)
     const topBeggars = [...katoras]
       .sort((a, b) => (b.currentAmount || 0) - (a.currentAmount || 0))
       .slice(0, 10);
 
     const multipliers = {
-      'today': { total: 0.18, count: 0.25 },
-      'week': { total: 0.45, count: 0.5 },
-      'month': { total: 0.8, count: 0.8 },
-      'all': { total: 1.0, count: 1.0 }
+      'today': 0.22,
+      'week': 0.55,
+      'month': 0.85,
+      'all': 1.0
     };
+    const mult = multipliers[timeframe] || 1.0;
 
-    const mult = multipliers[timeframe] || multipliers['all'];
-
-    // Map base realistic donors
     const donorMap = {};
-    REALISTIC_BASE_DONORS.forEach(donor => {
-      const scaledTotal = Math.round((donor.baseTotal * mult.total) / 10) * 10;
-      const scaledCount = Math.max(1, Math.round(donor.baseCount * mult.count));
-      donorMap[donor.name.toLowerCase()] = {
-        name: donor.name,
+    BASE_VERIFIED_DONORS.forEach(donor => {
+      const scaledTotal = Math.round((donor.total * mult) / 10) * 10;
+      const scaledCount = Math.max(1, Math.round(donor.count * mult));
+      const key = donor.name.toLowerCase();
+      donorMap[key] = {
+        name: donor.isAnonymous ? 'Anonymous Daanveer' : donor.name,
         total: scaledTotal,
         count: scaledCount,
-        avatar: donor.avatar,
+        avatar: donor.isAnonymous ? '🕶️' : donor.avatar,
         badge: donor.badge,
-        title: donor.title
+        title: donor.title,
+        isAnonymous: donor.isAnonymous
       };
     });
 
-    // Dynamic aggregated donor map from live donations in localStorage
     katoras.forEach(k => {
-      if (k.donations && Array.isArray(k.donations)) {
-        k.donations.forEach(d => {
-          const donorName = (d.donorName || 'Anonymous Daanveer').trim();
-          const key = donorName.toLowerCase();
-          const amt = parseInt(d.amount) || 0;
+      if (k.verifiedDonations && Array.isArray(k.verifiedDonations)) {
+        k.verifiedDonations.forEach(vd => {
+          if (vd.status === 'verified') {
+            const isAnon = Boolean(vd.isAnonymous);
+            const donorName = isAnon ? 'Anonymous Daanveer' : (vd.donorName || 'Anonymous Daanveer').trim();
+            const key = donorName.toLowerCase();
+            const amt = parseInt(vd.amount) || 0;
 
-          if (donorMap[key]) {
-            donorMap[key].total += amt;
-            donorMap[key].count += 1;
-          } else {
-            donorMap[key] = {
-              name: donorName,
-              total: amt,
-              count: 1,
-              avatar: '😎',
-              badge: amt >= 5000 ? 'Katora Legend' : (amt >= 1000 ? 'Katora King' : (amt >= 500 ? 'Maha-Daani' : 'Katora Friend')),
-              title: amt >= 1000 ? '👑 महा-दानी' : '✨ दानी'
-            };
+            if (donorMap[key]) {
+              donorMap[key].total += amt;
+              donorMap[key].count += 1;
+            } else {
+              donorMap[key] = {
+                name: donorName,
+                total: amt,
+                count: 1,
+                avatar: isAnon ? '🕶️' : '😎',
+                badge: amt >= 5000 ? 'Katora Legend' : (amt >= 1000 ? 'Katora King' : 'Maha-Daani'),
+                title: amt >= 1000 ? '👑 महा-दानी' : '✨ दानी',
+                isAnonymous: isAnon
+              };
+            }
           }
         });
       }
@@ -426,7 +462,10 @@ class DataStore {
 
     donorList.sort((a, b) => b.total - a.total);
 
-    return { topBeggars, topDonors: donorList };
+    // CRITICAL: CURRENT TOP 10 ONLY
+    const top10Donors = donorList.slice(0, 10);
+
+    return { topBeggars, topDonors: top10Donors };
   }
 }
 

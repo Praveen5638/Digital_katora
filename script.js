@@ -237,41 +237,33 @@ function verifyAndSubmitPayment() {
 
   const donorNameField = document.getElementById('modal-donor-name');
   const donorMsgField = document.getElementById('modal-donor-message');
-  const utrField = document.getElementById('modal-utr-input');
 
-  const donorName = (donorNameField && donorNameField.value.trim()) || 'Generous Daanveer';
-  const message = (donorMsgField && donorMsgField.value.trim()) || 'Punya Kamao! 😂';
-  const utr = (utrField && utrField.value.trim()) || `UTR-${Math.floor(100000000000 + Math.random() * 900000000000)}`;
+  const donorName = (donorNameField && donorNameField.value.trim()) || 'Generous Friend';
+  const message = (donorMsgField && donorMsgField.value.trim()) || 'Katora ko pyaar mila ❤️';
 
   const katora = window.dataStore?.getKatoraById(currentModalKatoraId);
   const beggarName = katora?.creator || 'राहुल';
   const beggarImg = katora?.image || 'mascot-beggar-3d.jpg';
-  const earnedPunya = selectedAmount * 2;
+  const earnedPunya = 102;
 
-  // 1. Populate dynamic celebration stage elements
+  // 1. Populate dynamic celebration stage elements (Social Action / Thank-You)
   const amtDisp = document.getElementById('modalSuccessAmtDisplay');
   const subDisp = document.getElementById('modalSuccessSub');
   const beggarNameDisp = document.getElementById('modalAnimBeggarName');
   const beggarImgDisp = document.getElementById('modalAnimBeggarImg');
   const punyaPtsDisp = document.getElementById('modalEarnedPunyaPts');
-  const ghadaFillDisp = document.getElementById('modalGhadaMeterFill');
-  const ghadaPctDisp = document.getElementById('modalGhadaFillPct');
 
-  if (amtDisp) amtDisp.textContent = `₹${selectedAmount}`;
-  if (subDisp) subDisp.textContent = `सिक्का ${beggarName} के कटोरे में गिर चुका है! आपको +${earnedPunya} पुण्य मिला! ✨`;
+  if (amtDisp) amtDisp.textContent = `❤️ I Helped!`;
+  if (subDisp) subDisp.textContent = `${beggarName} ke katore ko aapki taraf se dher sara pyaar mila! ✨`;
   if (beggarNameDisp) beggarNameDisp.textContent = `🥺 ${beggarName.split(' ')[0]}`;
   if (beggarImgDisp) beggarImgDisp.src = beggarImg;
-  if (punyaPtsDisp) punyaPtsDisp.textContent = `+${earnedPunya} Punya`;
-
-  const targetPct = Math.min(100, Math.round(55 + Math.min(40, (selectedAmount / 50) * 15)));
-  if (ghadaFillDisp) ghadaFillDisp.style.width = `${targetPct}%`;
-  if (ghadaPctDisp) ghadaPctDisp.textContent = `${targetPct}% Full`;
+  if (punyaPtsDisp) punyaPtsDisp.textContent = `+${earnedPunya} Karma`;
 
   // 2. Play Audio & Confetti
   playCoinChime();
   launchConfetti(0.5, 0.45, 75);
 
-  // 3. Trigger In-Modal Parabolic Coin Flight
+  // 3. Trigger In-Modal Parabolic Coin Flight & Happy Mascot Reaction
   const coin = document.getElementById('modalAnimFlyingCoin');
   const beggar = document.getElementById('modalAnimBeggar');
   const bowl = document.getElementById('modalKatoraBowl');
@@ -298,10 +290,9 @@ function verifyAndSubmitPayment() {
     }
   }, 500);
 
-  // 4. Save Donation to persistent State Store
-  const res = window.dataStore?.addDonation(currentModalKatoraId, {
+  // 4. Save Social Cheer to DataStore (does not falsely manipulate verified financial numbers)
+  window.dataStore?.addSocialCheer(currentModalKatoraId, {
     donorName,
-    amount: selectedAmount,
     message
   });
 
@@ -315,13 +306,13 @@ function verifyAndSubmitPayment() {
   }
 
   // 6. Broadcast Data Update Event
-  window.dispatchEvent(new CustomEvent('dk_data_updated', { detail: { katoraId: currentModalKatoraId, amount: selectedAmount } }));
+  window.dispatchEvent(new CustomEvent('dk_data_updated', { detail: { katoraId: currentModalKatoraId } }));
 
   // 7. Auto-Dismiss Modal after 2.8 seconds of celebration
   if (modalAutoCloseTimer) clearTimeout(modalAutoCloseTimer);
   modalAutoCloseTimer = setTimeout(() => {
     closeDonationModal();
-    showToast(`🎉 ₹${selectedAmount} ${beggarName} के कटोरे में जमा हो गए! +${earnedPunya} Punya prapt hue! 🌟`);
+    showToast(`🎉 ${beggarName} ke katore ko aapki taraf se dher sara pyaar mila! ✨`);
   }, 2800);
 }
 
@@ -1536,10 +1527,10 @@ function initShareKatoraSystem() {
       <!-- Header -->
       <div class="share-modal-header">
         <div style="display:flex; align-items:center; gap:0.5rem;">
-          <span style="font-size:1.4rem;">📤</span>
+          <span style="font-size:1.4rem;">🥣</span>
           <div>
-            <h3 id="katoraShareModalTitle" style="font-size:1.15rem; font-weight:800; margin:0; color:var(--text-primary);">कटोरा शेयर करें</h3>
-            <span style="font-size:0.75rem; color:var(--gold-light); font-family:var(--font-mono); font-weight:700;">SHARE & COLLECT CHANDA</span>
+            <h3 id="katoraShareModalTitle" style="font-size:1.15rem; font-weight:800; margin:0; color:var(--text-primary);">Apna Katora Doston Tak Pahunchao 😂</h3>
+            <span style="font-size:0.75rem; color:var(--gold-light); font-family:var(--font-mono); font-weight:700;">Jitne dost, utni khushi. 🥣❤️</span>
           </div>
         </div>
         <button class="drawer-close-btn" onclick="closeShareKatoraModal()" aria-label="Close Share Modal">✕</button>
@@ -1655,7 +1646,15 @@ window.openShareKatoraModal = function(katoraId, kObj) {
   const target = k.targetAmount || 1000;
   const pct = Math.min(100, Math.round((raised / target) * 100));
 
-  const memeText = `🥺 Bhai/Behen thoda daan kardo! Mere "${k.tagline || k.title || 'Emergency Fund'}" katore mein direct UPI se chanda daalo aur punya kamao: ${shareUrl}`;
+  const memeText = `Bhai 😂 mera Digital Katora dekh!
+
+🥣 ${k.title || k.tagline || 'Digital Katora'}
+
+"${k.tagline || k.story || 'Thoda daan yahan bhi gira do!'}"
+
+Agar mann kare to help kar dena ❤️
+
+👉 ${shareUrl}`;
 
   window.activeShareData = {
     katora: k,
