@@ -1136,55 +1136,7 @@ function submitKatora(event) {
   }, 1200);
 }
 
-// E. LEADERBOARD.HTML
-function renderLeaderboardPage() {
-  if (!window.location.pathname.includes('leaderboard.html') || !window.dataStore) return;
-
-  const { topBeggars, topDonors } = window.dataStore.getLeaderboard();
-
-  // Populate Podium #1, #2, #3
-  if (topBeggars && topBeggars.length >= 3) {
-    const pod1 = document.querySelector('.podium-rank-1');
-    const pod2 = document.querySelector('.podium-rank-2');
-    const pod3 = document.querySelector('.podium-rank-3');
-
-    if (pod1) {
-      pod1.querySelector('h3, .podium-title')?.replaceChildren(document.createTextNode(topBeggars[0].creator));
-      pod1.querySelector('p, .podium-amount')?.replaceChildren(document.createTextNode(`₹${topBeggars[0].currentAmount.toLocaleString('en-IN')}`));
-    }
-    if (pod2) {
-      pod2.querySelector('h3, .podium-title')?.replaceChildren(document.createTextNode(topBeggars[1].creator));
-      pod2.querySelector('p, .podium-amount')?.replaceChildren(document.createTextNode(`₹${topBeggars[1].currentAmount.toLocaleString('en-IN')}`));
-    }
-    if (pod3) {
-      pod3.querySelector('h3, .podium-title')?.replaceChildren(document.createTextNode(topBeggars[2].creator));
-      pod3.querySelector('p, .podium-amount')?.replaceChildren(document.createTextNode(`₹${topBeggars[2].currentAmount.toLocaleString('en-IN')}`));
-    }
-  }
-
-  // Populate Top Donors List if present
-  const donorsTable = document.querySelector('.leaderboard-list');
-  if (donorsTable && topDonors) {
-    donorsTable.innerHTML = topDonors.slice(3).map((d, idx) => {
-      const punya = d.total * 2;
-      const ghadaPct = Math.min(100, Math.round((punya / 50000) * 100));
-      return `
-        <div class="lb-item" style="background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 1.1rem 1.5rem; margin-bottom: 0.75rem; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow-sm);">
-          <div style="display: flex; align-items: center; gap: 0.85rem;">
-            <span style="font-family: var(--font-mono); font-weight: 800; color: var(--text-muted);">#${idx + 4}</span>
-            <div>
-              <strong style="color: var(--text-primary); font-size: 0.95rem;">${d.name}</strong>
-              <div style="font-size: 0.75rem; color: var(--gold-light); font-family: var(--font-mono);">
-                🏺 Punya: ${punya.toLocaleString('en-IN')} Pts (${ghadaPct}% Ghada Full)
-              </div>
-            </div>
-          </div>
-          <span style="font-family: var(--font-mono); font-weight: 800; color: var(--green-light);">₹${d.total.toLocaleString('en-IN')}</span>
-        </div>
-      `;
-    }).join('');
-  }
-}
+// E. LEADERBOARD.HTML (Handled by section 17 below)
 
 // F. PROFILE.HTML
 function renderProfilePage() {
@@ -1510,12 +1462,14 @@ function startLiveActivityFeed() {
   if (!feed) return;
 
   const mockEvents = [
-    { icon: '☕', text: 'रोहन ने राहुल के कटोरे में ₹51 डाले ☕', badge: '+₹51' },
-    { icon: '💻', text: 'अमन का RTX 4090 कटोरा 50% पूरा हुआ 💻', badge: 'GOAL 50%' },
-    { icon: '👑', text: 'एक गुप्त दानी ने ₹501 का महा-दान दिया 👑', badge: '+₹501' },
-    { icon: '🍗', text: 'कबीर को ब्रेकअप बिरयानी के लिए ₹101 मिले 🍗', badge: '+₹101' },
-    { icon: '🌟', text: 'समीर राव बने #1 महा-दानी सम्राट 🌟', badge: 'RANK #1' },
-    { icon: '⚡', text: 'प्रिया ने ₹21 का तुरंत शगुन भेजा ✨', badge: '+₹21' }
+    { icon: '👑', text: 'विक्रमादित्य सिंघानिया ने ₹1,100 का महा-दान भेजा 👑', badge: '+₹1,100' },
+    { icon: '☕', text: 'रोहन मल्होत्रा ने कटोरे में ₹101 डाले ☕', badge: '+₹101' },
+    { icon: '🌟', text: 'प्रिया सुंदरम बनीं #2 महा-दानी 🌟', badge: 'RANK #2' },
+    { icon: '💫', text: 'नेहा कुलकर्णी ने ₹251 का तुरंत शगुन भेजा ✨', badge: '+₹251' },
+    { icon: '🚀', text: 'आदित्य वर्धन ने ₹501 का सहयोग दिया 🚀', badge: '+₹501' },
+    { icon: '🌸', text: 'पूजा अग्रवाल ने ₹201 का पुण्य दान दिया 🌸', badge: '+₹201' },
+    { icon: '🎯', text: 'कुणाल कश्यप ने कटोरा सपोर्टर बैज जीता 🎯', badge: 'BADGE' },
+    { icon: '🤝', text: 'देवेंद्र पटेल ने ₹51 का दान अर्पित किया 🤝', badge: '+₹51' }
   ];
 
   let eventIdx = 0;
@@ -1951,6 +1905,21 @@ function renderLeaderboardPage(timeframe = 'all') {
 
   // 5. Render 9:16 Share Story Card
   updateShareStoryCard(currentShareDonorData);
+
+  // 6. Dynamically update user's personal rank card
+  const user = window.dataStore.getUserProfile();
+  if (user) {
+    const userRankIdx = topDonors.findIndex(d => d.name.toLowerCase() === (user.name || '').toLowerCase());
+    const rankNum = userRankIdx >= 0 ? userRankIdx + 1 : topDonors.length + 1;
+    const userRankElem = document.getElementById('userCurrentRankText');
+    const userStatsElem = document.getElementById('userCurrentRankStats');
+    if (userRankElem) {
+      userRankElem.textContent = `#${rankNum} (${user.name || 'Aapka Naam'})`;
+    }
+    if (userStatsElem) {
+      userStatsElem.innerHTML = `₹${(user.totalDonated || 0).toLocaleString('en-IN')} Donated &bull; ${user.donationsMadeCount || 0} Katoras Helped &bull; <span style="color: var(--gold-light); font-weight: 700;">${(user.punyaPoints || 0).toLocaleString('en-IN')} Punya Pts</span>`;
+    }
+  }
 }
 
 // Render Top 3 Royal Court Podium

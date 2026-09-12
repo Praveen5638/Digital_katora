@@ -19,6 +19,105 @@ const SEED_USER = {
   unlockedAchievements: []
 };
 
+const REALISTIC_BASE_DONORS = [
+  {
+    name: 'Vikramaditya Singhania',
+    baseTotal: 25500,
+    baseCount: 42,
+    avatar: '👑',
+    badge: 'Katora Legend',
+    title: '👑 महा-दानी सम्राट'
+  },
+  {
+    name: 'Priya Sundaram',
+    baseTotal: 18400,
+    baseCount: 31,
+    avatar: '💎',
+    badge: 'Katora Legend',
+    title: '💎 महारानी दानवीर'
+  },
+  {
+    name: 'Rohan Malhotra',
+    baseTotal: 14200,
+    baseCount: 28,
+    avatar: '🚀',
+    badge: 'Katora King',
+    title: '🏆 पुण्य नायक'
+  },
+  {
+    name: 'Neha Kulkarni',
+    baseTotal: 9850,
+    baseCount: 19,
+    avatar: '🌟',
+    badge: 'Katora King',
+    title: '🌟 परम दानी'
+  },
+  {
+    name: 'Aditya Vardhan',
+    baseTotal: 7600,
+    baseCount: 15,
+    avatar: '🔥',
+    badge: 'Katora King',
+    title: '🔥 कर्मा किंग'
+  },
+  {
+    name: 'Ananya Deshmukh',
+    baseTotal: 5400,
+    baseCount: 12,
+    avatar: '💫',
+    badge: 'Katora Legend',
+    title: '💫 पुण्य शिरोमणि'
+  },
+  {
+    name: 'Harshvardhan Joshi',
+    baseTotal: 4150,
+    baseCount: 9,
+    avatar: '☕',
+    badge: 'Maha-Daani',
+    title: '☕ चाय स्पॉन्सर प्रो'
+  },
+  {
+    name: 'Pooja Aggarwal',
+    baseTotal: 3200,
+    baseCount: 7,
+    avatar: '🌸',
+    badge: 'Maha-Daani',
+    title: '🌿 नेक दिल दानी'
+  },
+  {
+    name: 'Kunal Kashyap',
+    baseTotal: 2450,
+    baseCount: 6,
+    avatar: '🎯',
+    badge: 'Maha-Daani',
+    title: '🎯 कटोरा मित्र'
+  },
+  {
+    name: 'Devendra Patel',
+    baseTotal: 1800,
+    baseCount: 4,
+    avatar: '🤝',
+    badge: 'Katora Supporter',
+    title: '🤝 हॉस्टल मसीहा'
+  },
+  {
+    name: 'Simran Kaur',
+    baseTotal: 1250,
+    baseCount: 3,
+    avatar: '💖',
+    badge: 'Katora Supporter',
+    title: '💖 हमदर्द दानी'
+  },
+  {
+    name: 'Aarav Mehta',
+    baseTotal: 950,
+    baseCount: 2,
+    avatar: '🎉',
+    badge: 'Katora Friend',
+    title: '✨ नया दानी'
+  }
+];
+
 class DataStore {
   constructor() {
     this.storageKey = 'dk_katoras_data_v4';
@@ -271,34 +370,59 @@ class DataStore {
       .sort((a, b) => (b.currentAmount || 0) - (a.currentAmount || 0))
       .slice(0, 10);
 
+    const multipliers = {
+      'today': { total: 0.18, count: 0.25 },
+      'week': { total: 0.45, count: 0.5 },
+      'month': { total: 0.8, count: 0.8 },
+      'all': { total: 1.0, count: 1.0 }
+    };
+
+    const mult = multipliers[timeframe] || multipliers['all'];
+
+    // Map base realistic donors
+    const donorMap = {};
+    REALISTIC_BASE_DONORS.forEach(donor => {
+      const scaledTotal = Math.round((donor.baseTotal * mult.total) / 10) * 10;
+      const scaledCount = Math.max(1, Math.round(donor.baseCount * mult.count));
+      donorMap[donor.name.toLowerCase()] = {
+        name: donor.name,
+        total: scaledTotal,
+        count: scaledCount,
+        avatar: donor.avatar,
+        badge: donor.badge,
+        title: donor.title
+      };
+    });
+
     // Dynamic aggregated donor map from live donations in localStorage
-    const liveDonationMap = {};
     katoras.forEach(k => {
-      if (k.donations) {
+      if (k.donations && Array.isArray(k.donations)) {
         k.donations.forEach(d => {
-          const donorName = d.donorName || 'Anonymous Daanveer';
-          if (!liveDonationMap[donorName]) {
-            liveDonationMap[donorName] = { total: 0, count: 0 };
+          const donorName = (d.donorName || 'Anonymous Daanveer').trim();
+          const key = donorName.toLowerCase();
+          const amt = parseInt(d.amount) || 0;
+
+          if (donorMap[key]) {
+            donorMap[key].total += amt;
+            donorMap[key].count += 1;
+          } else {
+            donorMap[key] = {
+              name: donorName,
+              total: amt,
+              count: 1,
+              avatar: '😎',
+              badge: amt >= 5000 ? 'Katora Legend' : (amt >= 1000 ? 'Katora King' : (amt >= 500 ? 'Maha-Daani' : 'Katora Friend')),
+              title: amt >= 1000 ? '👑 महा-दानी' : '✨ दानी'
+            };
           }
-          liveDonationMap[donorName].total += (d.amount || 0);
-          liveDonationMap[donorName].count += 1;
         });
       }
     });
 
-    const donorList = [];
-    Object.keys(liveDonationMap).forEach(name => {
-      const live = liveDonationMap[name];
-      donorList.push({
-        name: name,
-        total: live.total,
-        count: live.count,
-        punya: live.total * 2,
-        avatar: '😎',
-        badge: live.total >= 5000 ? 'Katora Legend' : (live.total >= 1000 ? 'Katora King' : (live.total >= 500 ? 'Maha-Daani' : 'Katora Friend')),
-        title: '✨ दानी'
-      });
-    });
+    const donorList = Object.values(donorMap).map(d => ({
+      ...d,
+      punya: d.total * 2
+    }));
 
     donorList.sort((a, b) => b.total - a.total);
 
