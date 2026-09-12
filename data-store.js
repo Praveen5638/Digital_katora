@@ -165,13 +165,18 @@ class DataStore {
     this.syncFromSupabase();
   }
 
-  getKatoras({ category = 'all', search = '', sort = 'trending' } = {}) {
+  getKatoras({ category = 'all', search = '', sort = 'trending', includePending = false } = {}) {
     try {
       let raw = localStorage.getItem(this.storageKey);
       let katoras = raw ? JSON.parse(raw) : [];
       if (!Array.isArray(katoras)) katoras = [];
 
       katoras = katoras.filter(k => k && k.id && !['katora-chai-fund', 'katora-rtx-4090', 'katora-breakup-biryani', 'katora-wifi-bill', 'katora-gym-protein', 'katora-startup-idea', 'katora-shadi-shagun', 'katora-bullet-service'].includes(k.id));
+      // Public view only shows approved/active katoras (Admin can view all with includePending: true)
+      if (!includePending) {
+        katoras = katoras.filter(k => k.status === 'approved' || k.status === 'active' || k.verified === true);
+      }
+
       
       if (category && category !== 'all') {
         if (category === 'urgent') {
@@ -308,8 +313,8 @@ class DataStore {
       upiId: data.upiId || 'katora@upi',
       urgent: Boolean(data.urgent),
       featured: true,
-      verified: true,
-      status: 'approved',
+      verified: false,
+      status: 'pending_approval',
       createdAt: new Date().toISOString(),
       story: data.story || 'Hum bhi gareeb hain, thoda daan yahan bhi gira do!',
       customQr: data.customQr || null,
@@ -570,6 +575,23 @@ class DataStore {
       });
     } catch (e) {
       console.warn('Could not push donation to Supabase:', e);
+    }
+  }
+
+  
+  async patchKatoraStatusToSupabase(katoraId, status = 'approved', verified = true) {
+    try {
+      await fetch(`${SUPABASE_CONFIG.url}/rest/v1/katoras?id=eq.${encodeURIComponent(katoraId)}`, {
+        method: 'PATCH',
+        headers: {
+          'apikey': SUPABASE_CONFIG.key,
+          'Authorization': 'Bearer ' + SUPABASE_CONFIG.key,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ status, verified })
+      });
+    } catch (e) {
+      console.warn('Could not update katora status in Supabase:', e);
     }
   }
 

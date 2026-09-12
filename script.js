@@ -1087,6 +1087,31 @@ function renderKatoraDetailPage() {
   if (!katora) return;
   currentModalKatoraId = katora.id;
 
+  // Show Pending Review Status Banner on Detail Page if not yet approved
+  const isPending = katora.status === 'pending_approval' || katora.status === 'pending' || !katora.verified;
+  let statusBanner = document.getElementById('katoraDetailStatusBanner');
+  if (isPending) {
+    if (!statusBanner) {
+      statusBanner = document.createElement('div');
+      statusBanner.id = 'katoraDetailStatusBanner';
+      statusBanner.style.cssText = 'background: rgba(255, 184, 0, 0.15); border: 1.5px solid var(--gold); border-radius: 12px; padding: 0.85rem 1.25rem; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem;';
+      statusBanner.innerHTML = `
+        <div style="display:flex; align-items:center; gap:0.75rem;">
+          <span style="font-size:1.6rem;">⏳</span>
+          <div>
+            <div style="font-weight:800; font-size:0.95rem; color:var(--gold-light);">Admin Approval Pending (समीक्षा जारी है)</div>
+            <div style="font-size:0.8rem; color:var(--text-secondary);">Ye katora submit ho gaya hai. Admin review poora hote hi ye public explore page par live dikhega!</div>
+          </div>
+        </div>
+        <span class="badge" style="background:var(--gold-gradient); color:#000; font-weight:800; font-size:0.75rem;">UNDER REVIEW</span>
+      `;
+      profileHero?.parentNode?.insertBefore(statusBanner, profileHero);
+    }
+  } else if (statusBanner) {
+    statusBanner.remove();
+  }
+
+
   // Title, Creator, Story
   const nameEl = document.querySelector('.katora-profile h1');
   const reasonEl = document.querySelector('.reason-large');
@@ -3229,7 +3254,7 @@ function renderAdminPage() {
   const queueWrap = document.getElementById('adminQueueTableBody');
   if (!queueWrap || !window.dataStore) return; // Not on admin.html
 
-  const allKatoras = window.dataStore.getKatoras();
+  const allKatoras = window.dataStore.getKatoras({ includePending: true });
 
   // 1. Calculate & Populate 4 Stats Cards
   const pendingCount = allKatoras.filter(k => k.status === 'pending_approval' || !k.status || k.status === 'pending').length;
@@ -3439,6 +3464,7 @@ function adminApproveCurrentKatora() {
     found.status = 'approved';
     found.verified = true;
     localStorage.setItem(window.dataStore.storageKey, JSON.stringify(all));
+    window.dataStore.patchKatoraStatusToSupabase(found.id, 'approved', true);
   }
 
   // Audit Log
@@ -3470,6 +3496,7 @@ function adminQuickApprove(id) {
     found.status = 'approved';
     found.verified = true;
     localStorage.setItem(window.dataStore.storageKey, JSON.stringify(all));
+    window.dataStore.patchKatoraStatusToSupabase(found.id, 'approved', true);
   }
 
   playCoinChime();
