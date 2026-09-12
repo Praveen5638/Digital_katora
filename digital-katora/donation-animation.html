@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="hi" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🪙 Magic Donation Simulator — Digital Katora</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Unified Design System Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+    
+    <meta name="description" content="Live interactive physics simulation: Send phone UPI micro-tips to Digital Katora with parabolic coin trajectory, crystal audio chimes, and instant beggar emotions!">
+    <meta name="theme-color" content="#6C5CE7">
+
+    <style>
+      /* ==== SPECIFIC SIMULATION CANVAS STYLES ==== */
+      .sim-hero-section {
+        position: relative;
+        min-height: 85vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem 1rem 6rem;
+        overflow: hidden;
+      }
+
+      /* Star Background */
+      .stars-container {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+      }
+      .sim-star {
+        position: absolute;
+        width: 2px;
+        height: 2px;
+        background: white;
+        border-radius: 50%;
+        opacity: 0.6;
+        animation: starTwinkle 3s infinite ease-in-out;
+      }
+      @keyframes starTwinkle {
+        0%, 100% { opacity: 0.2; transform: scale(1); }
+        50% { opacity: 1; transform: scale(1.8); }
+      }
+
+      /* STAGE */
+      .stage-box {
+        position: relative;
+        width: 100%;
+        max-width: 950px;
+        height: 480px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 40px;
+        z-index: 2;
+      }
+
+      /* DONOR SIDE */
+      .donor-side {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        transition: transform 0.4s ease;
+      }
+
+      .actor-label {
+        font-family: var(--font-heading);
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--text-secondary);
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        background: var(--bg-surface);
+        padding: 6px 16px;
+        border-radius: var(--radius-pill);
+        border: 1px solid var(--border-color);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      }
+
+      .actor-character {
+        position: relative;
+        width: 190px;
+        height: 250px;
+        border-radius: 24px;
+        background: rgba(20, 19, 34, 0.7);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1.5px solid rgba(255, 255, 255, 0.12);
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: visible;
+        transition: transform 0.4s var(--ease-squash), box-shadow 0.4s ease;
+      }
+
+      .actor-character.happy {
+        animation: happyDance 0.8s var(--ease-squash) infinite alternate;
+      }
+
+      @keyframes happyDance {
+        0% { transform: translateY(0) scale(1) rotate(0deg); }
+        100% { transform: translateY(-14px) scale(1.05) rotate(3deg); }
+      }
+
+      .actor-img-wrap {
+        width: 100%;
+        height: 100%;
+        border-radius: 22px;
+        overflow: hidden;
+        position: relative;
+        background: radial-gradient(circle at 50% 40%, rgba(99, 102, 241, 0.15) 0%, rgba(11, 11, 18, 0.9) 100%);
+      }
+
+      .actor-img-wrap img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: top center;
+        transition: transform 0.3s ease;
+      }
+
+      .actor-character:hover .actor-img-wrap img {
+        transform: scale(1.06);
+      }
+
+      /* Phone in hand */
+      .sim-phone {
+        position: absolute;
+        width: 48px;
+        height: 80px;
+        background: linear-gradient(135deg, #2d2d44, #1a1a2e);
+        border-radius: 10px;
+        border: 2px solid var(--primary-light);
+        bottom: 25px;
+        right: -16px;
+        z-index: 10;
+        transform: rotate(-15deg);
+        box-shadow: 0 10px 25px var(--primary-glow);
+        transition: all 0.3s ease;
+      }
+      .sim-phone.sending {
+        animation: phonePulse 0.4s ease infinite alternate;
+      }
+      @keyframes phonePulse {
+        0% { transform: rotate(-15deg) scale(1); }
+        100% { transform: rotate(-10deg) scale(1.2) translateY(-8px); }
+      }
+      .sim-phone-screen {
+        position: absolute;
+        inset: 8px 4px 6px 4px;
+        background: linear-gradient(180deg, #3B82F6, #6366F1);
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .sim-phone-screen::after {
+        content: '🪙';
+        font-size: 16px;
+      }
+
+      /* BEGGAR SIDE */
+      .beggar-side {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        transition: transform 0.4s ease;
+      }
+
+      .beggar-head {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, #d4a574, #b8860b);
+        border-radius: 50%;
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        box-shadow: inset -5px -5px 15px rgba(0,0,0,0.25);
+        z-index: 3;
+        transition: all 0.3s ease;
+      }
+
+      .beggar-eye {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        background: #1a1a2e;
+        border-radius: 50%;
+        top: 32px;
+        transition: all 0.3s ease;
+      }
+      .beggar-eye.left { left: 22px; }
+      .beggar-eye.right { right: 22px; }
+
+      .beggar-mouth {
+        position: absolute;
+        width: 24px;
+        height: 12px;
+        border-top: 3px solid #1a1a2e;
+        border-radius: 50% 50% 0 0;
+        top: 52px;
+        left: 50%;
+        transform: translateX(-50%);
+        transition: all 0.3s ease;
+      }
+
+      .sim-tear {
+        position: absolute;
+        width: 6px;
+        height: 10px;
+        background: #4fc3f7;
+        border-radius: 50%;
+        top: 42px;
+        opacity: 0;
+        animation: tearAnim 2s infinite;
+      }
+      .sim-tear.left { left: 18px; animation-delay: 0s; }
+      .sim-tear.right { right: 18px; animation-delay: 0.5s; }
+
+      @keyframes tearAnim {
+        0% { opacity: 0; transform: translateY(0) scale(0.5); }
+        20% { opacity: 1; transform: translateY(0) scale(1); }
+        100% { opacity: 0; transform: translateY(30px) scale(0.3); }
+      }
+
+      .beggar-body {
+        width: 110px;
+        height: 110px;
+        background: linear-gradient(135deg, #8b6f47, #5c4a2e);
+        border-radius: 50% 50% 20px 20px;
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 2;
+      }
+
+      /* KATORA BOWL */
+      .sim-katora {
+        position: absolute;
+        width: 90px;
+        height: 50px;
+        background: linear-gradient(180deg, #ffb800 0%, #e67e22 100%);
+        border-radius: 0 0 50% 50% / 0 0 100% 100%;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 7;
+        box-shadow: 0 10px 30px rgba(255, 184, 0, 0.5), inset 0 -10px 20px rgba(0,0,0,0.2);
+        transition: all 0.3s ease;
+        overflow: visible;
+      }
+      .sim-katora::before {
+        content: '';
+        position: absolute;
+        top: -6px;
+        left: -6px;
+        right: -6px;
+        height: 12px;
+        background: linear-gradient(90deg, #ffb800, #ffd93d, #ffb800);
+        border-radius: 50%;
+        box-shadow: 0 2px 8px rgba(255, 184, 0, 0.6);
+      }
+      .sim-katora-shine {
+        position: absolute;
+        top: -4px;
+        left: 20%;
+        width: 20px;
+        height: 6px;
+        background: rgba(255,255,255,0.8);
+        border-radius: 50%;
+        filter: blur(2px);
+        animation: katoraShineAnim 2s infinite;
+      }
+      @keyframes katoraShineAnim {
+        0%, 100% { opacity: 0.3; transform: translateX(0); }
+        50% { opacity: 1; transform: translateX(30px); }
+      }
+
+      .beggar-hand {
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, #d4a574, #b8860b);
+        border-radius: 50%;
+        bottom: -20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 6;
+      }
+
+      /* FLYING COIN */
+      .sim-coin {
+        position: fixed;
+        width: 60px;
+        height: 60px;
+        background: radial-gradient(circle at 30% 30%, #ffd93d, #ffb800 60%, #e67e22);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 30px;
+        font-weight: 900;
+        color: #8b4513;
+        font-family: var(--font-mono);
+        text-shadow: 0 1px 2px rgba(255,255,255,0.5);
+        box-shadow: 0 0 30px rgba(255, 184, 0, 0.8), inset -4px -4px 10px rgba(0,0,0,0.3), inset 4px 4px 10px rgba(255,255,255,0.5);
+        z-index: 10000;
+        opacity: 0;
+        pointer-events: none;
+        border: 2px solid #ffd93d;
+      }
+      .sim-coin::before {
+        content: '';
+        position: absolute;
+        inset: 6px;
+        border: 2px dashed rgba(139, 69, 19, 0.4);
+        border-radius: 50%;
+      }
+
+      /* SPARKLES & TING */
+      .sim-sparkle {
+        position: fixed;
+        width: 10px;
+        height: 10px;
+        background: #ffd93d;
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9999;
+        box-shadow: 0 0 10px #ffd93d, 0 0 20px #ffb800;
+      }
+
+      .sim-ting-text {
+        position: fixed;
+        font-size: 48px;
+        font-weight: 900;
+        color: #ffd93d;
+        text-shadow: 0 0 20px #ffb800, 0 0 40px #ffb800, 0 4px 0 #8b4513;
+        z-index: 10001;
+        pointer-events: none;
+        opacity: 0;
+        letter-spacing: 4px;
+        font-family: var(--font-heading);
+      }
+
+      .sim-plus-amount {
+        position: fixed;
+        font-size: 32px;
+        font-weight: 900;
+        color: var(--green);
+        text-shadow: 0 0 15px var(--green), 0 0 30px var(--green-glow);
+        z-index: 10001;
+        pointer-events: none;
+        opacity: 0;
+        font-family: var(--font-mono);
+      }
+
+      .sim-emote {
+        position: fixed;
+        font-size: 48px;
+        pointer-events: none;
+        z-index: 10001;
+        opacity: 0;
+        filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));
+      }
+
+      /* Phone reaction */
+      .sim-phone.sending {
+        animation: phoneShakeAnim 0.5s ease-in-out;
+      }
+      @keyframes phoneShakeAnim {
+        0%, 100% { transform: rotate(-15deg) translateX(0); }
+        20% { transform: rotate(-12deg) translateX(-5px); }
+        40% { transform: rotate(-18deg) translateX(5px); }
+        60% { transform: rotate(-12deg) translateX(-3px); }
+        80% { transform: rotate(-18deg) translateX(3px); }
+      }
+
+      /* Beggar happy */
+      .beggar-head.happy {
+        transform: translateX(-50%) scale(1.1);
+        background: linear-gradient(135deg, #ffd93d, #fbbf24);
+      }
+      .beggar-head.happy .beggar-eye {
+        height: 4px;
+        border-radius: 4px;
+        background: #1a1a2e;
+      }
+      .beggar-head.happy .beggar-mouth {
+        border-top: none;
+        border-bottom: 3px solid #1a1a2e;
+        border-radius: 0 0 50% 50%;
+        width: 30px;
+        height: 15px;
+        top: 50px;
+      }
+      .actor-character.happy {
+        animation: happyBounceAnim 0.6s ease-in-out;
+      }
+      @keyframes happyBounceAnim {
+        0%, 100% { transform: translateY(0); }
+        30% { transform: translateY(-15px); }
+        50% { transform: translateY(0); }
+        70% { transform: translateY(-8px); }
+      }
+
+      .sim-katora.shake {
+        animation: katoraShakeAnim 0.5s ease-in-out;
+      }
+      @keyframes katoraShakeAnim {
+        0%, 100% { transform: translateX(-50%) rotate(0deg); }
+        25% { transform: translateX(-50%) rotate(-8deg) scale(1.1); }
+        75% { transform: translateX(-50%) rotate(8deg) scale(1.1); }
+      }
+
+      /* FLOATING CONTROLS CONSOLE */
+      .sim-controls-console {
+        display: flex;
+        gap: 12px;
+        background: var(--glass-bg);
+        backdrop-filter: var(--glass-blur);
+        -webkit-backdrop-filter: var(--glass-blur);
+        padding: 16px 24px;
+        border-radius: var(--radius-pill);
+        border: 1px solid var(--border-glow);
+        box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        z-index: 50;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 1.5rem;
+      }
+
+      @media (max-width: 768px) {
+        .stage-box {
+          flex-direction: column;
+          height: auto;
+          gap: 30px;
+          padding: 20px 10px;
+        }
+        .actor-character { width: 120px; height: 150px; }
+        .person-head, .beggar-head { width: 60px; height: 60px; }
+        .person-body, .beggar-body { width: 80px; height: 80px; }
+        .sim-phone { width: 40px; height: 70px; bottom: 40px; }
+        .sim-katora { width: 70px; height: 40px; bottom: -5px; }
+        .beggar-hand { width: 30px; height: 30px; bottom: -15px; }
+        .sim-hand { width: 30px; height: 30px; bottom: 40px; right: -5px; }
+        .sim-controls-console { padding: 10px; gap: 8px; }
+        .sim-coin { width: 45px; height: 45px; font-size: 22px; }
+      }
+    </style>
+</head>
+<body>
+    <!-- Ambient Background Blobs -->
+    <div class="ambient-canvas">
+        <div class="mesh-blob blob-purple"></div>
+        <div class="mesh-blob blob-gold"></div>
+        <div class="mesh-blob blob-coral"></div>
+    </div>
+
+    <!-- 1. UNIFIED NAVBAR -->
+    <nav class="navbar">
+        <div class="container nav-wrap">
+            <a href="index.html" class="brand-logo">
+                <div class="logo-bowl-glow">
+                    <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 26px; height: 26px;">
+                        <path d="M4 14C4 22.8 10.2 30 18 30C25.8 30 32 22.8 32 14H4Z" fill="url(#brandBowlGrad)" stroke="#FFD93D" stroke-width="1.8"/>
+                        <ellipse cx="18" cy="14" rx="14" ry="4" fill="#FFB800" stroke="#FFEAA7" stroke-width="1.2"/>
+                        <circle cx="18" cy="7.5" r="4" fill="#FFD93D" stroke="#E67E22" stroke-width="1"/>
+                        <text x="18" y="9.5" font-size="5" font-weight="bold" fill="#8B4513" text-anchor="middle" font-family="'JetBrains Mono', monospace">₹</text>
+                        <defs>
+                            <linearGradient id="brandBowlGrad" x1="4" y1="14" x2="32" y2="30" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#6C5CE7"/>
+                                <stop offset="1" stop-color="#FFB800"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <span>Digital <span class="gradient-text">Katora</span></span>
+            </a>
+
+            <!-- Center Navigation -->
+            <div class="nav-center-menu">
+                <a href="index.html" class="nav-link-pill">Home</a>
+                <a href="katoras.html" class="nav-link-pill">All Katoras</a>
+                <a href="leaderboard.html" class="nav-link-pill">Leaderboard</a>
+                <a href="achievements.html" class="nav-link-pill">Badges</a>
+                <a href="donation-animation.html" class="nav-link-pill active">✨ Magic Demo</a>
+                <a href="about.html" class="nav-link-pill">About</a>
+            </div>
+
+            <!-- Right Actions -->
+            <div class="nav-actions">
+                <button class="theme-toggle-btn" id="themeToggleBtn" title="Toggle Theme" aria-label="Toggle Theme">
+                    <span class="theme-icon">🌙</span>
+                </button>
+                <a href="create-katora.html" class="btn btn-primary btn-magnetic nav-cta-btn">
+                    <span>🥣 Katora Banao</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 2. SIMULATION HERO STAGE -->
+    <section class="sim-hero-section">
+        <!-- Star particles -->
+        <div class="stars-container" id="starsBox"></div>
+
+        <div class="container" style="text-align: center; max-width: 850px; z-index: 10; margin-bottom: 1.5rem;">
+            <div class="hero-badge-pill animate-fade-in" style="margin-bottom: 1rem;">
+                <span class="badge-dot"></span>
+                <span>✨ 60fps Real-Time Physics Simulator ✨</span>
+            </div>
+            <h1 class="page-title" style="font-size: clamp(2rem, 4.5vw, 3.2rem); margin-bottom: 0.5rem;">
+                Phone Se Katora <span class="gradient-text-gold">Magic Transfer</span> 🪙
+            </h1>
+            <p style="color: var(--text-secondary); font-size: 1.05rem; margin: 0;">
+                Click any shagun amount below aur dekho kaise sikka hawa mein rotate hokar katora mein chham-chham girta hai!
+            </p>
+        </div>
+
+        <!-- STAGE CANVAS -->
+        <div class="stage-box">
+
+            <!-- DONOR SIDE -->
+            <div class="donor-side">
+                <div class="actor-label">😎 DONOR (Aap)</div>
+                <div class="actor-character">
+                    <div class="actor-img-wrap">
+                        <img src="mascot-donor-3d.png" alt="3D Donor Mascot" style="object-position: top 12%;">
+                    </div>
+                    <div class="sim-phone" id="donorPhone" title="Phone UPI Launcher">
+                        <div class="sim-phone-screen"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BEGGAR SIDE -->
+            <div class="beggar-side">
+                <div class="actor-label">🥺 BEGGAR (Rahul)</div>
+                <div class="actor-character" id="beggarPerson">
+                    <div class="actor-img-wrap">
+                        <img src="mascot-beggar-3d.jpg" alt="3D Beggar Mascot" style="object-position: top 18%;">
+                    </div>
+                    <div class="sim-katora" id="beggarKatora" title="Aluminium Katora Bowl">
+                        <div class="sim-katora-shine"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- CONTROLS CONSOLE -->
+        <div class="sim-controls-console">
+            <button class="btn btn-secondary btn-magnetic" onclick="triggerMagicDonation(1)">₹1 (Sikka)</button>
+            <button class="btn btn-secondary btn-magnetic" onclick="triggerMagicDonation(5)">₹5 (Cutting)</button>
+            <button class="btn btn-secondary btn-magnetic" onclick="triggerMagicDonation(11)">₹11 (Shagun)</button>
+            <button class="btn btn-primary btn-magnetic" onclick="triggerMagicDonation(51)">₹51 (Chai + Sutta)</button>
+            <button class="btn btn-primary btn-magnetic" onclick="triggerMagicDonation(101)">₹101 (Biryani Fund)</button>
+            <button class="btn btn-primary btn-magnetic" style="background: var(--gold-gradient); color: #0F0E17;" onclick="triggerMagicDonation(501)">👑 ₹501 (Ambani Flex)</button>
+        </div>
+
+        <!-- 3D Punya Ka Ghada Live Karma Pot -->
+        <div class="ghada-3d-showcase" style="max-width: 600px; margin: 2.5rem auto 1rem; width: 100%; display: flex; flex-direction: row; align-items: center; justify-content: space-around; gap: 1.5rem; flex-wrap: wrap; text-align: left;">
+            <div class="ghada-image-frame" style="width: 140px; height: 150px; margin: 0;">
+                <div class="ghada-aura-halo" style="width: 130px; height: 130px;"></div>
+                <img src="punya-ka-ghada-3d.jpg" alt="3D Punya Ka Ghada" class="ghada-3d-img">
+            </div>
+            <div style="flex: 1; min-width: 240px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem; flex-wrap: wrap; gap: 0.5rem;">
+                    <span class="badge" style="background: rgba(245, 158, 11, 0.2); color: var(--gold); border: 1px solid var(--gold);">🏺 Live Karma Ghada</span>
+                    <span id="demo-punya-points" class="punya-points-badge" style="background: var(--gold-gradient); color: #0F0E17; font-weight: 800;">
+                        ✨ +102 Punya
+                    </span>
+                </div>
+                <div class="ghada-meter-track" style="height: 12px; margin: 0.5rem 0;">
+                    <div id="demo-ghada-fill" class="ghada-meter-fill" style="width: 51%;"></div>
+                </div>
+                <div class="ghada-status-pill" style="font-size: 0.78rem;">
+                    <span id="demo-ghada-pct">51% Full</span>
+                    <span id="demo-ghada-tier" class="ghada-status-label" style="color: var(--green-light); font-weight: 700;">⚖️ Karmic Balance Good</span>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 1.5rem; z-index: 10; display: flex; gap: 1rem; flex-wrap: wrap;">
+            <a href="katora-detail.html" class="btn btn-glass" style="font-size: 0.9rem;">
+                <span>🥣</span> Rahul ke Asli Katora par Jao
+            </a>
+            <a href="katoras.html" class="btn btn-glass" style="font-size: 0.9rem;">
+                <span>🪙</span> Baaki Katore Dekho
+            </a>
+        </div>
+    </section>
+
+    <!-- 3. FOOTER -->
+        <!-- UNIFIED FOOTER -->
+    <footer class="site-footer">
+        <div class="container footer-grid">
+            <div class="footer-col brand-col">
+                <a href="index.html" class="brand-logo" style="margin-bottom: 1rem; display: inline-flex;">
+                    <div class="logo-bowl-glow">
+                        <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 26px; height: 26px;">
+                            <path d="M4 14C4 22.8 10.2 30 18 30C25.8 30 32 22.8 32 14H4Z" fill="url(#brandBowlGradFooter)" stroke="#FFD93D" stroke-width="1.8"/>
+                            <ellipse cx="18" cy="14" rx="14" ry="4" fill="#FFB800" stroke="#FFEAA7" stroke-width="1.2"/>
+                            <circle cx="18" cy="7.5" r="4" fill="#FFD93D" stroke="#E67E22" stroke-width="1"/>
+                            <text x="18" y="9.5" font-size="5" font-weight="bold" fill="#8B4513" text-anchor="middle" font-family="'JetBrains Mono', monospace">₹</text>
+                            <defs>
+                                <linearGradient id="brandBowlGradFooter" x1="4" y1="14" x2="32" y2="30" gradientUnits="userSpaceOnUse">
+                                    <stop stop-color="#6C5CE7"/>
+                                    <stop offset="1" stop-color="#FFB800"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <span>Digital <span class="gradient-text">Katora</span></span>
+                </a>
+                <p class="footer-tagline">
+                    India's premier satirical micro-tipping community. Khule paise nahi hain? Digital Katora scan karo!
+                </p>
+                <div class="social-links-row">
+                    <a href="https://instagram.com" target="_blank" class="social-icon-circle" title="Instagram" aria-label="Instagram">
+                        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                    </a>
+                    <a href="https://twitter.com" target="_blank" class="social-icon-circle" title="Twitter / X" aria-label="Twitter">
+                        <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    </a>
+                    <a href="https://github.com" target="_blank" class="social-icon-circle" title="GitHub" aria-label="GitHub">
+                        <svg viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <ul class="footer-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="katoras.html">Explore Katoras</a></li>
+                    <li><a href="create-katora.html">Start a Katora</a></li>
+                    <li><a href="leaderboard.html">Top Donors</a></li>
+                    <li><a href="achievements.html">Badges & Trophies</a></li>
+                    <li><a href="donation-animation.html">✨ Magic Demo</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Company & Fun</h4>
+                <ul class="footer-links">
+                    <li><a href="about.html">Our Story</a></li>
+                    <li><a href="faq.html">FAQs</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                    <li><a href="admin.html">Admin Panel</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Beggar Wisdom</h4>
+                <div class="card" style="padding: 1.25rem; background: var(--bg-surface); border: 1px solid var(--border-color);">
+                    <p style="font-style: italic; color: var(--gold); font-size: 0.9rem; margin-bottom: 0.5rem;">
+                        "Sharam chhoro, katora jodo! Dost se udhaar maangne se behtar hai public se maang lo."
+                    </p>
+                    <span style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);">— Ancient Tapri Proverb</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="container footer-bottom-flex">
+                <p>© 2025 Digital Katora. Crafted with 😂, ☕ & 🥣 in Bharat. 100% Satirical Platform.</p>
+                <div class="footer-legal-links">
+                    <a href="faq.html">Privacy & Terms</a>
+                    <a href="contact.html">Report Meme</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MOBILE STICKY BOTTOM NAV -->
+    <div class="mobile-bottom-nav">
+        <a href="index.html" class="mob-nav-item">
+            <span class="mob-nav-icon">🏠</span>
+            <span class="mob-nav-label">Home</span>
+        </a>
+        <a href="katoras.html" class="mob-nav-item">
+            <span class="mob-nav-icon">🥣</span>
+            <span class="mob-nav-label">Katoras</span>
+        </a>
+        <a href="create-katora.html" class="mob-nav-item mob-nav-create">
+            <span class="mob-nav-plus">+</span>
+        </a>
+        <a href="donation-animation.html" class="mob-nav-item active">
+            <span class="mob-nav-icon">✨</span>
+            <span class="mob-nav-label">Demo</span>
+        </a>
+        <a href="leaderboard.html" class="mob-nav-item">
+            <span class="mob-nav-icon">👑</span>
+            <span class="mob-nav-label">Ranks</span>
+        </a>
+    </div>
+
+    <!-- Scripts -->
+        <!-- MOBILE BOTTOM NAVIGATION BAR -->
+    <nav class="mobile-bottom-nav">
+        <a href="index.html" class="bottom-nav-item ">
+            <span class="bottom-nav-icon">
+                <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1h-5v-6h-6v6H4a1 1 0 01-1-1V9.5z"/></svg>
+            </span>
+            <span>Home</span>
+        </a>
+        <a href="katoras.html" class="bottom-nav-item ">
+            <span class="bottom-nav-icon">
+                <svg viewBox="0 0 24 24"><path d="M3 10c0 5.5 4 10 9 10s9-4.5 9-10H3z"/><path d="M3 10c0-1.5 4-2 9-2s9 .5 9 2"/></svg>
+            </span>
+            <span>Katoras</span>
+        </a>
+        <a href="create-katora.html" class="bottom-nav-item ">
+            <span class="bottom-nav-icon">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke="var(--primary-light)" stroke-width="2"/><path d="M12 8v8M8 12h8" stroke="#FFF" stroke-width="2.5" stroke-linecap="round"/></svg>
+            </span>
+            <span>Create</span>
+        </a>
+        <a href="donation-animation.html" class="bottom-nav-item active">
+            <span class="bottom-nav-icon">
+                <svg viewBox="0 0 24 24"><path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4L12 2z"/></svg>
+            </span>
+            <span>Demo</span>
+        </a>
+        <a href="leaderboard.html" class="bottom-nav-item ">
+            <span class="bottom-nav-icon">
+                <svg viewBox="0 0 24 24"><path d="M6 9V4h12v5c0 3.3-2.7 6-6 6s-6-2.7-6-6z"/><path d="M6 6H3c0 2.2 1.8 4 4 4"/><path d="M18 6h3c0 2.2-1.8 4-4 4"/><path d="M12 15v4m-4 2h8"/></svg>
+            </span>
+            <span>Ranks</span>
+        </a>
+        <a href="profile.html" class="bottom-nav-item ">
+            <span class="bottom-nav-icon">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M6 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg>
+            </span>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <script src="data-store.js"></script>
+    <script src="script.js"></script>
+    <script>
+      // 1. STAR PARTICLES
+      const starsBox = document.getElementById('starsBox');
+      if (starsBox) {
+        for (let i = 0; i < 70; i++) {
+          const star = document.createElement('div');
+          star.className = 'sim-star';
+          star.style.left = Math.random() * 100 + '%';
+          star.style.top = Math.random() * 100 + '%';
+          star.style.animationDelay = Math.random() * 3 + 's';
+          starsBox.appendChild(star);
+        }
+      }
+
+      // 2. TRIGGER MAGIC DONATION
+      function triggerMagicDonation(amount) {
+        const phone = document.getElementById('donorPhone');
+        const katora = document.getElementById('beggarKatora');
+
+        if (!phone || !katora) return;
+
+        // Phone shake animation
+        phone.classList.add('sending');
+        setTimeout(() => phone.classList.remove('sending'), 500);
+
+        const phoneRect = phone.getBoundingClientRect();
+        const katoraRect = katora.getBoundingClientRect();
+
+        const startX = phoneRect.left + phoneRect.width / 2;
+        const startY = phoneRect.top + phoneRect.height / 2;
+        const endX = katoraRect.left + katoraRect.width / 2;
+        const endY = katoraRect.top + katoraRect.height / 2;
+
+        setTimeout(() => {
+          launchFlyingCoin(startX, startY, endX, endY, amount);
+        }, 250);
+      }
+
+      // 3. PARABOLIC COIN FLIGHT
+      function launchFlyingCoin(startX, startY, endX, endY, amount) {
+        const coin = document.createElement('div');
+        coin.className = 'sim-coin';
+        coin.textContent = '₹';
+        coin.style.left = startX + 'px';
+        coin.style.top = startY + 'px';
+        coin.style.transform = 'translate(-50%, -50%) scale(0)';
+        coin.style.transition = 'opacity 0.2s ease';
+        coin.style.opacity = '1';
+        document.body.appendChild(coin);
+
+        requestAnimationFrame(() => {
+          coin.style.transition = 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)';
+          coin.style.transform = 'translate(-50%, -50%) scale(1)';
+        });
+
+        setTimeout(() => {
+          const duration = 900;
+          const startTime = performance.now();
+          const arcHeight = window.innerWidth <= 768 ? 100 : 180;
+
+          function animateFrame(now) {
+            const elapsed = now - startTime;
+            const t = Math.min(elapsed / duration, 1);
+
+            const eased = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+            const x = startX + (endX - startX) * eased;
+            const y = startY + (endY - startY) * eased - Math.sin(t * Math.PI) * arcHeight;
+            const rotation = t * 720;
+
+            coin.style.left = x + 'px';
+            coin.style.top = y + 'px';
+            coin.style.transform = `translate(-50%, -50%) scale(${1 - t * 0.2}) rotate(${rotation}deg)`;
+
+            if (t < 0.9 && Math.random() > 0.4) {
+              createSimSparkle(x, y);
+            }
+
+            if (t < 1) {
+              requestAnimationFrame(animateFrame);
+            } else {
+              handleCoinImpact(coin, endX, endY, amount);
+            }
+          }
+
+          requestAnimationFrame(animateFrame);
+        }, 200);
+      }
+
+      // 4. COIN IMPACT CELEBRATION
+      function handleCoinImpact(coin, endX, endY, amount) {
+        if (window.DK && window.DK.playCoinDropSound) {
+          window.DK.playCoinDropSound();
+        }
+
+        coin.style.transition = 'transform 0.2s ease, opacity 0.2s ease';
+        coin.style.transform = 'translate(-50%, -50%) scale(0)';
+        coin.style.opacity = '0';
+        setTimeout(() => coin.remove(), 250);
+
+        const katora = document.getElementById('beggarKatora');
+        katora.classList.add('shake');
+        setTimeout(() => katora.classList.remove('shake'), 500);
+
+        for (let i = 0; i < 15; i++) {
+          createImpactBurst(endX, endY);
+        }
+
+        showSimTing(endX, endY - 60);
+        // Update Live 3D Punya Ka Ghada
+        const punyaEarned = amount * 2;
+        window.currentDemoPunya = (window.currentDemoPunya || 510) + punyaEarned;
+        const ptsEl = document.getElementById('demo-punya-points');
+        const fillEl = document.getElementById('demo-ghada-fill');
+        const pctEl = document.getElementById('demo-ghada-pct');
+        const tierEl = document.getElementById('demo-ghada-tier');
+        if (ptsEl) ptsEl.textContent = `✨ ${window.currentDemoPunya} Pts (+${punyaEarned})`;
+        const pct = Math.min(Math.round((window.currentDemoPunya / 1000) * 100), 100);
+        if (fillEl) fillEl.style.width = pct + '%';
+        if (pctEl) pctEl.textContent = pct + '% Full';
+        if (tierEl) {
+          if (pct >= 100) { tierEl.textContent = '🌟 Swarg VIP Pass / Moksha'; tierEl.style.color = 'var(--gold-light)'; }
+          else if (pct >= 75) { tierEl.textContent = '👑 Agla Janam Raja Ka'; }
+          else if (pct >= 50) { tierEl.textContent = '⚖️ Karmic Balance Good'; }
+          else { tierEl.textContent = '🧼 Paap Dhul Rahe Hain'; }
+        }
+
+        setTimeout(() => triggerBeggarHappiness(), 200);
+
+        if (amount >= 51 && window.DK && window.DK.triggerConfetti) {
+          window.DK.triggerConfetti(endX, endY);
+        }
+
+        if (amount >= 101) {
+          setTimeout(() => {
+            showSimEmote('🤑', endX - 50, endY - 150);
+            showSimEmote('💰', endX + 50, endY - 150);
+          }, 350);
+        }
+      }
+
+      // 5. BEGGAR SMILE STATE
+      function triggerBeggarHappiness() {
+        const beggarPerson = document.getElementById('beggarPerson');
+        const katora = document.getElementById('beggarKatora');
+
+        if (beggarPerson) beggarPerson.classList.add('happy');
+        if (katora) katora.style.boxShadow = '0 0 60px rgba(255, 184, 0, 1), inset 0 -10px 20px rgba(0,0,0,0.2)';
+
+        if (beggarPerson) {
+          const rect = beggarPerson.getBoundingClientRect();
+          showSimEmote('😍', rect.left + rect.width / 2 - 24, rect.top - 60);
+        }
+
+        setTimeout(() => {
+          if (beggarPerson) beggarPerson.classList.remove('happy');
+          if (katora) katora.style.boxShadow = '0 10px 30px rgba(255, 184, 0, 0.5), inset 0 -10px 20px rgba(0,0,0,0.2)';
+        }, 2500);
+      }
+
+      // 6. SPARKLES & EMOTES
+      function createSimSparkle(x, y) {
+        const s = document.createElement('div');
+        s.className = 'sim-sparkle';
+        s.style.left = x + 'px';
+        s.style.top = y + 'px';
+        s.style.transform = 'translate(-50%, -50%)';
+        document.body.appendChild(s);
+
+        const dx = (Math.random() - 0.5) * 50;
+        const dy = (Math.random() - 0.5) * 50;
+        requestAnimationFrame(() => {
+          s.style.transition = 'all 0.5s ease-out';
+          s.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) scale(0)`;
+          s.style.opacity = '0';
+        });
+        setTimeout(() => s.remove(), 500);
+      }
+
+      function createImpactBurst(x, y) {
+        const s = document.createElement('div');
+        s.className = 'sim-sparkle';
+        s.style.left = x + 'px';
+        s.style.top = y + 'px';
+        s.style.background = Math.random() > 0.5 ? 'var(--gold-light)' : 'var(--gold)';
+        document.body.appendChild(s);
+
+        const angle = Math.random() * Math.PI * 2;
+        const distance = Math.random() * 90 + 20;
+        const dx = Math.cos(angle) * distance;
+        const dy = Math.sin(angle) * distance;
+
+        requestAnimationFrame(() => {
+          s.style.transition = 'all 0.7s cubic-bezier(0.34, 1.56, 0.64, 1)';
+          s.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) scale(0)`;
+          s.style.opacity = '0';
+        });
+        setTimeout(() => s.remove(), 700);
+      }
+
+      function showSimTing(x, y) {
+        const t = document.createElement('div');
+        t.className = 'sim-ting-text';
+        t.textContent = 'TING! 🔔';
+        t.style.left = x + 'px';
+        t.style.top = y + 'px';
+        t.style.transform = 'translate(-50%, -50%) scale(0)';
+        document.body.appendChild(t);
+
+        requestAnimationFrame(() => {
+          t.style.transition = 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
+          t.style.opacity = '1';
+          t.style.transform = 'translate(-50%, -50%) scale(1.2) rotate(6deg)';
+        });
+        setTimeout(() => {
+          t.style.transition = 'all 0.6s ease-out';
+          t.style.transform = 'translate(-50%, -90px) scale(0.8)';
+          t.style.opacity = '0';
+        }, 500);
+        setTimeout(() => t.remove(), 1100);
+      }
+
+      function showSimPlus(x, y, amount) {
+        const p = document.createElement('div');
+        p.className = 'sim-plus-amount';
+        p.textContent = '+' + amount;
+        p.style.left = x + 'px';
+        p.style.top = y + 'px';
+        p.style.transform = 'translate(-50%, -50%) scale(0)';
+        document.body.appendChild(p);
+
+        requestAnimationFrame(() => {
+          p.style.transition = 'all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
+          p.style.opacity = '1';
+          p.style.transform = 'translate(-50%, -50%) scale(1.4)';
+        });
+        setTimeout(() => {
+          p.style.transition = 'all 0.7s ease-out';
+          p.style.transform = 'translate(-50%, -140px) scale(1)';
+          p.style.opacity = '0';
+        }, 600);
+        setTimeout(() => p.remove(), 1300);
+      }
+
+      function showSimEmote(emoji, x, y) {
+        const e = document.createElement('div');
+        e.className = 'sim-emote';
+        e.textContent = emoji;
+        e.style.left = x + 'px';
+        e.style.top = y + 'px';
+        e.style.transform = 'translate(-50%, -50%) scale(0)';
+        document.body.appendChild(e);
+
+        requestAnimationFrame(() => {
+          e.style.transition = 'all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
+          e.style.opacity = '1';
+          e.style.transform = 'translate(-50%, -50%) scale(1.1)';
+        });
+        setTimeout(() => {
+          e.style.transition = 'all 0.8s ease-out';
+          e.style.transform = 'translate(-50%, -110px) scale(0.6)';
+          e.style.opacity = '0';
+        }, 800);
+        setTimeout(() => e.remove(), 1600);
+      }
+    </script>
+</body>
+</html>

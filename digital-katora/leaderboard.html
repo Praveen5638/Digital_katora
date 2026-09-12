@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="hi" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>👑 Top Donors & Mahadaani Leaderboard — Digital Katora</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Design System Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+    
+    <meta name="description" content="Discover the Top Donors and Mahadaanis of Digital Katora. Compete, earn punya karma points, unlock legendary badges, and flex your ranking!">
+    <meta name="theme-color" content="#6C5CE7">
+</head>
+<body>
+    <!-- Ambient Background Blobs & Floating Coins -->
+    <div class="ambient-canvas">
+        <div class="mesh-blob blob-purple"></div>
+        <div class="mesh-blob blob-gold"></div>
+        <div class="mesh-blob blob-coral"></div>
+        <div class="floating-coin-bg" style="top: 14%; left: 6%;">👑</div>
+        <div class="floating-coin-bg" style="top: 50%; right: 8%; animation-delay: -3.5s;">🪙</div>
+        <div class="floating-coin-bg" style="bottom: 25%; left: 12%; animation-delay: -7s;">✨</div>
+    </div>
+
+    <!-- 1. STICKY NAVBAR -->
+    <nav class="navbar" id="siteNavbar">
+        <div class="container nav-wrap">
+            <!-- Brand Logo -->
+            <a href="index.html" class="brand-logo" aria-label="Digital Katora Home">
+                <div class="logo-bowl-glow">
+                    <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 26px; height: 26px;">
+                        <path d="M4 14C4 22.8 10.2 30 18 30C25.8 30 32 22.8 32 14H4Z" fill="url(#navBrandBowlGradLB)" stroke="#FFD93D" stroke-width="1.8"/>
+                        <ellipse cx="18" cy="14" rx="14" ry="4" fill="#FFB800" stroke="#FFEAA7" stroke-width="1.2"/>
+                        <circle cx="18" cy="7.5" r="4" fill="#FFD93D" stroke="#E67E22" stroke-width="1"/>
+                        <text x="18" y="9.5" font-size="5" font-weight="bold" fill="#8B4513" text-anchor="middle" font-family="'JetBrains Mono', monospace">₹</text>
+                        <defs>
+                            <linearGradient id="navBrandBowlGradLB" x1="4" y1="14" x2="32" y2="30" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#6C5CE7"/>
+                                <stop offset="1" stop-color="#FFB800"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <span>Digital <span class="gradient-text">Katora</span></span>
+            </a>
+
+            <!-- Center Menu -->
+            <div class="nav-center-menu">
+                <a href="index.html" class="nav-link-pill">Home</a>
+                <a href="katoras.html" class="nav-link-pill">Katoras</a>
+                <a href="leaderboard.html" class="nav-link-pill active">Top Donors</a>
+                <a href="index.html#how-it-works" class="nav-link-pill">How It Works</a>
+            </div>
+
+            <!-- Right Actions -->
+            <div class="nav-right-actions">
+                <button id="theme-toggle-btn" class="theme-toggle-btn" title="Toggle Dark/Light Mode" aria-label="Toggle Theme">
+                    <span class="theme-icon">🌙</span>
+                </button>
+                <div class="magnetic-btn-wrap">
+                    <a href="create-katora.html" class="btn btn-primary-gradient btn-glow-pulse" style="padding: 0.65rem 1.4rem; font-size: 0.9rem;">
+                        <span>🥣</span> Mera Katora Banao
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN LEADERBOARD CONTAINER -->
+    <main class="lb-page-container" id="leaderboardPageWrap">
+        
+        <!-- 2. HERO HEADER -->
+        <header class="lb-hero-section">
+            <span class="hero-pill-badge" style="margin-bottom: 0.5rem; font-size: 0.82rem;">👑 HALL OF FAME & KARMA RANKS</span>
+            <h1 class="lb-hero-title">
+                Katore Ke <span class="gradient-text">Mahadaani 👑</span>
+            </h1>
+            <p class="lb-hero-subtitle">
+                जिन्होंने डिजिटल कटोरे में सिक्के डालकर सबसे ज्यादा पुण्य और कर्मा का रिकॉर्ड बनाया! क्या आपका नाम टॉप 3 में है? 😂
+            </p>
+        </header>
+
+        <!-- 3. TIME FILTER (Segmented Control) -->
+        <div class="lb-time-filter-wrap">
+            <div class="lb-time-filter-bar">
+                <button type="button" class="lb-filter-btn" onclick="setLeaderboardFilter('today', this)">
+                    📅 Today (आज का)
+                </button>
+                <button type="button" class="lb-filter-btn" onclick="setLeaderboardFilter('week', this)">
+                    ⚡ This Week (इस हफ्ते)
+                </button>
+                <button type="button" class="lb-filter-btn" onclick="setLeaderboardFilter('month', this)">
+                    🌟 This Month (इस महीने)
+                </button>
+                <button type="button" class="lb-filter-btn active" onclick="setLeaderboardFilter('all', this)">
+                    👑 All Time (अब तक का)
+                </button>
+            </div>
+        </div>
+
+        <!-- 4. TOP 3 ROYAL COURT PODIUM -->
+        <section class="lb-podium-section" aria-label="Top 3 Royal Podium">
+            <div class="lb-podium-grid" id="lbPodiumGrid">
+                <!-- Dynamically injected via script.js -->
+            </div>
+        </section>
+
+        <!-- 5. HALL OF FAME CARDS -->
+        <section class="lb-hall-of-fame-section" aria-label="Hall of Fame Grid">
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 0.75rem;">
+                <div>
+                    <span class="hero-pill-badge" style="margin-bottom: 0.35rem; font-size: 0.78rem;">💎 ROYAL COURT</span>
+                    <h3 style="font-size: 1.6rem; margin: 0;">Hall of Fame (शीर्ष दानवीर)</h3>
+                </div>
+                <span style="font-size: 0.85rem; color: var(--text-muted); font-family: var(--font-mono);">
+                    ⚡ 100% Verified UPI Contributions
+                </span>
+            </div>
+
+            <!-- Dynamic Hall of Fame Grid -->
+            <div class="lb-hall-grid" id="lbHallOfFameGrid">
+                <!-- Dynamically populated via script.js -->
+            </div>
+        </section>
+
+        <!-- 6. FULL LEADERBOARD TABLE (Desktop Table / Mobile Cards) -->
+        <section class="lb-full-table-section" aria-label="Complete Leaderboard Table">
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem;">
+                <div>
+                    <span class="hero-pill-badge" style="margin-bottom: 0.35rem; font-size: 0.78rem;">📋 RANK LIST</span>
+                    <h3 style="font-size: 1.6rem; margin: 0;">Complete Leaderboard (पूरी रैंकिंग)</h3>
+                </div>
+                <span style="font-size: 0.85rem; color: var(--text-muted); font-family: var(--font-mono);">
+                    UPDATED LIVE
+                </span>
+            </div>
+
+            <div class="lb-table-card">
+                <!-- Desktop Table View -->
+                <table class="lb-table-desktop">
+                    <thead>
+                        <tr>
+                            <th>RANK</th>
+                            <th>DONOR (दानी)</th>
+                            <th>ACHIEVEMENT BADGE</th>
+                            <th>TOTAL DONATED</th>
+                            <th>DONATIONS</th>
+                            <th>ACTION</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lbTableBodyDesktop">
+                        <!-- Populated dynamically via script.js -->
+                    </tbody>
+                </table>
+
+                <!-- Mobile Card View -->
+                <div class="lb-mobile-cards-list" id="lbMobileCardsList">
+                    <!-- Populated dynamically on mobile via script.js -->
+                </div>
+            </div>
+
+            <!-- Sticky / Anchored "Your Rank" Card -->
+            <div class="lb-your-rank-card">
+                <div style="display: flex; align-items: center; gap: 0.85rem;">
+                    <div style="font-size: 1.8rem;">😎</div>
+                    <div>
+                        <div style="font-weight: 800; font-size: 1.05rem; color: var(--text-primary);">
+                            Aapka Rank: <span class="gradient-text" style="font-family: var(--font-mono);">#14 (Aapka Naam)</span>
+                        </div>
+                        <div style="font-size: 0.8rem; color: var(--text-secondary);">
+                            ₹1,250 Donated &bull; 14 Katoras Helped &bull; <span style="color: var(--gold-light); font-weight: 700;">850 Punya Pts</span>
+                        </div>
+                    </div>
+                </div>
+                <a href="katoras.html" class="btn btn-primary-gradient btn-sm" style="white-space: nowrap;">
+                    <span>🥣</span> Daan Karke Rank Badhao &rarr;
+                </a>
+            </div>
+        </section>
+
+        <!-- 7. ACHIEVEMENT PROGRESSION ROADMAP -->
+        <section class="lb-achievement-ladder-section" aria-label="Achievement Progression Ladder">
+            <div class="lb-ladder-card">
+                <div style="text-align: center; max-width: 600px; margin: 0 auto 1.5rem;">
+                    <span class="hero-pill-badge" style="margin-bottom: 0.35rem; font-size: 0.78rem;">🏆 LEVEL PROGRESSION</span>
+                    <h3 style="font-size: 1.6rem; margin: 0 0 0.25rem;">Achievement Levels (पुण्य का सफर)</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin: 0;">
+                        जैसे-जैसे आप कटोरे में सिक्के डालेंगे, आपके लेवल्स और कर्मा बैज अनलॉक होते जाएंगे:
+                    </p>
+                </div>
+
+                <!-- 6 Progression Nodes Grid -->
+                <div class="lb-ladder-track">
+                    <div class="lb-ladder-node unlocked">
+                        <span class="lb-ladder-icon">🥣</span>
+                        <div class="lb-ladder-amt">₹1+</div>
+                        <div class="lb-ladder-title">Katora Friend</div>
+                        <span style="font-size: 0.7rem; color: var(--green-light); font-weight: 700;">✓ UNLOCKED</span>
+                    </div>
+
+                    <div class="lb-ladder-node unlocked">
+                        <span class="lb-ladder-icon">☕</span>
+                        <div class="lb-ladder-amt">₹100+</div>
+                        <div class="lb-ladder-title">Katora Supporter</div>
+                        <span style="font-size: 0.7rem; color: var(--green-light); font-weight: 700;">✓ UNLOCKED</span>
+                    </div>
+
+                    <div class="lb-ladder-node unlocked">
+                        <span class="lb-ladder-icon">💎</span>
+                        <div class="lb-ladder-amt">₹500+</div>
+                        <div class="lb-ladder-title">Maha-Daani</div>
+                        <span style="font-size: 0.7rem; color: var(--green-light); font-weight: 700;">✓ UNLOCKED</span>
+                    </div>
+
+                    <div class="lb-ladder-node unlocked">
+                        <span class="lb-ladder-icon">👑</span>
+                        <div class="lb-ladder-amt">₹1,000+</div>
+                        <div class="lb-ladder-title">Katora King</div>
+                        <span style="font-size: 0.7rem; color: var(--green-light); font-weight: 700;">✓ UNLOCKED</span>
+                    </div>
+
+                    <div class="lb-ladder-node locked">
+                        <span class="lb-ladder-icon">⚡</span>
+                        <div class="lb-ladder-amt">₹5,000+</div>
+                        <div class="lb-ladder-title">Katora Legend</div>
+                        <span style="font-size: 0.7rem; color: var(--text-muted); font-weight: 700;">🔒 LOCKED</span>
+                    </div>
+
+                    <div class="lb-ladder-node locked">
+                        <span class="lb-ladder-icon">🌟</span>
+                        <div class="lb-ladder-amt">TOP 3</div>
+                        <div class="lb-ladder-title">Legendary Donor</div>
+                        <span style="font-size: 0.7rem; color: var(--text-muted); font-weight: 700;">👑 ROYAL ONLY</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 8. SHARE ACHIEVEMENT 9:16 STORY SHOWCASE -->
+        <section class="lb-share-showcase-section" id="lbShareShowcaseSection" aria-label="Share Your Ranking Achievement">
+            <span class="hero-pill-badge" style="margin-bottom: 0.35rem; font-size: 0.78rem;">📸 SOCIAL FLEX CARDS</span>
+            <h2 class="text-h2" style="font-size: clamp(1.8rem, 3.5vw, 2.4rem); margin: 0 0 0.5rem;">
+                Apna Rank & Achievement <span class="gradient-text">Flex Karein! 👑</span>
+            </h2>
+            <p style="color: var(--text-secondary); font-size: 1rem; max-width: 600px; margin: 0 auto;">
+                Instagram Story (9:16), WhatsApp और Twitter पर अपना कर्मा स्कोर और लीडरबोर्ड कार्ड शेयर करें!
+            </p>
+
+            <div class="lb-share-flex-wrap">
+                <!-- 9:16 Vertical Story Preview Card -->
+                <div class="lb-story-card-916" id="lbStoryCard916">
+                    <!-- Brand Top -->
+                    <div class="lb-story-brand">
+                        <span>🥣</span>
+                        <span>DIGITAL <span class="gradient-text">KATORA</span></span>
+                    </div>
+
+                    <!-- Donor Profile Center -->
+                    <div>
+                        <div class="lb-story-avatar-box" id="shareStoryAvatarBox">
+                            <img src="mascot-donor-3d.png" alt="Donor Avatar">
+                        </div>
+                        <div style="font-size: 1.8rem; margin: -10px 0 0.25rem;">👑</div>
+                        <h3 style="font-size: 1.35rem; margin: 0 0 0.25rem;" id="shareStoryDonorName">समीर राव</h3>
+                        <div class="badge" style="background: var(--gold-gradient); color: #0F0E17; font-weight: 800; font-size: 0.78rem; padding: 0.25rem 0.75rem;" id="shareStoryRankBadge">
+                            RANK #1 • MAHA-DAANI SAMRAT
+                        </div>
+                    </div>
+
+                    <!-- Contribution & Karma Stats -->
+                    <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 184, 0, 0.3); border-radius: 18px; padding: 1rem;">
+                        <div style="font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-mono); font-weight: 700;">TOTAL COINS DROPPED</div>
+                        <div style="font-family: var(--font-mono); font-size: 1.9rem; font-weight: 900; color: var(--gold-light);" id="shareStoryTotalAmount">₹25,001</div>
+                        <div style="font-size: 0.75rem; color: var(--green-light); font-weight: 700; margin-top: 0.25rem;" id="shareStoryPunyaPoints">
+                            ⭐ +50,002 Punya Points • VIP Swarg Pass!
+                        </div>
+                    </div>
+
+                    <!-- Story Footer -->
+                    <div style="font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-mono);">
+                        digitalkatora.app &bull; Punya & Meme Economy
+                    </div>
+                </div>
+
+                <!-- 1-Click Action Buttons Panel -->
+                <div class="lb-story-actions-panel">
+                    <h4 style="font-size: 1.25rem; margin: 0 0 0.5rem; color: var(--text-primary);">
+                        1-Click Share & Download:
+                    </h4>
+                    <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 1rem;">
+                        ऊपर दी गई किसी भी प्रोफाइल का कार्ड सिलेक्ट करें और सीधा सोशल मीडिया पर फ्लेक्स करें!
+                    </p>
+
+                    <button type="button" class="btn btn-primary-gradient" onclick="shareLeaderboardInstagram()" style="width: 100%; justify-content: center;">
+                        <span>📸</span> Share on Instagram Story (9:16)
+                    </button>
+                    <button type="button" class="btn btn-glass" onclick="shareLeaderboardWhatsApp()" style="width: 100%; justify-content: center; border-color: rgba(37, 211, 102, 0.4); color: #25D366 !important;">
+                        <span>💬</span> Share on WhatsApp Status
+                    </button>
+                    <button type="button" class="btn btn-glass" onclick="shareLeaderboardTwitter()" style="width: 100%; justify-content: center; border-color: rgba(29, 161, 242, 0.4); color: #1DA1F2 !important;">
+                        <span>🐦</span> Share on Twitter / X
+                    </button>
+                    <button type="button" class="btn btn-glass" onclick="downloadShareCard()" style="width: 100%; justify-content: center; border-color: rgba(255, 184, 0, 0.4); color: var(--gold-light) !important;">
+                        <span>💾</span> Download Card Image
+                    </button>
+                    <button type="button" class="btn btn-glass" onclick="copyLeaderboardShareLink()" style="width: 100%; justify-content: center;">
+                        <span>📋</span> Copy Leaderboard Link
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 9. LIVE RANKING ACTIVITY TICKER -->
+        <section class="lb-activity-ticker-wrap" aria-label="Live Ranking Activity">
+            <div class="lb-activity-item">
+                <span style="font-size: 1.6rem; animation: pulseGlow 1.5s infinite ease-in-out;">⚡</span>
+                <div>
+                    <span style="font-size: 0.75rem; color: var(--green-light); font-family: var(--font-mono); font-weight: 800;">LIVE RANKING MOVEMENT</span>
+                    <div style="font-size: 0.92rem; color: var(--text-primary);">
+                        🚀 <strong>अमन वर्मा</strong> ने ₹501 दान करके #2 रैंक पर अपनी पकड़ मजबूत की!
+                    </div>
+                </div>
+            </div>
+            <a href="katoras.html" style="font-size: 0.85rem; color: var(--primary-light); font-weight: 700; white-space: nowrap;">
+                आप भी दान करें &rarr;
+            </a>
+        </section>
+
+        <!-- 10. CONVERSION CTA -->
+        <section aria-label="Call to Action Banner">
+            <div class="card card-glow" style="background: linear-gradient(135deg, rgba(108, 92, 231, 0.18) 0%, rgba(255, 184, 0, 0.14) 100%); border: 1.5px solid var(--border-glow); padding: 4rem 2rem; text-align: center; border-radius: 28px; position: relative; overflow: hidden;">
+                <div style="font-size: 3.5rem; margin-bottom: 0.75rem; animation: floatMascot 3s ease-in-out infinite;">👑</div>
+                <h2 class="text-h2" style="font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 0.75rem;">
+                    Apna Naam Leaderboard Par <span class="gradient-text">Lao! 😂</span>
+                </h2>
+                <p style="color: var(--text-secondary); font-size: 1.1rem; max-width: 600px; margin: 0 auto 2rem; line-height: 1.6;">
+                    किसी भी भूखी आत्मा या गरीब स्टूडेंट के कटोरे में सिक्का डालें और तुरंत टॉप महा-दानी की लिस्ट में शामिल हों!
+                </p>
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <a href="katoras.html" class="btn btn-primary-gradient btn-lg btn-glow-pulse" style="font-size: 1.1rem; padding: 0.9rem 2.2rem;">
+                        <span>🥣</span> Explore Katoras & Donate &rarr;
+                    </a>
+                    <a href="create-katora.html" class="btn btn-glass btn-lg" style="font-size: 1.1rem; padding: 0.9rem 2.2rem;">
+                        <span>✨</span> Apna Katora Banao
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 11. UNIFIED FOOTER -->
+    <footer class="footer">
+        <div class="container footer-grid">
+            <div class="footer-brand">
+                <a href="index.html" class="brand-logo" style="margin-bottom: 1rem; display: inline-flex;">
+                    <div class="logo-bowl-glow">
+                        <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 24px; height: 24px;">
+                            <path d="M4 14C4 22.8 10.2 30 18 30C25.8 30 32 22.8 32 14H4Z" fill="url(#brandBowlGradFooterLB)" stroke="#FFD93D" stroke-width="1.8"/>
+                            <ellipse cx="18" cy="14" rx="14" ry="4" fill="#FFB800" stroke="#FFEAA7" stroke-width="1.2"/>
+                            <circle cx="18" cy="7.5" r="4" fill="#FFD93D" stroke="#E67E22" stroke-width="1"/>
+                            <text x="18" y="9.5" font-size="5" font-weight="bold" fill="#8B4513" text-anchor="middle" font-family="'JetBrains Mono', monospace">₹</text>
+                            <defs>
+                                <linearGradient id="brandBowlGradFooterLB" x1="4" y1="14" x2="32" y2="30" gradientUnits="userSpaceOnUse">
+                                    <stop stop-color="#6C5CE7"/>
+                                    <stop offset="1" stop-color="#FFB800"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <span>Digital <span class="gradient-text">Katora</span></span>
+                </a>
+                <p class="footer-tagline">
+                    India's premier satirical micro-tipping community. Khule paise nahi hain? Digital Katora scan karo!
+                </p>
+                <div class="social-links-row">
+                    <a href="https://instagram.com" target="_blank" class="social-icon-circle" title="Instagram" aria-label="Instagram">
+                        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                    </a>
+                    <a href="https://twitter.com" target="_blank" class="social-icon-circle" title="Twitter / X" aria-label="Twitter">
+                        <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    </a>
+                    <a href="https://github.com" target="_blank" class="social-icon-circle" title="GitHub" aria-label="GitHub">
+                        <svg viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4>Navigation</h4>
+                <ul class="footer-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="katoras.html">Explore Katoras</a></li>
+                    <li><a href="leaderboard.html">Top Donors</a></li>
+                    <li><a href="index.html#how-it-works">How It Works</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Quick Info</h4>
+                <ul class="footer-links">
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="faq.html">FAQ</a></li>
+                    <li><a href="contact.html">Contact Tapri HQ</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Tapri Proverb</h4>
+                <div class="card" style="padding: 1.25rem; background: var(--bg-surface); border: 1px solid var(--border-subtle);">
+                    <p style="font-style: italic; color: var(--gold); font-size: 0.9rem; margin-bottom: 0.5rem;">
+                        "Sharam chhoro, katora jodo! Dost se udhaar maangne se behtar hai public se maang lo."
+                    </p>
+                    <span style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);">— Ancient Tapri Wisdom</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="container footer-bottom-flex">
+                <p>© 2025 Digital Katora. Crafted with 😂, ☕ & 🥣 in Bharat. 100% Satirical Platform.</p>
+                <div class="footer-legal-links">
+                    <a href="faq.html">Privacy Policy</a>
+                    <a href="faq.html">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MOBILE BOTTOM NAVIGATION BAR -->
+    <nav class="mobile-bottom-nav">
+        <a href="index.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">
+                <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1h-5v-6h-6v6H4a1 1 0 01-1-1V9.5z"/></svg>
+            </span>
+            <span>Home</span>
+        </a>
+        <a href="katoras.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">
+                <svg viewBox="0 0 24 24"><path d="M3 10c0 5.5 4 10 9 10s9-4.5 9-10H3z"/><path d="M3 10c0-1.5 4-2 9-2s9 .5 9 2"/></svg>
+            </span>
+            <span>Katoras</span>
+        </a>
+        <a href="create-katora.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke="var(--primary-light)" stroke-width="2"/><path d="M12 8v8M8 12h8" stroke="#FFF" stroke-width="2.5" stroke-linecap="round"/></svg>
+            </span>
+            <span>Create</span>
+        </a>
+        <a href="leaderboard.html" class="bottom-nav-item active">
+            <span class="bottom-nav-icon">
+                <svg viewBox="0 0 24 24"><path d="M6 9V4h12v5c0 3.3-2.7 6-6 6s-6-2.7-6-6z"/><path d="M6 6H3c0 2.2 1.8 4 4 4"/><path d="M18 6h3c0 2.2-1.8 4-4 4"/><path d="M12 15v4m-4 2h8"/></svg>
+            </span>
+            <span>Ranks</span>
+        </a>
+        <a href="profile.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M6 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg>
+            </span>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <script src="data-store.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

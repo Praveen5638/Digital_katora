@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="hi" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏆 Badges & Achievements — Digital Katora</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Unified Design System Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+    
+    <meta name="description" content="Unlock prestigious meme trophies and badges on Digital Katora. Track your donor milestones, climb ranks, and share your Maha-Daani status!">
+    <meta name="theme-color" content="#FFB800">
+
+    <style>
+      /* ═════════════════════════════════════════════════════════════════════
+         ACHIEVEMENTS PAGE CUSTOM STYLES
+         ═════════════════════════════════════════════════════════════════════ */
+      .achievements-hero-section {
+        padding: 4rem 1.25rem 2.5rem;
+        position: relative;
+        text-align: center;
+      }
+
+      /* Personal Profile Card */
+      .donor-profile-banner {
+        background: linear-gradient(135deg, rgba(255, 184, 0, 0.1) 0%, rgba(108, 92, 231, 0.12) 100%);
+        border: 2px solid var(--border-glow);
+        border-radius: 28px;
+        padding: 2.25rem;
+        margin: 2.5rem auto 3.5rem;
+        max-width: 960px;
+        box-shadow: var(--shadow-card);
+        text-align: left;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .donor-profile-grid {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        gap: 2rem;
+        align-items: center;
+      }
+
+      .donor-avatar-large {
+        width: 88px;
+        height: 88px;
+        border-radius: 50%;
+        background: var(--gold-gradient);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.8rem;
+        box-shadow: 0 0 30px var(--gold-glow);
+        position: relative;
+      }
+
+      .donor-stats-row {
+        display: flex;
+        gap: 2rem;
+        flex-wrap: wrap;
+        margin-top: 1rem;
+      }
+
+      .donor-stat-mini {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .donor-stat-mini span:first-child {
+        font-size: 0.75rem;
+        font-family: var(--font-mono);
+        color: var(--text-muted);
+        text-transform: uppercase;
+      }
+
+      .donor-stat-mini span:last-child {
+        font-size: 1.25rem;
+        font-weight: 800;
+        color: var(--text-primary);
+        font-family: var(--font-mono);
+      }
+
+      /* Milestone Stepper Bar */
+      .milestone-stepper-box {
+        background: var(--bg-surface);
+        border: 1.5px solid var(--border-subtle);
+        border-radius: 24px;
+        padding: 2rem;
+        margin: 2.5rem 0;
+      }
+
+      .milestone-track {
+        display: flex;
+        justify-content: space-between;
+        position: relative;
+        margin: 2rem 0 1rem;
+        gap: 0.75rem;
+      }
+
+      .milestone-track::before {
+        content: '';
+        position: absolute;
+        top: 24px;
+        left: 20px;
+        right: 20px;
+        height: 4px;
+        background: var(--bg-elevated);
+        z-index: 1;
+      }
+
+      .milestone-track-progress {
+        position: absolute;
+        top: 24px;
+        left: 20px;
+        height: 4px;
+        background: var(--gold-gradient);
+        z-index: 2;
+        transition: width 0.6s ease;
+      }
+
+      .milestone-step-node {
+        position: relative;
+        z-index: 3;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        text-align: center;
+      }
+
+      .milestone-node-circle {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: var(--bg-elevated);
+        border: 2px solid var(--border-subtle);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.35rem;
+        transition: all 0.3s ease;
+      }
+
+      .milestone-step-node.unlocked .milestone-node-circle {
+        background: var(--gold-gradient);
+        border-color: #FFF;
+        box-shadow: 0 0 18px var(--gold-glow);
+        transform: scale(1.1);
+      }
+
+      /* Achievement Cards Grid */
+      .achievements-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+        margin: 2.5rem 0;
+      }
+
+      .badge-card {
+        background: var(--bg-surface);
+        border: 1.5px solid var(--border-subtle);
+        border-radius: 24px;
+        padding: 1.75rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        position: relative;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        cursor: pointer;
+      }
+
+      .badge-card:hover {
+        transform: translateY(-6px);
+        border-color: var(--primary-light);
+        box-shadow: var(--shadow-card);
+      }
+
+      .badge-card.unlocked {
+        border-color: var(--gold);
+        background: linear-gradient(180deg, rgba(255, 184, 0, 0.06) 0%, var(--bg-surface) 100%);
+      }
+
+      .badge-card.unlocked:hover {
+        box-shadow: 0 12px 35px var(--gold-glow);
+      }
+
+      .badge-card.locked {
+        opacity: 0.7;
+        filter: grayscale(0.5);
+      }
+
+      .badge-card.locked:hover {
+        opacity: 0.95;
+        filter: grayscale(0.1);
+      }
+
+      .badge-icon-box {
+        width: 64px;
+        height: 64px;
+        border-radius: 18px;
+        background: var(--bg-elevated);
+        border: 1.5px solid var(--border-subtle);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        margin-bottom: 1.25rem;
+        box-shadow: var(--shadow-sm);
+      }
+
+      .badge-card.unlocked .badge-icon-box {
+        background: var(--gold-gradient);
+        border-color: #FFF;
+        box-shadow: 0 0 20px var(--gold-glow);
+      }
+
+      .badge-status-tag {
+        position: absolute;
+        top: 1.25rem;
+        right: 1.25rem;
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        font-weight: 800;
+        padding: 3px 10px;
+        border-radius: var(--radius-pill);
+      }
+
+      .badge-status-tag.unlocked {
+        background: rgba(0, 184, 148, 0.15);
+        color: var(--green-light);
+        border: 1px solid rgba(0, 184, 148, 0.3);
+      }
+
+      .badge-status-tag.locked {
+        background: rgba(255, 255, 255, 0.08);
+        color: var(--text-muted);
+        border: 1px solid var(--border-subtle);
+      }
+
+      /* Share Card Modal */
+      .share-modal-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(12px);
+        z-index: 10000;
+        align-items: center;
+        justify-content: center;
+        padding: 1.5rem;
+      }
+
+      .share-modal-overlay.active {
+        display: flex;
+      }
+
+      .viral-receipt-card {
+        background: var(--bg-surface);
+        border: 2px solid var(--gold);
+        border-radius: 28px;
+        padding: 2.5rem;
+        max-width: 480px;
+        width: 100%;
+        text-align: center;
+        box-shadow: 0 25px 70px rgba(0,0,0,0.6);
+        position: relative;
+        animation: slideFeedElastic 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+
+      @media (max-width: 992px) {
+        .donor-profile-grid {
+          grid-template-columns: 1fr;
+          text-align: center;
+        }
+        .donor-avatar-large {
+          margin: 0 auto;
+        }
+        .donor-stats-row {
+          justify-content: center;
+        }
+        .achievements-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .milestone-track {
+          overflow-x: auto;
+          padding-bottom: 1rem;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .achievements-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+</head>
+<body>
+    <!-- Ambient Canvas Background -->
+    <div class="ambient-canvas">
+        <div class="mesh-blob blob-gold"></div>
+        <div class="mesh-blob blob-purple"></div>
+        <div class="mesh-blob blob-coral"></div>
+        <div class="floating-coin-bg" style="top: 15%; left: 8%;">🏆</div>
+        <div class="floating-coin-bg" style="top: 55%; right: 10%; animation-delay: -3s;">👑</div>
+        <div class="floating-coin-bg" style="bottom: 18%; left: 14%; animation-delay: -5s;">✨</div>
+    </div>
+
+    <!-- 1. UNIFIED NAVBAR -->
+    <nav class="navbar" role="navigation" aria-label="Main Navigation">
+        <div class="container nav-wrap">
+            <a href="index.html" class="brand-logo" aria-label="Digital Katora Home">
+                <div class="logo-bowl-glow">
+                    <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 26px; height: 26px;">
+                        <path d="M4 14C4 22.8 10.2 30 18 30C25.8 30 32 22.8 32 14H4Z" fill="url(#brandBowlGradAch)" stroke="#FFD93D" stroke-width="1.8"/>
+                        <ellipse cx="18" cy="14" rx="14" ry="4" fill="#FFB800" stroke="#FFEAA7" stroke-width="1.2"/>
+                        <circle cx="18" cy="7.5" r="4" fill="#FFD93D" stroke="#E67E22" stroke-width="1"/>
+                        <text x="18" y="9.5" font-size="5" font-weight="bold" fill="#8B4513" text-anchor="middle" font-family="'JetBrains Mono', monospace">₹</text>
+                        <defs>
+                            <linearGradient id="brandBowlGradAch" x1="4" y1="14" x2="32" y2="30" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#6C5CE7"/>
+                                <stop offset="1" stop-color="#FFB800"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <span>Digital <span class="gradient-text">Katora</span></span>
+            </a>
+
+            <!-- Center Pill Navigation -->
+            <div class="nav-center-menu">
+                <a href="katoras.html" class="nav-link-pill">🥣 Katoras</a>
+                <a href="leaderboard.html" class="nav-link-pill">👑 Top Donors</a>
+                <a href="about.html" class="nav-link-pill">💡 How It Works</a>
+                <a href="achievements.html" class="nav-link-pill active">🏆 Badges</a>
+                <a href="donation-animation.html" class="nav-link-pill">✨ Magic Demo</a>
+            </div>
+
+            <!-- Right Actions -->
+            <div class="nav-actions">
+                <button class="theme-toggle-btn" id="themeToggleBtn" title="Toggle Theme" aria-label="Toggle Dark/Light Theme">
+                    <span class="theme-icon">🌙</span>
+                </button>
+                <a href="create-katora.html" class="btn btn-primary btn-magnetic nav-cta-btn">
+                    <span>🥣 Create Katora</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 2. HERO SECTION -->
+    <header class="achievements-hero-section">
+        <div class="container" style="max-width: 850px;">
+            <div class="hero-badge-pill animate-fade-in" style="margin-bottom: 1.25rem;">
+                <span class="badge-dot"></span>
+                <span>🏆 Digital Katora Achievements 🏆</span>
+            </div>
+
+            <h1 class="page-title" style="font-size: clamp(2.3rem, 5vw, 3.8rem); margin-bottom: 1rem;">
+                Kitna Bhara Katora? <span class="gradient-text-gold">👑</span>
+            </h1>
+
+            <p style="color: var(--text-secondary); font-size: 1.15rem; line-height: 1.7; margin: 0 auto;">
+                Donation karo, milestones unlock karo aur apni Katora wali izzat badhao. Har ₹1 ke shagun par good karma points aur trophies milti hain!
+            </p>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- 3. PERSONAL DONOR CARD -->
+        <section class="donor-profile-banner" id="donorProfileBanner">
+            <div class="donor-profile-grid">
+                <div class="donor-avatar-large" id="profileAvatar">👑</div>
+                
+                <div>
+                    <div style="display: flex; align-items: center; gap: 0.65rem; flex-wrap: wrap;">
+                        <h2 style="font-size: 1.5rem; margin: 0;" id="profileName">Aman "Ambani" Verma</h2>
+                        <span class="badge" style="background: rgba(255, 184, 0, 0.2); color: var(--gold-light); border: 1px solid var(--gold);" id="profileBadge">
+                            👑 Katora King
+                        </span>
+                    </div>
+
+                    <div class="donor-stats-row">
+                        <div class="donor-stat-mini">
+                            <span>Total Donated</span>
+                            <span id="profileTotal">₹1,240</span>
+                        </div>
+                        <div class="donor-stat-mini">
+                            <span>Donations</span>
+                            <span id="profileCount">28 Drops</span>
+                        </div>
+                        <div class="donor-stat-mini">
+                            <span>Leaderboard Rank</span>
+                            <span id="profileRank">#17</span>
+                        </div>
+                        <div class="donor-stat-mini">
+                            <span>Next Trophy</span>
+                            <span id="profileNextTier" style="color: var(--gold-light);">Katora Legend (₹3,760 rem.)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <button type="button" class="btn btn-primary btn-magnetic" onclick="openShareModal('Katora King', '👑', 1240)">
+                        <span>🚀 Share Achievement</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. LEVEL PROGRESS TRACKER -->
+        <section class="milestone-stepper-box">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                <div>
+                    <h3 style="font-size: 1.25rem; margin: 0 0 0.35rem;">🏆 Level Progression Journey</h3>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0;">₹1 se lekar Top 3 Legendary Daanveer tak ka safar.</p>
+                </div>
+                <span class="hero-pill-badge" id="stepperPctBadge">⚡ 24.8% to Katora Legend</span>
+            </div>
+
+            <div class="milestone-track">
+                <div class="milestone-track-progress" style="width: 75%;"></div>
+
+                <div class="milestone-step-node unlocked">
+                    <div class="milestone-node-circle">🪙</div>
+                    <strong style="font-size: 0.82rem;">Katora Friend</strong>
+                    <small style="color: var(--gold-light); font-family: var(--font-mono);">₹1+</small>
+                </div>
+
+                <div class="milestone-step-node unlocked">
+                    <div class="milestone-node-circle">💛</div>
+                    <strong style="font-size: 0.82rem;">Supporter</strong>
+                    <small style="color: var(--gold-light); font-family: var(--font-mono);">₹100+</small>
+                </div>
+
+                <div class="milestone-step-node unlocked">
+                    <div class="milestone-node-circle">😇</div>
+                    <strong style="font-size: 0.82rem;">Maha-Daani</strong>
+                    <small style="color: var(--gold-light); font-family: var(--font-mono);">₹500+</small>
+                </div>
+
+                <div class="milestone-step-node unlocked">
+                    <div class="milestone-node-circle">👑</div>
+                    <strong style="font-size: 0.82rem;">Katora King</strong>
+                    <small style="color: var(--gold-light); font-family: var(--font-mono);">₹1,000+</small>
+                </div>
+
+                <div class="milestone-step-node">
+                    <div class="milestone-node-circle">💎</div>
+                    <strong style="font-size: 0.82rem;">Katora Legend</strong>
+                    <small style="color: var(--text-muted); font-family: var(--font-mono);">₹5,000+</small>
+                </div>
+
+                <div class="milestone-step-node">
+                    <div class="milestone-node-circle">🏆</div>
+                    <strong style="font-size: 0.82rem;">Legendary Donor</strong>
+                    <small style="color: var(--text-muted); font-family: var(--font-mono);">Top 3</small>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. ALL ACHIEVEMENT CARDS -->
+        <section class="section" style="padding: 2rem 0;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+                <div>
+                    <h2 style="font-size: clamp(1.6rem, 3.5vw, 2.4rem); margin: 0 0 0.35rem;">Saare Katora Badges 🏆</h2>
+                    <p style="color: var(--text-secondary); margin: 0;">Click any unlocked badge to generate a shareable viral flex card.</p>
+                </div>
+                <div class="hero-pill-badge">
+                    <span>✨ 8 Unlocked / 4 Locked</span>
+                </div>
+            </div>
+
+            <div class="achievements-grid">
+                <!-- Badge 1: Katora Friend -->
+                <div class="badge-card unlocked" onclick="openShareModal('Katora Friend', '🪙', 1)">
+                    <span class="badge-status-tag unlocked">✓ UNLOCKED</span>
+                    <div class="badge-icon-box">🪙</div>
+                    <div>
+                        <h3 style="font-size: 1.2rem; margin: 0 0 0.35rem;">Katora Friend</h3>
+                        <p style="color: var(--gold); font-size: 0.82rem; font-family: var(--font-mono); margin-bottom: 0.5rem;">Requirement: ₹1+</p>
+                        <p style="color: var(--text-secondary); font-size: 0.88rem; line-height: 1.5; margin: 0;">"First coin daala. Bas shuruat hai! 😂"</p>
+                    </div>
+                </div>
+
+                <!-- Badge 2: Supporter -->
+                <div class="badge-card unlocked" onclick="openShareModal('Katora Supporter', '💛', 100)">
+                    <span class="badge-status-tag unlocked">✓ UNLOCKED</span>
+                    <div class="badge-icon-box">💛</div>
+                    <div>
+                        <h3 style="font-size: 1.2rem; margin: 0 0 0.35rem;">Katora Supporter</h3>
+                        <p style="color: var(--gold); font-size: 0.82rem; font-family: var(--font-mono); margin-bottom: 0.5rem;">Requirement: ₹100+</p>
+                        <p style="color: var(--text-secondary); font-size: 0.88rem; line-height: 1.5; margin: 0;">"Ab aap sirf dekhne nahi aaye. Ab katora aapko pehchanne laga."</p>
+                    </div>
+                </div>
+
+                <!-- Badge 3: Maha-Daani -->
+                <div class="badge-card unlocked" onclick="openShareModal('Maha-Daani', '😇', 500)">
+                    <span class="badge-status-tag unlocked">✓ UNLOCKED</span>
+                    <div class="badge-icon-box">😇</div>
+                    <div>
+                        <h3 style="font-size: 1.2rem; margin: 0 0 0.35rem;">Maha-Daani</h3>
+                        <p style="color: var(--gold); font-size: 0.82rem; font-family: var(--font-mono); margin-bottom: 0.5rem;">Requirement: ₹500+</p>
+                        <p style="color: var(--text-secondary); font-size: 0.88rem; line-height: 1.5; margin: 0;">"Katora ne aapko officially notice kar liya hai. Maha-Daani detected!"</p>
+                    </div>
+                </div>
+
+                <!-- Badge 4: Katora King -->
+                <div class="badge-card unlocked" onclick="openShareModal('Katora King', '👑', 1000)">
+                    <span class="badge-status-tag unlocked">✓ UNLOCKED</span>
+                    <div class="badge-icon-box">👑</div>
+                    <div>
+                        <h3 style="font-size: 1.2rem; margin: 0 0 0.35rem;">Katora King</h3>
+                        <p style="color: var(--gold); font-size: 0.82rem; font-family: var(--font-mono); margin-bottom: 0.5rem;">Requirement: ₹1,000+</p>
+                        <p style="color: var(--text-secondary); font-size: 0.88rem; line-height: 1.5; margin: 0;">"Ab katora aapko salaam karta hai. King aa gaya!"</p>
+                    </div>
+                </div>
+
+                <!-- Badge 5: Katora Legend (Locked) -->
+                <div class="badge-card locked" onclick="showToast('🔒 ₹3,760 more needed to unlock Katora Legend!')">
+                    <span class="badge-status-tag locked">🔒 LOCKED</span>
+                    <div class="badge-icon-box">💎</div>
+                    <div>
+                        <h3 style="font-size: 1.2rem; margin: 0 0 0.35rem;">Katora Legend</h3>
+                        <p style="color: var(--text-muted); font-size: 0.82rem; font-family: var(--font-mono); margin-bottom: 0.5rem;">Requirement: ₹5,000+</p>
+                        <p style="color: var(--text-muted); font-size: 0.88rem; line-height: 1.5; margin: 0;">"Legendary level ki Katora generosity. Diamond flex."</p>
+                    </div>
+                </div>
+
+                <!-- Badge 6: Legendary Donor Top 3 (Locked) -->
+                <div class="badge-card locked" onclick="showToast('🔒 Reach Top 3 on the Leaderboard to unlock Legendary Donor!')">
+                    <span class="badge-status-tag locked">🔒 LOCKED (TOP 3)</span>
+                    <div class="badge-icon-box">🏆</div>
+                    <div>
+                        <h3 style="font-size: 1.2rem; margin: 0 0 0.35rem;">Legendary Donor</h3>
+                        <p style="color: var(--text-muted); font-size: 0.82rem; font-family: var(--font-mono); margin-bottom: 0.5rem;">Requirement: Rank #1, #2, or #3</p>
+                        <p style="color: var(--text-muted); font-size: 0.88rem; line-height: 1.5; margin: 0;">"Ab toh naam Digital Katora ki history mein darj hai."</p>
+                    </div>
+                </div>
+
+                <!-- Special Badge 7: First Drop -->
+                <div class="badge-card unlocked" onclick="openShareModal('First Drop', '🔥', 1)">
+                    <span class="badge-status-tag unlocked">✓ UNLOCKED</span>
+                    <div class="badge-icon-box">🔥</div>
+                    <div>
+                        <h3 style="font-size: 1.2rem; margin: 0 0 0.35rem;">First Drop</h3>
+                        <p style="color: var(--gold); font-size: 0.82rem; font-family: var(--font-mono); margin-bottom: 0.5rem;">Special: First micro-tip</p>
+                        <p style="color: var(--text-secondary); font-size: 0.88rem; line-height: 1.5; margin: 0;">"Har badi journey ek ₹1 se shuru hoti hai."</p>
+                    </div>
+                </div>
+
+                <!-- Special Badge 8: Chai Patron -->
+                <div class="badge-card unlocked" onclick="openShareModal('Chai Patron', '☕', 150)">
+                    <span class="badge-status-tag unlocked">✓ UNLOCKED</span>
+                    <div class="badge-icon-box">☕</div>
+                    <div>
+                        <h3 style="font-size: 1.2rem; margin: 0 0 0.35rem;">Chai Patron</h3>
+                        <p style="color: var(--gold); font-size: 0.82rem; font-family: var(--font-mono); margin-bottom: 0.5rem;">Special: Chai Fund Hero</p>
+                        <p style="color: var(--text-secondary); font-size: 0.88rem; line-height: 1.5; margin: 0;">"Sharma ji ke tapri ka udhaar chukwane wale masiha."</p>
+                    </div>
+                </div>
+
+                <!-- Special Badge 9: Goal Completer -->
+                <div class="badge-card unlocked" onclick="openShareModal('Goal Completer', '🎉', 500)">
+                    <span class="badge-status-tag unlocked">✓ UNLOCKED</span>
+                    <div class="badge-icon-box">🎉</div>
+                    <div>
+                        <h3 style="font-size: 1.2rem; margin: 0 0 0.35rem;">Goal Completer</h3>
+                        <p style="color: var(--gold); font-size: 0.82rem; font-family: var(--font-mono); margin-bottom: 0.5rem;">Special: Filled a Katora 100%</p>
+                        <p style="color: var(--text-secondary); font-size: 0.88rem; line-height: 1.5; margin: 0;">"Aapke aakhiri sikke ne katora pura bhar diya!"</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. LEADERBOARD CONNECTION -->
+        <section class="section" style="background: var(--bg-surface); padding: 3.5rem 2rem; border-radius: 28px; border: 1.5px solid var(--border-subtle); margin: 3rem 0;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem;">
+                <div>
+                    <span class="badge" style="background: rgba(108, 92, 231, 0.15); color: var(--primary-light); margin-bottom: 0.5rem;">👑 Live Leaderboard Sync</span>
+                    <h2 style="font-size: clamp(1.5rem, 3vw, 2.2rem); margin: 0 0 0.5rem;">Achievement Se Seedha Leaderboard Tak</h2>
+                    <p style="color: var(--text-secondary); margin: 0;">Aapka Current Rank: <strong>#17</strong> • Agle rank ke liye sirf <strong>₹85</strong> aur chahiye!</p>
+                </div>
+                <a href="leaderboard.html" class="btn btn-primary btn-magnetic">
+                    <span>👑 View Full Leaderboard &rarr;</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- 7. FINAL CTA -->
+        <section class="section" style="text-align: center; padding: 4rem 0 5rem;">
+            <div style="font-size: 3.5rem; margin-bottom: 1rem; animation: floatSlow 3s infinite ease-in-out;">🏆</div>
+            <h2 style="font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 800; margin-bottom: 1rem;">
+                Agla Milestone Unlock Karna Hai? 😂
+            </h2>
+            <p style="color: var(--text-secondary); font-size: 1.15rem; max-width: 600px; margin: 0 auto 2.25rem;">
+                Explore page par jao, relatable katora chuno, aur apna good karma rank badhao!
+            </p>
+            <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+                <a href="katoras.html" class="btn btn-primary btn-magnetic" style="font-size: 1.05rem; padding: 0.9rem 2.2rem;">
+                    <span>🪙 Katore Explore Karo</span>
+                </a>
+                <a href="create-katora.html" class="btn btn-secondary btn-magnetic" style="font-size: 1.05rem; padding: 0.9rem 2.2rem;">
+                    <span>🥣 Apna Katora Banao</span>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- 8. VIRAL SHARE ACHIEVEMENT MODAL -->
+    <div class="share-modal-overlay" id="shareModalOverlay" onclick="closeShareModal(event)">
+        <div class="viral-receipt-card" onclick="event.stopPropagation()">
+            <button type="button" class="btn btn-glass btn-sm" onclick="closeShareModal()" style="position: absolute; top: 1rem; right: 1rem; padding: 0.3rem 0.6rem;">
+                ✕
+            </button>
+
+            <span class="badge" style="background: rgba(255, 184, 0, 0.2); color: var(--gold); border: 1px solid var(--gold); margin-bottom: 1rem;">
+                🏆 OFFICIAL KATORA TROPHY
+            </span>
+
+            <div style="font-size: 4rem; margin: 0.5rem 0;" id="modalBadgeIcon">👑</div>
+
+            <h2 style="font-size: 1.8rem; margin: 0 0 0.5rem;" id="modalBadgeTitle">Katora King</h2>
+            <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.5rem;" id="modalBadgeQuote">
+                "I have officially entered Katora King territory. Salaam karo!" 😂
+            </p>
+
+            <div style="background: var(--bg-elevated); border: 1px dashed var(--border-subtle); border-radius: 16px; padding: 1rem; margin-bottom: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--text-muted);">
+                    <span>Donor:</span>
+                    <strong style="color: var(--text-primary);" id="modalDonorName">Aman Verma</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--text-muted); margin-top: 0.35rem;">
+                    <span>Milestone:</span>
+                    <strong style="color: var(--gold-light);" id="modalMilestoneAmount">₹1,000+ Donated</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--text-muted); margin-top: 0.35rem;">
+                    <span>Platform:</span>
+                    <strong style="color: var(--primary-light);">Digital Katora 🥣</strong>
+                </div>
+            </div>
+
+            <!-- Social Share Buttons -->
+            <div style="display: flex; flex-direction: column; gap: 0.65rem;">
+                <button type="button" class="btn btn-primary" onclick="shareToWhatsApp()" style="background: #25D366; color: #FFF; justify-content: center;">
+                    <span>💬 Share on WhatsApp</span>
+                </button>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem;">
+                    <button type="button" class="btn btn-secondary" onclick="shareToX()" style="justify-content: center;">
+                        <span>🐦 Share on X</span>
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="copyAchievementLink()" style="justify-content: center;">
+                        <span>🔗 Copy Link</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 9. UNIFIED FOOTER -->
+    <footer class="site-footer">
+        <div class="container footer-grid">
+            <div class="footer-col brand-col">
+                <a href="index.html" class="brand-logo" style="margin-bottom: 1rem; display: inline-flex;">
+                    <div class="logo-bowl-glow">
+                        <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 26px; height: 26px;">
+                            <path d="M4 14C4 22.8 10.2 30 18 30C25.8 30 32 22.8 32 14H4Z" fill="url(#brandBowlGradFooterAch)" stroke="#FFD93D" stroke-width="1.8"/>
+                            <ellipse cx="18" cy="14" rx="14" ry="4" fill="#FFB800" stroke="#FFEAA7" stroke-width="1.2"/>
+                            <circle cx="18" cy="7.5" r="4" fill="#FFD93D" stroke="#E67E22" stroke-width="1"/>
+                            <text x="18" y="9.5" font-size="5" font-weight="bold" fill="#8B4513" text-anchor="middle" font-family="'JetBrains Mono', monospace">₹</text>
+                            <defs>
+                                <linearGradient id="brandBowlGradFooterAch" x1="4" y1="14" x2="32" y2="30" gradientUnits="userSpaceOnUse">
+                                    <stop stop-color="#6C5CE7"/>
+                                    <stop offset="1" stop-color="#FFB800"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <span>Digital <span class="gradient-text">Katora</span></span>
+                </a>
+                <p class="footer-tagline">
+                    India's premier satirical micro-tipping community. Khule paise nahi hain? Digital Katora scan karo!
+                </p>
+                <div class="social-links-row">
+                    <a href="https://instagram.com" target="_blank" class="social-icon-circle" title="Instagram" aria-label="Instagram">
+                        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                    </a>
+                    <a href="https://twitter.com" target="_blank" class="social-icon-circle" title="Twitter / X" aria-label="Twitter">
+                        <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <ul class="footer-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="katoras.html">Explore Katoras</a></li>
+                    <li><a href="create-katora.html">Start a Katora</a></li>
+                    <li><a href="leaderboard.html">Top Donors</a></li>
+                    <li><a href="achievements.html">Badges & Trophies</a></li>
+                    <li><a href="donation-animation.html">✨ Magic Demo</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Company & Fun</h4>
+                <ul class="footer-links">
+                    <li><a href="about.html">Our Story</a></li>
+                    <li><a href="faq.html">FAQs</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                    <li><a href="admin.html">Admin Panel</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Beggar Wisdom</h4>
+                <div class="card" style="padding: 1.25rem; background: var(--bg-surface); border: 1px solid var(--border-color);">
+                    <p style="font-style: italic; color: var(--gold); font-size: 0.9rem; margin-bottom: 0.5rem;">
+                        "Sharam chhoro, katora jodo! Dost se udhaar maangne se behtar hai public se maang lo."
+                    </p>
+                    <span style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);">— Ancient Tapri Proverb</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="container footer-bottom-flex">
+                <p>© 2025 Digital Katora. Made for fun. ❤️ 100% Satirical Platform.</p>
+                <div class="footer-legal-links">
+                    <a href="faq.html">Privacy & Terms</a>
+                    <a href="contact.html">Report Issue</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MOBILE STICKY BOTTOM NAV -->
+    <nav class="mobile-bottom-nav">
+        <a href="index.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">🏠</span>
+            <span>Home</span>
+        </a>
+        <a href="katoras.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">🥣</span>
+            <span>Katoras</span>
+        </a>
+        <a href="create-katora.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">➕</span>
+            <span>Create</span>
+        </a>
+        <a href="achievements.html" class="bottom-nav-item active">
+            <span class="bottom-nav-icon">🏆</span>
+            <span>Badges</span>
+        </a>
+        <a href="leaderboard.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">👑</span>
+            <span>Ranks</span>
+        </a>
+    </nav>
+
+    <!-- Scripts -->
+    <script src="data-store.js"></script>
+    <script src="script.js"></script>
+    <script>
+      let currentShareBadge = { title: 'Katora King', icon: '👑', amount: 1000 };
+
+      function openShareModal(title, icon, amount) {
+        currentShareBadge = { title, icon, amount };
+        const overlay = document.getElementById('shareModalOverlay');
+        const titleEl = document.getElementById('modalBadgeTitle');
+        const iconEl = document.getElementById('modalBadgeIcon');
+        const amtEl = document.getElementById('modalMilestoneAmount');
+
+        if (titleEl) titleEl.textContent = title;
+        if (iconEl) iconEl.textContent = icon;
+        if (amtEl) amtEl.textContent = `₹${amount.toLocaleString('en-IN')}+ Donated`;
+
+        if (overlay) overlay.classList.add('active');
+      }
+
+      function closeShareModal(e) {
+        const overlay = document.getElementById('shareModalOverlay');
+        if (overlay) overlay.classList.remove('active');
+      }
+
+      function copyAchievementLink() {
+        const url = window.location.href;
+        navigator.clipboard.writeText(url).then(() => {
+          if (window.DK && window.DK.showToast) {
+            window.DK.showToast('✓ Achievement flex link copied to clipboard!');
+          } else {
+            alert('✓ Link copied!');
+          }
+        });
+      }
+
+      function shareToWhatsApp() {
+        const text = `🏆 Maine Digital Katora par "${currentShareBadge.title} ${currentShareBadge.icon}" badge unlock kiya hai! Chanda do aur punya kamao: ${window.location.origin}/achievements.html`;
+        window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
+      }
+
+      function shareToX() {
+        const text = `🏆 Unlocked "${currentShareBadge.title} ${currentShareBadge.icon}" on @DigitalKatora! India's premier micro-tipping community 🥣`;
+        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(window.location.origin)}`, '_blank');
+      }
+    </script>
+</body>
+</html>

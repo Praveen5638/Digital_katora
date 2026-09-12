@@ -1,0 +1,1599 @@
+<!DOCTYPE html>
+<html lang="hi" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🥣 Digital Katora — Paise Chahiye? Katora Uthao! | The Viral Desi Tip Jar</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Design System Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+    
+    <meta name="description" content="Digital Katora — The playful, meme-powered social micro-donation platform. Drop coins, earn punya, and fund your broken friends!">
+    <meta name="theme-color" content="#6C5CE7">
+
+    <style>
+      /* ==== HOMEPAGE SPECIFIC HERO 3D SCENE & INTERACTIVE MOTION ==== */
+      .hero-section-home {
+        position: relative;
+        padding-top: 5.5rem;
+        padding-bottom: 3.5rem;
+        overflow: hidden;
+      }
+
+      .hero-grid-two-col {
+        display: grid;
+        grid-template-columns: 1fr 1.05fr;
+        gap: 3.5rem;
+        align-items: center;
+      }
+
+      @media (max-width: 992px) {
+        .hero-grid-two-col {
+          grid-template-columns: 1fr;
+          gap: 2.5rem;
+          text-align: center;
+        }
+        .hero-content-col {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+      }
+
+      /* Hero 3D Stage Container */
+      .hero-3d-stage {
+        position: relative;
+        width: 100%;
+        max-width: 580px;
+        height: 390px;
+        background: radial-gradient(circle at 50% 50%, rgba(108, 92, 231, 0.18) 0%, rgba(15, 14, 23, 0.85) 100%);
+        border-radius: 28px;
+        border: 1.5px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.5rem 2rem;
+        margin: 0 auto;
+        overflow: visible;
+      }
+
+      /* Hero Stars */
+      .hero-stars-box {
+        position: absolute;
+        inset: 0;
+        border-radius: 28px;
+        overflow: hidden;
+        pointer-events: none;
+      }
+      .hero-star {
+        position: absolute;
+        width: 3px;
+        height: 3px;
+        background: #FFD93D;
+        border-radius: 50%;
+        opacity: 0.5;
+        animation: starTwinkle 2.5s infinite ease-in-out;
+      }
+      @keyframes starTwinkle {
+        0%, 100% { opacity: 0.2; transform: scale(0.8); }
+        50% { opacity: 0.9; transform: scale(1.6); }
+      }
+
+      /* Donor Hero Actor */
+      .hero-actor-donor {
+        position: relative;
+        width: 170px;
+        height: 250px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        z-index: 5;
+      }
+      .hero-actor-img-box {
+        width: 100%;
+        height: 210px;
+        border-radius: 20px;
+        overflow: hidden;
+        background: radial-gradient(circle at 50% 30%, rgba(108, 92, 231, 0.25) 0%, rgba(24, 22, 34, 0.9) 100%);
+        border: 1.5px solid rgba(108, 92, 231, 0.4);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+        position: relative;
+      }
+      .hero-actor-img-box img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        object-position: center bottom;
+        display: block;
+        transition: transform 0.4s var(--ease-squash);
+      }
+      .hero-actor-donor:hover .hero-actor-img-box img {
+        transform: scale(1.05);
+      }
+
+      /* Phone in Donor Hand */
+      .hero-phone-hand {
+        position: absolute;
+        bottom: 20px;
+        right: -15px;
+        width: 44px;
+        height: 72px;
+        background: linear-gradient(135deg, #2D2D44, #181622);
+        border: 2px solid var(--primary-light);
+        border-radius: 9px;
+        box-shadow: 0 8px 20px var(--primary-glow);
+        transform: rotate(-12deg);
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: phonePulseIdle 3s infinite ease-in-out;
+      }
+      @keyframes phonePulseIdle {
+        0%, 100% { transform: rotate(-12deg) scale(1); box-shadow: 0 8px 20px var(--primary-glow); }
+        50% { transform: rotate(-8deg) scale(1.06); box-shadow: 0 10px 30px var(--primary-glow); }
+      }
+      .hero-phone-screen {
+        width: 32px;
+        height: 56px;
+        background: linear-gradient(180deg, #6C5CE7 0%, #FFB800 100%);
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+      }
+
+      /* Beggar Hero Actor */
+      .hero-actor-beggar {
+        position: relative;
+        width: 170px;
+        height: 250px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        z-index: 5;
+      }
+      .hero-actor-beggar .hero-actor-img-box {
+        border-color: rgba(255, 184, 0, 0.4);
+      }
+      .hero-actor-beggar.happy .hero-actor-img-box {
+        animation: beggarHappyBounce 1.2s var(--ease-squash) infinite alternate;
+        border-color: var(--green);
+        box-shadow: 0 0 30px var(--green-glow);
+      }
+      @keyframes beggarHappyBounce {
+        0% { transform: translateY(0) scale(1) rotate(0deg); }
+        100% { transform: translateY(-10px) scale(1.04) rotate(2deg); }
+      }
+
+      /* Golden Katora in Beggar Hand */
+      .hero-katora-bowl {
+        position: absolute;
+        bottom: -5px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 96px;
+        height: 52px;
+        background: var(--gold-gradient);
+        border-radius: 0 0 50% 50% / 0 0 100% 100%;
+        border: 2px solid #FFEAA7;
+        box-shadow: 0 10px 25px var(--gold-glow), inset 0 -8px 14px rgba(0,0,0,0.3);
+        z-index: 12;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .hero-katora-bowl::before {
+        content: '';
+        position: absolute;
+        top: -6px;
+        left: -4px;
+        right: -4px;
+        height: 12px;
+        background: #FFD93D;
+        border-radius: 50%;
+        border: 1px solid #FFEAA7;
+      }
+      .hero-katora-bowl.shake {
+        animation: katoraShakeAnim 0.5s var(--ease-squash);
+      }
+      @keyframes katoraShakeAnim {
+        0%, 100% { transform: translateX(-50%) rotate(0deg); }
+        25% { transform: translateX(-54%) rotate(-8deg) scale(1.1); }
+        50% { transform: translateX(-46%) rotate(8deg) scale(1.15); }
+        75% { transform: translateX(-52%) rotate(-4deg); }
+      }
+
+      /* Parabolic Golden Coin Animation */
+      .hero-flying-coin {
+        position: absolute;
+        width: 46px;
+        height: 46px;
+        background: radial-gradient(circle at 35% 35%, #FFD93D, #FFB800 65%, #E67E22);
+        border: 2px solid #FFF;
+        border-radius: 50%;
+        box-shadow: 0 0 25px rgba(255, 217, 61, 0.9), inset 0 2px 4px rgba(255,255,255,0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-mono);
+        font-size: 20px;
+        font-weight: 900;
+        color: #8B4513;
+        z-index: 20;
+        pointer-events: none;
+        opacity: 0;
+      }
+
+      .hero-flying-coin.animate {
+        animation: coinFlightParabola 2.4s infinite cubic-bezier(0.25, 1, 0.5, 1);
+      }
+      @keyframes coinFlightParabola {
+        0% {
+          opacity: 0;
+          left: 170px;
+          top: 240px;
+          transform: scale(0.4) rotate(0deg);
+        }
+        15% {
+          opacity: 1;
+          left: 190px;
+          top: 180px;
+          transform: scale(1.1) rotate(120deg);
+        }
+        50% {
+          opacity: 1;
+          left: 290px;
+          top: 90px;
+          transform: scale(1.2) rotate(360deg);
+        }
+        85% {
+          opacity: 1;
+          left: 390px;
+          top: 260px;
+          transform: scale(0.9) rotate(720deg);
+        }
+        95%, 100% {
+          opacity: 0;
+          left: 410px;
+          top: 290px;
+          transform: scale(0.2) rotate(900deg);
+        }
+      }
+
+      /* Hero Actor Name Tags */
+      .hero-actor-tag {
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--text-secondary);
+        background: var(--bg-surface);
+        padding: 4px 12px;
+        border-radius: var(--radius-pill);
+        border: 1px solid var(--border-subtle);
+        margin-top: 0.5rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+      }
+
+      /* Emotional Feedback Emote */
+      .hero-emotion-bubble {
+        position: absolute;
+        top: -15px;
+        right: 15px;
+        background: var(--bg-surface);
+        border: 1px solid var(--green);
+        color: var(--green-light);
+        font-size: 0.85rem;
+        font-weight: 700;
+        padding: 4px 10px;
+        border-radius: var(--radius-pill);
+        box-shadow: 0 4px 15px var(--green-glow);
+        opacity: 0;
+        transform: translateY(10px);
+        transition: all 0.4s var(--ease-squash);
+        pointer-events: none;
+        z-index: 30;
+      }
+      .hero-emotion-bubble.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* ==== 3. STATS STRIP ==== */
+      .stats-strip-wrapper {
+        margin-top: 1rem;
+        margin-bottom: 4rem;
+      }
+      .stats-strip-card {
+        background: var(--bg-surface);
+        border: 1px solid var(--border-subtle);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-card);
+        padding: 1.75rem 2.5rem;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 2rem;
+        align-items: center;
+      }
+      .stat-item-box {
+        display: flex;
+        align-items: center;
+        gap: 1.25rem;
+      }
+      .stat-icon-circle {
+        width: 54px;
+        height: 54px;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.6rem;
+        flex-shrink: 0;
+      }
+      .stat-icon-purple { background: rgba(108, 92, 231, 0.15); border: 1px solid rgba(108, 92, 231, 0.3); }
+      .stat-icon-gold { background: rgba(255, 184, 0, 0.15); border: 1px solid rgba(255, 184, 0, 0.3); }
+      .stat-icon-green { background: rgba(0, 184, 148, 0.15); border: 1px solid rgba(0, 184, 148, 0.3); }
+      .stat-icon-coral { background: rgba(255, 107, 107, 0.15); border: 1px solid rgba(255, 107, 107, 0.3); }
+      
+      .stat-number {
+        font-family: var(--font-display);
+        font-size: clamp(1.6rem, 2.8vw, 2.1rem);
+        font-weight: 800;
+        line-height: 1.1;
+        color: var(--text-primary);
+      }
+      .stat-label {
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        font-weight: 600;
+        margin-top: 2px;
+      }
+
+      @media (max-width: 900px) {
+        .stats-strip-card {
+          grid-template-columns: repeat(2, 1fr);
+          padding: 1.5rem;
+          gap: 1.5rem;
+        }
+      }
+      @media (max-width: 480px) {
+        .stats-strip-card {
+          grid-template-columns: 1fr;
+          gap: 1.25rem;
+        }
+      }
+
+      /* ==== 5. INTERACTIVE COIN TRANSFER SHOWCASE SECTION ==== */
+      .signature-showcase-section {
+        padding: 5rem 0;
+        background: radial-gradient(circle at 50% 50%, rgba(108, 92, 231, 0.08) 0%, transparent 70%);
+      }
+      .showcase-stage-box {
+        position: relative;
+        width: 100%;
+        max-width: 900px;
+        margin: 0 auto;
+        background: var(--bg-surface);
+        border: 1.5px solid var(--border-glow);
+        border-radius: var(--radius-lg);
+        box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+        padding: 3rem 2rem;
+        text-align: center;
+        overflow: hidden;
+      }
+      .showcase-actors-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        gap: 2rem;
+        margin-bottom: 2.5rem;
+        position: relative;
+      }
+      .showcase-actor-box {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+      }
+      .showcase-actor-avatar {
+        width: 110px;
+        height: 110px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 3px solid var(--primary-light);
+        box-shadow: 0 0 25px var(--primary-glow);
+        background: var(--bg-elevated);
+      }
+      .showcase-actor-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .showcase-amount-pills {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+      }
+      .showcase-pill-btn {
+        padding: 0.65rem 1.3rem;
+        border-radius: var(--radius-pill);
+        background: var(--bg-elevated);
+        border: 1.5px solid var(--border-subtle);
+        color: var(--text-primary);
+        font-family: var(--font-mono);
+        font-size: 0.95rem;
+        font-weight: 700;
+        transition: all 0.25s var(--ease-squash);
+        cursor: pointer;
+      }
+      .showcase-pill-btn:hover, .showcase-pill-btn.active {
+        background: var(--gold-gradient);
+        color: #0F0E17;
+        border-color: #FFD93D;
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 8px 20px var(--gold-glow);
+      }
+
+      /* Flying coin on interactive trigger */
+      .interactive-flying-coin {
+        position: absolute;
+        width: 52px;
+        height: 52px;
+        background: radial-gradient(circle at 35% 35%, #FFD93D, #FFB800 65%, #E67E22);
+        border: 2px solid #FFF;
+        border-radius: 50%;
+        box-shadow: 0 0 30px var(--gold-glow);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-mono);
+        font-size: 24px;
+        font-weight: 900;
+        color: #8B4513;
+        z-index: 100;
+        pointer-events: none;
+        opacity: 0;
+      }
+
+      /* ==== 7. DONOR ACHIEVEMENT SHAREABLE CARD ==== */
+      .achievement-showcase-section {
+        padding: 5rem 0;
+      }
+      .achievement-certificate-card {
+        max-width: 620px;
+        margin: 0 auto 2rem;
+        background: linear-gradient(135deg, #1D1A2F 0%, #151322 100%);
+        border: 2px solid var(--gold);
+        border-radius: 24px;
+        padding: 2.5rem;
+        position: relative;
+        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), 0 0 35px var(--gold-glow);
+        overflow: hidden;
+      }
+      .achievement-certificate-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 6px;
+        background: var(--gold-gradient);
+      }
+      .certificate-watermark {
+        position: absolute;
+        right: -20px;
+        bottom: -20px;
+        font-size: 9rem;
+        opacity: 0.04;
+        pointer-events: none;
+        font-family: var(--font-display);
+        font-weight: 900;
+      }
+      .cert-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px dashed var(--border-subtle);
+        padding-bottom: 1.25rem;
+        margin-bottom: 1.75rem;
+      }
+      .cert-body {
+        display: flex;
+        align-items: center;
+        gap: 1.75rem;
+        margin-bottom: 2rem;
+      }
+      .cert-avatar-wrap {
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 3px solid var(--gold);
+        box-shadow: 0 0 25px var(--gold-glow);
+        flex-shrink: 0;
+      }
+      .cert-avatar-wrap img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .cert-meta-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        background: var(--bg-surface);
+        padding: 1rem;
+        border-radius: var(--radius-md);
+        border: 1px solid var(--border-subtle);
+        text-align: center;
+      }
+      .cert-meta-val {
+        font-family: var(--font-mono);
+        font-weight: 800;
+        font-size: 1.15rem;
+        color: var(--gold-light);
+      }
+      .cert-meta-lbl {
+        font-size: 0.72rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        margin-top: 2px;
+      }
+
+      /* ==== 8. HOW IT WORKS 3-STEP VISUAL ==== */
+      .how-it-works-grid-3col {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+        margin-top: 3rem;
+      }
+      @media (max-width: 860px) {
+        .how-it-works-grid-3col {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* ==== 10. LIVE ACTIVITY NOTIFICATION FEED ==== */
+      .live-activity-bar {
+        background: var(--bg-surface);
+        border: 1px solid var(--border-subtle);
+        border-radius: var(--radius-lg);
+        padding: 1.5rem 2rem;
+        box-shadow: var(--shadow-card);
+        margin: 4rem auto 0;
+        max-width: 880px;
+      }
+    </style>
+</head>
+<body>
+    <!-- Ambient Background Canvas with Floating Particles -->
+    <div class="ambient-canvas">
+        <div class="mesh-blob blob-purple"></div>
+        <div class="mesh-blob blob-gold"></div>
+        <div class="mesh-blob blob-coral"></div>
+        <div class="floating-coin-bg" style="top: 15%; left: 8%;">🪙</div>
+        <div class="floating-coin-bg" style="top: 45%; right: 10%; animation-delay: -3s;">💰</div>
+        <div class="floating-coin-bg" style="bottom: 20%; left: 14%; animation-delay: -6s;">✨</div>
+    </div>
+
+    <!-- 1. STICKY NAVBAR -->
+    <nav class="navbar" id="siteNavbar">
+        <div class="container nav-wrap">
+            <!-- Left: Brand Logo -->
+            <a href="index.html" class="brand-logo" aria-label="Digital Katora Home">
+                <div class="logo-bowl-glow">
+                    <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 28px; height: 28px;">
+                        <path d="M4 14C4 22.8 10.2 30 18 30C25.8 30 32 22.8 32 14H4Z" fill="url(#navBrandBowlGrad)" stroke="#FFD93D" stroke-width="1.8"/>
+                        <ellipse cx="18" cy="14" rx="14" ry="4" fill="#FFB800" stroke="#FFEAA7" stroke-width="1.2"/>
+                        <circle cx="18" cy="7.5" r="4" fill="#FFD93D" stroke="#E67E22" stroke-width="1"/>
+                        <text x="18" y="9.5" font-size="5" font-weight="bold" fill="#8B4513" text-anchor="middle" font-family="'JetBrains Mono', monospace">₹</text>
+                        <defs>
+                            <linearGradient id="navBrandBowlGrad" x1="4" y1="14" x2="32" y2="30" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#6C5CE7"/>
+                                <stop offset="1" stop-color="#FFB800"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <span>Digital <span class="gradient-text">Katora</span></span>
+            </a>
+
+            <!-- Center Navigation Links -->
+            <div class="nav-center-menu">
+                <a href="#trending-katoras" class="nav-link-pill active">Katoras</a>
+                <a href="#leaderboard" class="nav-link-pill">Top Donors</a>
+                <a href="#how-it-works" class="nav-link-pill">How It Works</a>
+            </div>
+
+            <!-- Right Actions -->
+            <div class="nav-right-actions">
+                <button id="themeToggleBtn" class="theme-toggle-btn" title="Toggle Theme (Light / Dark)" aria-label="Toggle Theme">
+                    <span class="theme-icon">🌙</span>
+                </button>
+                <div class="magnetic-btn-wrap">
+                    <a href="create-katora.html" class="btn btn-primary-gradient btn-glow-pulse" style="padding: 0.65rem 1.4rem; font-size: 0.92rem;">
+                        <span>🥣</span> Apna Katora Banao
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <!-- 2. HERO SECTION ("The Grand Entry") -->
+        <section class="hero-section-home container">
+            <div class="hero-grid-two-col">
+                <!-- LEFT SIDE CONTENT -->
+                <div class="hero-content-col">
+                    <div class="hero-pill-badge" style="margin-bottom: 1.25rem;">
+                        <span class="pulse-dot"></span>
+                        <span>🔥 भारत का नंबर-1 मीम और डिजिटल टिपिंग प्लेटफॉर्म</span>
+                    </div>
+
+                    <h1 class="hero-headline" style="font-size: clamp(2.4rem, 4.6vw, 3.8rem); line-height: 1.15; margin-bottom: 1.25rem;">
+                        <span class="headline-word">🥺 पैसे</span>
+                        <span class="headline-word">चाहिए?</span> <br>
+                        <span class="headline-word gradient-text">कटोरा</span>
+                        <span class="headline-word gradient-text-gold">उठाओ!</span>
+                    </h1>
+
+                    <p class="hero-subheadline" style="max-width: 520px; font-size: 1.15rem; color: var(--text-secondary); margin-bottom: 2rem; line-height: 1.7;">
+                        असली जिंदगी में मांगने में शर्म आती है? कोई बात नहीं, अपना डिजिटल कटोरा ऑनलाइन रखो! दोस्त और पब्लिक हंसते-हंसते सीधा UPI पर सिक्के डालेंगे। 😂
+                    </p>
+
+                    <div class="hero-cta-group" style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2.25rem;">
+                        <div class="magnetic-btn-wrap">
+                            <a href="create-katora.html" class="btn btn-primary-gradient btn-lg btn-glow-pulse">
+                                <span>🥣</span> Apna Katora Banao
+                            </a>
+                        </div>
+                        <div class="magnetic-btn-wrap">
+                            <a href="#interactive-showcase" class="btn btn-glass btn-lg">
+                                <span>💰</span> Kisi Ke Katore Mein Dalo
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Subtle Social Proof Indicator -->
+                    <div class="trust-row" style="font-size: 0.88rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+                        <span style="color: var(--green-light); font-weight: 700;">👥 12,000+ एक्टिव भिखारी और महा-दानी</span>
+                        <span>&bull;</span>
+                        <span>⚡ 100% सीधा बैंक UPI ट्रांसफर</span>
+                        <span>&bull;</span>
+                        <span>🪙 0% कमीशन</span>
+                    </div>
+                </div>
+
+                <!-- RIGHT SIDE: 3D ANIMATED SCENE -->
+                <div class="hero-3d-stage" id="heroSceneStage">
+                    <!-- Background stars -->
+                    <div class="hero-stars-box">
+                        <div class="hero-star" style="top: 20%; left: 15%;"></div>
+                        <div class="hero-star" style="top: 40%; left: 80%; animation-delay: -1s;"></div>
+                        <div class="hero-star" style="top: 75%; left: 30%; animation-delay: -2s;"></div>
+                        <div class="hero-star" style="top: 15%; left: 60%; animation-delay: -1.5s;"></div>
+                    </div>
+
+                    <!-- DONOR (Young Indian holding phone) -->
+                    <div class="hero-actor-donor" id="heroDonorActor">
+                        <div class="hero-actor-img-box">
+                            <img src="mascot-donor-3d.png" alt="Young Indian Donor Mascot">
+                            <div class="hero-phone-hand" title="Donor Launching Coin via Phone">
+                                <div class="hero-phone-screen">🪙</div>
+                            </div>
+                        </div>
+                        <span class="hero-actor-tag">😎 DONOR (समीर)</span>
+                    </div>
+
+                    <!-- PARABOLIC TRAVELING COIN -->
+                    <div class="hero-flying-coin animate" id="heroFlyingCoin">₹</div>
+
+                    <!-- BEGGAR (Cute Indian Katora Holder) -->
+                    <div class="hero-actor-beggar happy" id="heroBeggarActor">
+                        <div class="hero-emotion-bubble show" id="heroEmotionBubble">
+                            💖 +₹51 मिला! धन्यवाद!
+                        </div>
+                        <div class="hero-actor-img-box">
+                            <img src="mascot-beggar-3d.jpg" alt="Cute Indian Katora Holder Mascot">
+                            <!-- Golden Katora in Hand -->
+                            <div class="hero-katora-bowl shake" id="heroKatoraBowl" title="Golden Digital Katora">
+                                <span style="font-size: 1.2rem; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));">✨</span>
+                            </div>
+                        </div>
+                        <span class="hero-actor-tag">🥺 BEGGAR (राहुल)</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. LIVE STATISTICS STRIP -->
+        <section class="container stats-strip-wrapper">
+            <div class="stats-strip-card">
+                <!-- Stat 1 -->
+                <div class="stat-item-box">
+                    <div class="stat-icon-circle stat-icon-purple">🥣</div>
+                    <div>
+                        <div class="stat-number" id="statActiveKatoras">348+</div>
+                        <div class="stat-label">Active Katoras</div>
+                    </div>
+                </div>
+
+                <!-- Stat 2 -->
+                <div class="stat-item-box">
+                    <div class="stat-icon-circle stat-icon-green">💰</div>
+                    <div>
+                        <div class="stat-number" id="statTotalCollected">₹1,48,290</div>
+                        <div class="stat-label">Total Collected</div>
+                    </div>
+                </div>
+
+                <!-- Stat 3 -->
+                <div class="stat-item-box">
+                    <div class="stat-icon-circle stat-icon-gold">👑</div>
+                    <div>
+                        <div class="stat-number" id="statTotalDonors">9,450+</div>
+                        <div class="stat-label">Total Donors</div>
+                    </div>
+                </div>
+
+                <!-- Stat 4 -->
+                <div class="stat-item-box">
+                    <div class="stat-icon-circle stat-icon-coral">✨</div>
+                    <div>
+                        <div class="stat-number" id="statHappyMoments">28,120+</div>
+                        <div class="stat-label">Happy Moments</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. TRENDING KATORAS -->
+        <section class="container section" id="trending-katoras" style="padding-top: 1rem; padding-bottom: 4.5rem;">
+            <div class="section-header" style="text-align: center; max-width: 680px; margin: 0 auto 3rem;">
+                <span class="hero-pill-badge" style="margin-bottom: 0.75rem;">🔥 LIVE BROKE SOULS</span>
+                <h2 class="text-h2" style="font-size: clamp(2rem, 3.5vw, 2.8rem); margin-bottom: 0.5rem;">
+                    Aaj Ke Sabse Zyada <span class="gradient-text">Pyaase Katore</span> 😂
+                </h2>
+                <p style="color: var(--text-secondary); font-size: 1.05rem;">
+                    ये वो लोग हैं जिनके बटुए में सिर्फ मकड़ी का जाला बचा है! थोड़ा पुण्य कमाओ और सिक्का डालो।
+                </p>
+            </div>
+
+            <div class="katora-grid">
+                <!-- Card 1: Rahul Sharma -->
+                <div class="bhikhari-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span class="katora-cat-pill">☕ Chai & Sutta Debt</span>
+                        <span class="bhikhari-tape-tag">🩹 100% असली गरीब</span>
+                    </div>
+
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <div class="avatar-ring-garib" title="Aluminium Steel Beggar Bowl">
+                            <div class="avatar-inner-garib">
+                                <img src="mascot-beggar-3d.jpg" alt="Rahul Sharma" style="width: 100%; height: 100%; object-fit: cover;">
+                            </div>
+                        </div>
+                        <div style="flex: 1; min-width: 0;">
+                            <h4 class="katora-creator-name">
+                                <span>Rahul Sharma</span>
+                                <span style="color: var(--green); font-size: 0.82rem;" title="Verified Beggar">✓</span>
+                            </h4>
+                            <span style="font-size: 0.72rem; color: #F59E0B; font-family: var(--font-mono); font-weight: 600;">Level 1 • कंगाल</span>
+                        </div>
+                    </div>
+
+                    <h3 class="katora-headline" style="font-size: 1rem; margin-top: -0.2rem;">चाय वाले का ₹340 उधार ☕</h3>
+                    <p class="katora-story-snippet" style="font-size: 0.8rem; color: var(--text-secondary); margin: 0; line-height: 1.35;">
+                        "दुकानदार डंडा लेकर घूम रहा है, ₹340 का उधार चुकाना है भाई! 😭"
+                    </p>
+
+                    <!-- Progress Bar -->
+                    <div class="garib-progress-wrap" style="margin-top: 0.1rem;">
+                        <div class="garib-progress-labels" style="font-size: 0.78rem;">
+                            <span class="garib-raised-val" style="font-size: 0.95rem;">₹391 <small style="font-size: 0.7rem; color: var(--text-muted); font-weight: 500;">/ ₹500</small></span>
+                            <span class="garib-goal-val" style="color: #10B981; font-weight: 700;">78% भरा 🥣</span>
+                        </div>
+                        <div class="garib-meter-track" style="height: 6px;">
+                            <div class="garib-meter-fill" style="width: 78%;"></div>
+                        </div>
+                        <div class="garib-status-pill" style="margin-top: 0.25rem;">
+                            <span>👥 4 दयालु दानी</span>
+                            <span style="color: #F59E0B; font-weight: 600;">⚡ ₹109 बाकी</span>
+                        </div>
+                    </div>
+
+                    <!-- Quick Chanda Chips -->
+                    <div class="quick-chanda-chips">
+                        <span class="chanda-chip-label">🪙 शगुन:</span>
+                        <button class="chanda-chip-btn" onclick="openDonationModal('Rahul Sharma', 'katora-chai-fund', 10)">₹10</button>
+                        <button class="chanda-chip-btn" onclick="openDonationModal('Rahul Sharma', 'katora-chai-fund', 21)">₹21</button>
+                        <button class="chanda-chip-btn" onclick="openDonationModal('Rahul Sharma', 'katora-chai-fund', 51)">₹51</button>
+                        <button class="chanda-chip-btn" onclick="openDonationModal('Rahul Sharma', 'katora-chai-fund', 101)">₹101</button>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div style="display: flex; gap: 0.5rem; margin-top: auto; padding-top: 0.35rem;">
+                        <a href="katora-detail.html?id=katora-chai-fund" class="btn btn-glass" style="flex: 1; padding: 0.55rem 0.5rem; font-size: 0.82rem; min-height: 38px; text-align: center;">कटोरा देखें 🥣</a>
+                        <button class="btn btn-paisa-green" style="flex: 1.3; padding: 0.55rem 0.6rem; font-size: 0.85rem; min-height: 38px;" onclick="openDonationModal('Rahul Sharma', 'katora-chai-fund', 51)">
+                            <span>🪙</span> भीख डालें ₹51
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Card 2: Aman Verma -->
+                <div class="bhikhari-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span class="katora-cat-pill">💻 ब्रोक कोडर</span>
+                        <span class="bhikhari-tape-tag">🪡 फटा हुआ जेब</span>
+                    </div>
+
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <div class="avatar-ring-garib" title="Aluminium Steel Beggar Bowl">
+                            <div class="avatar-inner-garib">💻</div>
+                        </div>
+                        <div style="flex: 1; min-width: 0;">
+                            <h4 class="katora-creator-name">
+                                <span>Aman Verma</span>
+                                <span style="color: var(--green); font-size: 0.82rem;" title="Verified Beggar">✓</span>
+                            </h4>
+                            <span style="font-size: 0.72rem; color: #818CF8; font-family: var(--font-mono); font-weight: 600;">Level 2 • ब्रोक कोडर</span>
+                        </div>
+                    </div>
+
+                    <h3 class="katora-headline" style="font-size: 1rem; margin-top: -0.2rem;">RTX 4090 GPU Fund 💻</h3>
+                    <p class="katora-story-snippet" style="font-size: 0.8rem; color: var(--text-secondary); margin: 0; line-height: 1.35;">
+                        "Hello World चलाते ही लैपटॉप में आग लग जाती है! AI बनाना है! 🔥"
+                    </p>
+
+                    <!-- Progress Bar -->
+                    <div class="garib-progress-wrap" style="margin-top: 0.1rem;">
+                        <div class="garib-progress-labels" style="font-size: 0.78rem;">
+                            <span class="garib-raised-val" style="font-size: 0.95rem;">₹42,560 <small style="font-size: 0.7rem; color: var(--text-muted); font-weight: 500;">/ ₹1.8L</small></span>
+                            <span class="garib-goal-val" style="color: #F59E0B; font-weight: 700;">24% भरा 🥣</span>
+                        </div>
+                        <div class="garib-meter-track" style="height: 6px;">
+                            <div class="garib-meter-fill" style="width: 24%;"></div>
+                        </div>
+                        <div class="garib-status-pill" style="margin-top: 0.25rem;">
+                            <span>👥 3 दयालु दानी</span>
+                            <span style="color: #EF4444; font-weight: 600;">🚨 भारी जरूरत</span>
+                        </div>
+                    </div>
+
+                    <!-- Quick Chanda Chips -->
+                    <div class="quick-chanda-chips">
+                        <span class="chanda-chip-label">🪙 शगुन:</span>
+                        <button class="chanda-chip-btn" onclick="openDonationModal('Aman Verma', 'katora-rtx-4090', 21)">₹21</button>
+                        <button class="chanda-chip-btn" onclick="openDonationModal('Aman Verma', 'katora-rtx-4090', 51)">₹51</button>
+                        <button class="chanda-chip-btn" onclick="openDonationModal('Aman Verma', 'katora-rtx-4090', 101)">₹101</button>
+                        <button class="chanda-chip-btn" onclick="openDonationModal('Aman Verma', 'katora-rtx-4090', 501)">₹501</button>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div style="display: flex; gap: 0.5rem; margin-top: auto; padding-top: 0.35rem;">
+                        <a href="katora-detail.html?id=katora-rtx-4090" class="btn btn-glass" style="flex: 1; padding: 0.55rem 0.5rem; font-size: 0.82rem; min-height: 38px; text-align: center;">कटोरा देखें 🥣</a>
+                        <button class="btn btn-paisa-green" style="flex: 1.3; padding: 0.55rem 0.6rem; font-size: 0.85rem; min-height: 38px;" onclick="openDonationModal('Aman Verma', 'katora-rtx-4090', 51)">
+                            <span>🪙</span> भीख डालें ₹51
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Card 3: Kabir Singh -->
+                <div class="bhikhari-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span class="katora-cat-pill">🍗 दिल टूटा मजनू</span>
+                        <span class="bhikhari-tape-tag">💔 भूखा देवदास</span>
+                    </div>
+
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <div class="avatar-ring-garib" title="Aluminium Steel Beggar Bowl">
+                            <div class="avatar-inner-garib">🍗</div>
+                        </div>
+                        <div style="flex: 1; min-width: 0;">
+                            <h4 class="katora-creator-name">
+                                <span>Kabir Singh</span>
+                                <span style="color: var(--green); font-size: 0.82rem;" title="Verified Beggar">✓</span>
+                            </h4>
+                            <span style="font-size: 0.72rem; color: #EC4899; font-family: var(--font-mono); font-weight: 600;">Level 3 • भूखा आशिक</span>
+                        </div>
+                    </div>
+
+                    <h3 class="katora-headline" style="font-size: 1rem; margin-top: -0.2rem;">Breakup Biryani Fund 🍗</h3>
+                    <p class="katora-story-snippet" style="font-size: 0.8rem; color: var(--text-secondary); margin: 0; line-height: 1.35;">
+                        "दिल टूटा है पर भूख नहीं मरी, डबल मसाला लेग पीस खाकर रोना है! 💔"
+                    </p>
+
+                    <!-- Progress Bar -->
+                    <div class="garib-progress-wrap" style="margin-top: 0.1rem;">
+                        <div class="garib-progress-labels" style="font-size: 0.78rem;">
+                            <span class="garib-raised-val" style="font-size: 0.95rem;">₹950 <small style="font-size: 0.7rem; color: var(--text-muted); font-weight: 500;">/ ₹1,200</small></span>
+                            <span class="garib-goal-val" style="color: #10B981; font-weight: 700;">79% भरा 🥣</span>
+                        </div>
+                        <div class="garib-meter-track" style="height: 6px;">
+                            <div class="garib-meter-fill" style="width: 79%;"></div>
+                        </div>
+                        <div class="garib-status-pill" style="margin-top: 0.25rem;">
+                            <span>👥 3 दयालु दानी</span>
+                            <span style="color: #10B981; font-weight: 600;">⚡ पूरा होने वाला है</span>
+                        </div>
+                    </div>
+
+                    <!-- Quick Chanda Chips -->
+                    <div class="quick-chanda-chips">
+                        <span class="chanda-chip-label">🪙 शगुन:</span>
+                        <button class="chanda-chip-btn" onclick="openDonationModal('Kabir Singh', 'katora-breakup-biryani', 11)">₹11</button>
+                        <button class="chanda-chip-btn" onclick="openDonationModal('Kabir Singh', 'katora-breakup-biryani', 21)">₹21</button>
+                        <button class="chanda-chip-btn" onclick="openDonationModal('Kabir Singh', 'katora-breakup-biryani', 51)">₹51</button>
+                        <button class="chanda-chip-btn" onclick="openDonationModal('Kabir Singh', 'katora-breakup-biryani', 101)">₹101</button>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div style="display: flex; gap: 0.5rem; margin-top: auto; padding-top: 0.35rem;">
+                        <a href="katora-detail.html?id=katora-breakup-biryani" class="btn btn-glass" style="flex: 1; padding: 0.55rem 0.5rem; font-size: 0.82rem; min-height: 38px; text-align: center;">कटोरा देखें 🥣</a>
+                        <button class="btn btn-paisa-green" style="flex: 1.3; padding: 0.55rem 0.6rem; font-size: 0.85rem; min-height: 38px;" onclick="openDonationModal('Kabir Singh', 'katora-breakup-biryani', 51)">
+                            <span>🪙</span> भीख डालें ₹51
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Bottom Call-To-Action Buttons -->
+            <div style="display: flex; justify-content: center; align-items: center; gap: 1rem; margin-top: 2.75rem; flex-wrap: wrap;">
+                <a href="katoras.html" class="btn btn-glass btn-lg" style="font-size: 0.95rem; padding: 0.75rem 1.8rem; display: inline-flex; align-items: center; gap: 0.5rem;">
+                    <span>🔍</span> सभी 50+ कटोरे देखें (Explore All)
+                </a>
+                <a href="create-katora.html" class="btn btn-primary-gradient btn-lg btn-glow-pulse" style="font-size: 0.95rem; padding: 0.75rem 1.8rem; display: inline-flex; align-items: center; gap: 0.5rem;">
+                    <span>🥣</span> अपना डिजिटल कटोरा खोलें (Free)
+                </a>
+            </div>
+        </section>
+
+        <!-- 5. INTERACTIVE COIN TRANSFER SHOWCASE (Signature Interaction) -->
+        <section class="signature-showcase-section" id="interactive-showcase">
+            <div class="container">
+                <div style="text-align: center; max-width: 720px; margin: 0 auto 2.5rem;">
+                    <span class="hero-pill-badge">✨ Signature Interactive Cinema</span>
+                    <h2 class="text-h2" style="font-size: clamp(2rem, 3.5vw, 2.8rem); margin-bottom: 0.5rem;">
+                        Phone Se Katora <span class="gradient-text-gold">Magic Transfer</span> 🪙
+                    </h2>
+                    <p style="color: var(--text-secondary); font-size: 1.05rem;">
+                        Choose any shagun amount below and trigger the parabolic coin drop! Watch the receiver react in real-time.
+                    </p>
+                </div>
+
+                <div class="showcase-stage-box" id="showcaseStage">
+                    <!-- Actors Row -->
+                    <div class="showcase-actors-row">
+                        <!-- Donor -->
+                        <div class="showcase-actor-box">
+                            <div class="showcase-actor-avatar" id="showcaseDonorAvatar">
+                                <img src="mascot-donor-3d.png" alt="Donor Mascot">
+                            </div>
+                            <span class="badge" style="background: rgba(108, 92, 231, 0.2); color: var(--primary-light); font-weight: 700;">
+                                📱 YOUR PHONE
+                            </span>
+                        </div>
+
+                        <!-- Mid Parabolic Flight Indicator -->
+                        <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+                            <span style="font-size: 1.8rem; animation: pulseGlow 2s infinite;">⚡</span>
+                            <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--gold); font-weight: 700;">PARABOLIC UPI TRANSFER</span>
+                        </div>
+
+                        <!-- Beggar Katora -->
+                        <div class="showcase-actor-box">
+                            <div class="showcase-actor-avatar" id="showcaseBeggarAvatar" style="border-color: var(--gold); box-shadow: 0 0 25px var(--gold-glow);">
+                                <img src="mascot-beggar-3d.jpg" alt="Beggar Mascot">
+                            </div>
+                            <span class="badge" style="background: rgba(255, 184, 0, 0.2); color: var(--gold); font-weight: 700;">
+                                🥣 DIGITAL KATORA
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Amount Triggers -->
+                    <div class="showcase-amount-pills">
+                        <button class="showcase-pill-btn" onclick="triggerShowcaseTransfer(1)">₹1 (Sikka)</button>
+                        <button class="showcase-pill-btn" onclick="triggerShowcaseTransfer(5)">₹5 (Cutting Chai)</button>
+                        <button class="showcase-pill-btn" onclick="triggerShowcaseTransfer(11)">₹11 (Shagun)</button>
+                        <button class="showcase-pill-btn active" onclick="triggerShowcaseTransfer(51)">₹51 (Chai + Sutta)</button>
+                        <button class="showcase-pill-btn" onclick="triggerShowcaseTransfer(101)">₹101 (Biryani Fund)</button>
+                        <button class="showcase-pill-btn" onclick="triggerShowcaseTransfer(501)">👑 ₹501 (Ambani Flex)</button>
+                    </div>
+
+                    <div style="display: flex; justify-content: center; gap: 1rem; align-items: center; flex-wrap: wrap;">
+                        <button class="btn btn-primary-gradient btn-lg btn-glow-pulse" onclick="triggerShowcaseTransfer(51)">
+                            <span>🚀</span> DROP COIN NOW (टिंग! 🪙)
+                        </button>
+                    </div>
+
+                    <!-- 3D Punya Ka Ghada Live Status in Showcase -->
+                    <div class="ghada-3d-showcase" style="max-width: 580px; margin: 2rem auto 0; display: flex; align-items: center; justify-content: space-around; gap: 1.5rem; flex-wrap: wrap; text-align: left;">
+                        <div class="ghada-image-frame" style="width: 110px; height: 120px; margin: 0;">
+                            <div class="ghada-aura-halo" style="width: 100px; height: 100px;"></div>
+                            <img src="punya-ka-ghada-3d.jpg" alt="3D Punya Ka Ghada" class="ghada-3d-img">
+                        </div>
+                        <div style="flex: 1; min-width: 220px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+                                <span class="badge" style="background: rgba(245, 158, 11, 0.2); color: var(--gold); border: 1px solid var(--gold);">🏺 Live Karma Meter</span>
+                                <span id="showcase-punya-pts" class="punya-points-badge" style="background: var(--gold-gradient); color: #0F0E17; font-weight: 800;">
+                                    ✨ +102 Punya
+                                </span>
+                            </div>
+                            <div class="ghada-meter-track" style="height: 10px; margin: 0.4rem 0;">
+                                <div id="showcase-ghada-fill" class="ghada-meter-fill" style="width: 65%;"></div>
+                            </div>
+                            <div class="ghada-status-pill" style="font-size: 0.78rem;">
+                                <span id="showcase-ghada-pct">65% Full</span>
+                                <span id="showcase-ghada-tier" class="ghada-status-label" style="color: var(--green-light); font-weight: 700;">👑 Agla Janam Raja Ka</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. TOP 3 MAHA-DAANI LEADERBOARD -->
+        <section class="container section" id="leaderboard" style="padding-top: 2rem; padding-bottom: 5rem;">
+            <div class="section-header" style="text-align: center; max-width: 680px; margin: 0 auto 3rem;">
+                <span class="hero-pill-badge" style="margin-bottom: 0.75rem;">👑 ROYAL PODIUM</span>
+                <h2 class="text-h2" style="font-size: clamp(2rem, 3.5vw, 2.8rem); margin-bottom: 0.5rem;">
+                    Katore Ke <span class="gradient-text-gold">Mahadaani 👑</span>
+                </h2>
+                <p style="color: var(--text-secondary); font-size: 1.05rem;">
+                    जिन्होंने दिल खोल कर सिक्के बरसाए और कर्मा का घड़ा भर दिया!
+                </p>
+            </div>
+
+            <div class="podium-grid">
+                <!-- #2 Silver: Aman Verma -->
+                <div class="podium-card podium-rank-2">
+                    <div class="donor-avatar-podium" style="border-color: #C0C0C0;">🥈</div>
+                    <div class="donor-name-podium">Aman Verma</div>
+                    <div class="donor-amount-podium" style="color: #E2E8F0;">₹2,501 Daan</div>
+                    <span class="donor-badge-title">💎 DIAMOND DAANVEER</span>
+
+                    <!-- Punya Ka Ghada -->
+                    <div class="punya-ghada-box">
+                        <div class="punya-ghada-header">
+                            <span class="punya-ghada-title">🏺 Punya Ka Ghada</span>
+                            <span class="punya-points-badge">✨ 5,002 Pts</span>
+                        </div>
+                        <div class="ghada-meter-track">
+                            <div class="ghada-meter-fill" style="width: 50%;"></div>
+                        </div>
+                        <div class="ghada-status-pill">
+                            <span>50% Full</span>
+                            <span class="ghada-status-label">⚖️ Balance Theek Hai</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- #1 Gold Winner: Sameer Rao (Largest Treatment) -->
+                <div class="podium-card podium-rank-1">
+                    <div class="crown-badge" style="font-size: 2.4rem; margin-bottom: 0;">👑</div>
+                    <div class="donor-avatar-podium" style="border-color: var(--gold); box-shadow: 0 0 30px var(--gold-glow); overflow: hidden; padding: 0; width: 100px; height: 100px;">
+                        <img src="mascot-donor-3d.png" alt="Maha Daani Donor" style="width: 100%; height: 100%; object-fit: cover; object-position: top 15%; display: block;">
+                    </div>
+                    <div class="donor-name-podium" style="font-size: 1.4rem;">Sameer "Crorepati" Rao</div>
+                    <div class="donor-amount-podium" style="font-size: 1.8rem;">₹5,001 Daan</div>
+                    <span class="donor-badge-title" style="background: var(--gold-gradient); color: #0F0E17; font-weight: 800;">
+                        👑 MAHA-DAANI SAMRAT #1
+                    </span>
+
+                    <!-- Punya Ka Ghada -->
+                    <div class="punya-ghada-box" style="border-color: rgba(245, 158, 11, 0.5); background: rgba(245, 158, 11, 0.1);">
+                        <div class="punya-ghada-header">
+                            <span class="punya-ghada-title" style="color: var(--gold-light);">🏺 Maha-Punya Ghada</span>
+                            <span class="punya-points-badge" style="background: var(--gold-gradient); color: #0F0E17;">⭐ 10,002 Pts</span>
+                        </div>
+                        <div class="ghada-meter-track" style="height: 12px;">
+                            <div class="ghada-meter-fill" style="width: 100%;"></div>
+                        </div>
+                        <div class="ghada-status-pill">
+                            <span style="color: var(--gold-light); font-weight: 800;">100% Full (OVERFLOW!)</span>
+                            <span class="ghada-status-label" style="color: var(--green-light);">🌟 Swarg VIP Pass!</span>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 1rem;">
+                        <button class="btn btn-sm btn-glass" onclick="showToast('🏆 Sameer Rao ka Ghada full ho gaya hai! Pure Moksha Achieved!')">
+                            📢 Share Victory
+                        </button>
+                    </div>
+                </div>
+
+                <!-- #3 Bronze: Vikas Singh -->
+                <div class="podium-card podium-rank-3">
+                    <div class="donor-avatar-podium" style="border-color: #CD7F32;">🥉</div>
+                    <div class="donor-name-podium">Vikas Singh</div>
+                    <div class="donor-amount-podium" style="color: #F6AD55;">₹1,101 Daan</div>
+                    <span class="donor-badge-title">⭐ CHAI PATRON</span>
+
+                    <!-- Punya Ka Ghada -->
+                    <div class="punya-ghada-box">
+                        <div class="punya-ghada-header">
+                            <span class="punya-ghada-title">🏺 Punya Ka Ghada</span>
+                            <span class="punya-points-badge">✨ 2,202 Pts</span>
+                        </div>
+                        <div class="ghada-meter-track">
+                            <div class="ghada-meter-fill" style="width: 22%;"></div>
+                        </div>
+                        <div class="ghada-status-pill">
+                            <span>22% Full</span>
+                            <span class="ghada-status-label">🧼 Paap Dhul Rahe Hain</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. DONOR ACHIEVEMENT SHOWCASE -->
+        <section class="container achievement-showcase-section" id="achievements">
+            <div class="section-header" style="text-align: center; max-width: 680px; margin: 0 auto 3rem;">
+                <span class="hero-pill-badge" style="margin-bottom: 0.75rem;">🎖️ SCREENSHOT-WORTHY FLEX</span>
+                <h2 class="text-h2" style="font-size: clamp(2rem, 3.5vw, 2.8rem); margin-bottom: 0.5rem;">
+                    Donor <span class="gradient-text">Achievement Card</span> 🏆
+                </h2>
+                <p style="color: var(--text-secondary); font-size: 1.05rem;">
+                    हर दान पर मिलता है खास डिजिटल सम्मान! अपनी दानवीरता को सोशल मीडिया पर शेयर करें।
+                </p>
+            </div>
+
+            <!-- Shareable Certificate Card -->
+            <div class="achievement-certificate-card" id="achievementCardToShare">
+                <div class="certificate-watermark">KATORA</div>
+                
+                <div class="cert-header">
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <span style="font-size: 1.8rem;">🥣</span>
+                        <div>
+                            <div style="font-size: 0.8rem; font-weight: 800; color: var(--gold); letter-spacing: 1.5px; text-transform: uppercase;">DIGITAL KATORA</div>
+                            <div style="font-size: 0.7rem; color: var(--text-muted);">Verified Philanthropy NFT Badge</div>
+                        </div>
+                    </div>
+                    <span class="badge" style="background: rgba(0, 184, 148, 0.2); color: var(--green-light); border: 1px solid var(--green);">
+                        ✅ 100% VERIFIED DAANI
+                    </span>
+                </div>
+
+                <div class="cert-body">
+                    <div class="cert-avatar-wrap">
+                        <img src="mascot-donor-3d.png" alt="Sameer Rao">
+                    </div>
+                    <div>
+                        <span style="font-size: 0.8rem; color: var(--gold); font-family: var(--font-mono); font-weight: 700;">OFFICIAL HONOUR OF KARMA</span>
+                        <h3 style="font-size: 1.5rem; color: var(--text-primary); margin: 0.2rem 0;">Sameer "Crorepati" Rao</h3>
+                        <p style="font-size: 0.88rem; color: var(--text-secondary); margin: 0;">
+                            Earned <strong>👑 Maha-Daani Tier 1</strong> by sponsoring hungry students & broken coders.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="cert-meta-grid">
+                    <div>
+                        <div class="cert-meta-val">₹5,001</div>
+                        <div class="cert-meta-lbl">Total Daan</div>
+                    </div>
+                    <div>
+                        <div class="cert-meta-val">+10,000</div>
+                        <div class="cert-meta-lbl">Karma XP</div>
+                    </div>
+                    <div>
+                        <div class="cert-meta-val">#1 Samrat</div>
+                        <div class="cert-meta-lbl">Global Rank</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Social Action Buttons -->
+            <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+                <button class="btn btn-secondary btn-magnetic" onclick="shareOnWhatsApp()">
+                    <span>📲</span> WhatsApp Par Flex Karein
+                </button>
+                <button class="btn btn-secondary btn-magnetic" onclick="shareOnInstagram()">
+                    <span>📸</span> Instagram Story Flex
+                </button>
+                <button class="btn btn-glass btn-magnetic" onclick="downloadCertificate()">
+                    <span>⬇️</span> Download Badge
+                </button>
+                <button class="btn btn-glass btn-magnetic" onclick="copyFlexLink()">
+                    <span>🔗</span> Copy Link
+                </button>
+            </div>
+        </section>
+
+        <!-- 8. HOW IT WORKS (3-Step Visual Storytelling) -->
+        <section class="container section" id="how-it-works" style="padding-top: 2rem; padding-bottom: 5rem;">
+            <div class="section-header" style="text-align: center; max-width: 680px; margin: 0 auto 3rem;">
+                <span class="hero-pill-badge" style="margin-bottom: 0.75rem;">⚡ 3 EASY STEPS</span>
+                <h2 class="text-h2" style="font-size: clamp(2rem, 3.5vw, 2.8rem); margin-bottom: 0.5rem;">
+                    Digital Katora <span class="gradient-text">Kaise Kaam Karta Hai?</span> 🥣
+                </h2>
+                <p style="color: var(--text-secondary); font-size: 1.05rem;">
+                    कटोरा बनाने से लेकर सीधे बैंक खाते में पैसे आने तक का 3-स्टेप आसान सफर
+                </p>
+            </div>
+
+            <div class="how-it-works-grid-3col">
+                <!-- Step 1 -->
+                <div class="card card-interactive" style="padding: 2.25rem; text-align: left;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                        <span class="step-badge" style="background: rgba(108, 92, 231, 0.2); color: var(--primary-light);">स्टेप 01</span>
+                        <span style="font-size: 0.8rem; color: var(--text-muted); font-family: var(--font-mono);">⏱️ 30 SECONDS</span>
+                    </div>
+                    <div style="width: 64px; height: 64px; border-radius: 18px; background: rgba(108, 92, 231, 0.15); display: flex; align-items: center; justify-content: center; font-size: 2rem; margin-bottom: 1.25rem; border: 1px solid rgba(108, 92, 231, 0.3);">
+                        🥣
+                    </div>
+                    <h3 style="font-size: 1.35rem; margin-bottom: 0.5rem;">1. कटोरा बनाएं और फोटो डालें</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;">
+                        अपना मजेदार कारण लिखें (जैसे <em>"चाय-समोसे के पैसे दे दो 😭"</em>), टारगेट अमाउंट डालें और UPI ID जोड़ें।
+                    </p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="card card-interactive" style="padding: 2.25rem; text-align: left;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                        <span class="step-badge" style="background: rgba(255, 184, 0, 0.2); color: var(--gold);">स्टेप 02</span>
+                        <span style="font-size: 0.8rem; color: var(--text-muted); font-family: var(--font-mono);">⚡ INSTANT LIVE</span>
+                    </div>
+                    <div style="width: 64px; height: 64px; border-radius: 18px; background: rgba(255, 184, 0, 0.15); display: flex; align-items: center; justify-content: center; font-size: 2rem; margin-bottom: 1.25rem; border: 1px solid rgba(255, 184, 0, 0.3);">
+                        📲
+                    </div>
+                    <h3 style="font-size: 1.35rem; margin-bottom: 0.5rem;">2. ऑटो-वेरिफिकेशन और QR लिंक</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;">
+                        आपका कटोरा instant live हो जाता है। WhatsApp, Instagram और दोस्तों के साथ अपना QR लिंक शेयर करें।
+                    </p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="card card-interactive" style="padding: 2.25rem; text-align: left;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                        <span class="step-badge" style="background: rgba(0, 184, 148, 0.2); color: var(--green-light);">स्टेप 03</span>
+                        <span style="font-size: 0.8rem; color: var(--text-muted); font-family: var(--font-mono);">💰 100% DIRECT</span>
+                    </div>
+                    <div style="width: 64px; height: 64px; border-radius: 18px; background: rgba(0, 184, 148, 0.15); display: flex; align-items: center; justify-content: center; font-size: 2rem; margin-bottom: 1.25rem; border: 1px solid rgba(0, 184, 148, 0.3);">
+                        🪙
+                    </div>
+                    <h3 style="font-size: 1.35rem; margin-bottom: 0.5rem;">3. टिंग! सीधा बैंक में पैसा पाएं</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;">
+                        सिक्का गिरते ही 'टिंग' की आवाज सुनें, पुण्य कमाएं और 100% पैसा सीधा अपने बैंक खाते में पाएं।
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 9. CREATE YOUR KATORA CTA -->
+        <section class="container" style="padding: 2rem 1.5rem 5rem;">
+            <div class="card card-glow" style="background: linear-gradient(135deg, rgba(108, 92, 231, 0.15) 0%, rgba(255, 184, 0, 0.12) 100%); border: 1.5px solid var(--border-glow); padding: 4rem 2rem; text-align: center; border-radius: 28px; position: relative; overflow: hidden;">
+                <div style="font-size: 3.5rem; margin-bottom: 1rem; animation: floatMascot 3s ease-in-out infinite;">🥣</div>
+                <h2 class="text-h2" style="font-size: clamp(2.2rem, 4.5vw, 3.4rem); margin-bottom: 1rem;">
+                    शर्म छोड़ो, <span class="gradient-text">कटोरा जोड़ो!</span> 🥣
+                </h2>
+                <p style="color: var(--text-secondary); font-size: 1.15rem; max-width: 620px; margin: 0 auto 2.5rem; line-height: 1.7;">
+                    12,000+ क्रिएटर्स, स्टूडेंट्स और दोस्तों के साथ जुड़ें और गर्व से अपना डिजिटल कटोरा रखें।
+                </p>
+                <div class="magnetic-btn-wrap" style="display: inline-block;">
+                    <a href="create-katora.html" class="btn btn-primary-gradient btn-lg btn-glow-pulse" style="font-size: 1.15rem; padding: 1rem 2.5rem;">
+                        <span>🥣</span> Mera Katora Banao &rarr;
+                    </a>
+                </div>
+                <div style="margin-top: 1.75rem; font-size: 0.88rem; color: var(--text-muted); display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+                    <span>✨ 100% फ्री</span>
+                    <span>&bull;</span>
+                    <span>⚡ 30 सेकंड सेटअप</span>
+                    <span>&bull;</span>
+                    <span>💰 सीधा UPI ट्रांसफर</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 10. LIVE ACTIVITY FEED -->
+        <section class="container" style="padding-bottom: 5rem;">
+            <div class="live-activity-bar">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+                    <div style="display: flex; align-items: center; gap: 0.6rem;">
+                        <span style="font-size: 1.3rem;">🪙</span>
+                        <h3 style="font-size: 1.1rem; margin: 0;">Live Activity Feed</h3>
+                    </div>
+                    <div class="live-indicator">
+                        <span class="pulse-dot" style="background: var(--coral); box-shadow: 0 0 8px var(--coral);"></span>
+                        <span style="font-size: 0.78rem; font-weight: 700; color: var(--coral);">LIVE UPDATING</span>
+                    </div>
+                </div>
+
+                <div class="feed-scroll-box" id="liveActivityFeedList">
+                    <div class="feed-item-card">
+                        <div class="feed-item-left">
+                            <span class="feed-coin-icon">☕</span>
+                            <span style="font-size: 0.92rem; font-weight: 600;">रोहन ने राहुल के कटोरे में ₹51 डाले ☕</span>
+                        </div>
+                        <span class="feed-amount-badge">+₹51</span>
+                    </div>
+                    <div class="feed-item-card">
+                        <div class="feed-item-left">
+                            <span class="feed-coin-icon">💻</span>
+                            <span style="font-size: 0.92rem; font-weight: 600;">अमन का RTX 4090 कटोरा 50% पूरा हुआ 💻</span>
+                        </div>
+                        <span class="feed-amount-badge" style="background: rgba(108, 92, 231, 0.15); color: var(--primary-light);">GOAL 50%</span>
+                    </div>
+                    <div class="feed-item-card">
+                        <div class="feed-item-left">
+                            <span class="feed-coin-icon">👑</span>
+                            <span style="font-size: 0.92rem; font-weight: 600;">एक गुप्त दानी ने ₹501 का महा-दान दिया 👑</span>
+                        </div>
+                        <span class="feed-amount-badge">+₹501</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 11. FOOTER -->
+    <footer class="footer">
+        <div class="container footer-grid">
+            <div class="footer-brand">
+                <a href="index.html" class="brand-logo" style="margin-bottom: 1rem; display: inline-flex;">
+                    <div class="logo-bowl-glow">
+                        <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 24px; height: 24px;">
+                            <path d="M4 14C4 22.8 10.2 30 18 30C25.8 30 32 22.8 32 14H4Z" fill="url(#brandBowlGradFooter2)" stroke="#FFD93D" stroke-width="1.8"/>
+                            <ellipse cx="18" cy="14" rx="14" ry="4" fill="#FFB800" stroke="#FFEAA7" stroke-width="1.2"/>
+                            <circle cx="18" cy="7.5" r="4" fill="#FFD93D" stroke="#E67E22" stroke-width="1"/>
+                            <text x="18" y="9.5" font-size="5" font-weight="bold" fill="#8B4513" text-anchor="middle" font-family="'JetBrains Mono', monospace">₹</text>
+                            <defs>
+                                <linearGradient id="brandBowlGradFooter2" x1="4" y1="14" x2="32" y2="30" gradientUnits="userSpaceOnUse">
+                                    <stop stop-color="#6C5CE7"/>
+                                    <stop offset="1" stop-color="#FFB800"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <span>Digital <span class="gradient-text">Katora</span></span>
+                </a>
+                <p class="footer-tagline">
+                    India's premier satirical micro-tipping community. Khule paise nahi hain? Digital Katora scan karo!
+                </p>
+                <div class="social-links-row">
+                    <a href="https://instagram.com" target="_blank" class="social-icon-circle" title="Instagram" aria-label="Instagram">
+                        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                    </a>
+                    <a href="https://twitter.com" target="_blank" class="social-icon-circle" title="Twitter / X" aria-label="Twitter">
+                        <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    </a>
+                    <a href="https://github.com" target="_blank" class="social-icon-circle" title="GitHub" aria-label="GitHub">
+                        <svg viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4>Navigation</h4>
+                <ul class="footer-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="#trending-katoras">Trending Katoras</a></li>
+                    <li><a href="#interactive-showcase">Coin Transfer Demo</a></li>
+                    <li><a href="#leaderboard">Top Donors</a></li>
+                    <li><a href="#achievements">Achievements</a></li>
+                    <li><a href="#how-it-works">How It Works</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Quick Info</h4>
+                <ul class="footer-links">
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="faq.html">FAQ</a></li>
+                    <li><a href="contact.html">Contact Tapri HQ</a></li>
+                    <li><a href="faq.html">Privacy & Terms</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Tapri Proverb</h4>
+                <div class="card" style="padding: 1.25rem; background: var(--bg-surface); border: 1px solid var(--border-subtle);">
+                    <p style="font-style: italic; color: var(--gold); font-size: 0.9rem; margin-bottom: 0.5rem;">
+                        "Sharam chhoro, katora jodo! Dost se udhaar maangne se behtar hai public se maang lo."
+                    </p>
+                    <span style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);">— Ancient Tapri Wisdom</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="container footer-bottom-flex">
+                <p>© 2025 Digital Katora. Crafted with 😂, ☕ & 🥣 in Bharat. 100% Satirical Platform.</p>
+                <div class="footer-legal-links">
+                    <a href="faq.html">Privacy Policy</a>
+                    <a href="faq.html">Terms of Service</a>
+                    <a href="contact.html">Report Bug</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 2-STEP UPI QR DONATION BOTTOM SHEET MODAL -->
+    <div id="donation-modal-overlay" class="modal-overlay">
+        <div class="donation-bottom-sheet">
+            <div class="sheet-handle"></div>
+            <button class="modal-close-icon" onclick="closeDonationModal()" aria-label="Close Modal">&times;</button>
+            
+            <!-- STEP 1: CHOOSE AMOUNT & DONOR DETAILS -->
+            <div id="modal-step-1">
+                <div style="text-align: center; margin-bottom: 1.25rem;">
+                    <div style="font-size: 2.8rem; margin-bottom: 0.35rem;">🪙</div>
+                    <h3 style="font-size: 1.45rem;">Drop Coins into <span id="modal-recipient-name" class="gradient-text">Rahul's Katora</span></h3>
+                    <p style="color: var(--text-secondary); font-size: 0.88rem; margin-top: 0.25rem;">
+                        Choose an amount & bless this hungry soul with punya!
+                    </p>
+                </div>
+
+                <!-- Amount Pills Grid -->
+                <div class="amount-btn-grid">
+                    <button type="button" class="amount-pill-btn" data-amount="1">₹1</button>
+                    <button type="button" class="amount-pill-btn" data-amount="11">₹11</button>
+                    <button type="button" class="amount-pill-btn" data-amount="21">₹21</button>
+                    <button type="button" class="amount-pill-btn active" data-amount="51">₹51</button>
+                    <button type="button" class="amount-pill-btn" data-amount="101">₹101</button>
+                    <button type="button" class="amount-pill-btn" data-amount="501">₹501</button>
+                </div>
+
+                <!-- Custom Input -->
+                <div class="custom-input-wrap" style="position: relative; margin-bottom: 1.25rem;">
+                    <span style="position: absolute; left: 1.2rem; top: 50%; transform: translateY(-50%); font-family: var(--font-mono); font-size: 1.3rem; font-weight: 800; color: var(--primary-light);">₹</span>
+                    <input type="number" id="modal-custom-amount" class="custom-amount-field" value="51" min="1" placeholder="Enter custom amount" style="width: 100%; height: 52px; padding: 0 1rem 0 2.6rem; background: var(--bg-elevated); border: 1.5px solid var(--border-subtle); border-radius: var(--radius-md); font-family: var(--font-mono); font-size: 1.25rem; font-weight: 800; color: var(--text-primary); outline: none;">
+                </div>
+
+                <!-- Donor Name & Note -->
+                <div style="margin-bottom: 0.85rem;">
+                    <input type="text" id="modal-donor-name" style="width: 100%; height: 46px; padding: 0 1rem; background: var(--bg-elevated); border: 1.5px solid var(--border-subtle); border-radius: var(--radius-md); font-family: var(--font-body); font-size: 0.95rem; color: var(--text-primary); outline: none;" placeholder="Aapka Shubh Naam (Optional)">
+                </div>
+                <div style="margin-bottom: 1.25rem;">
+                    <input type="text" id="modal-donor-message" style="width: 100%; height: 46px; padding: 0 1rem; background: var(--bg-elevated); border: 1.5px solid var(--border-subtle); border-radius: var(--radius-md); font-family: var(--font-body); font-size: 0.95rem; color: var(--text-primary); outline: none;" placeholder="Funny blessing or meme message 😂">
+                </div>
+
+                <button type="button" class="btn btn-primary-gradient btn-lg" style="width: 100%; font-size: 1.15rem;" onclick="goToModalStep2()">
+                    <span>📲</span> SCAN BEGGAR QR & PAY &rarr;
+                </button>
+            </div>
+
+            <!-- STEP 2: BEGGAR QR CODE & UPI INTENT -->
+            <div id="modal-step-2" style="display: none; text-align: center;">
+                <div style="margin-bottom: 1rem;">
+                    <span class="step-badge" style="background: rgba(0, 184, 148, 0.15); color: var(--green-light); border-color: rgba(0, 184, 148, 0.3);">
+                        ⚡ DIRECT ZERO-FEE UPI PAYMENT
+                    </span>
+                    <h3 style="font-size: 1.35rem; margin-top: 0.5rem;">
+                        Scan & Pay <span id="modal-qr-amount-display" class="gradient-text" style="font-family: var(--font-mono); font-size: 1.5rem;">₹51</span>
+                    </h3>
+                </div>
+
+                <!-- QR Container with Glow Frame -->
+                <div style="background: #FFFFFF; padding: 1rem; border-radius: 16px; display: inline-block; box-shadow: 0 0 35px rgba(108, 92, 231, 0.35); border: 3px solid var(--primary-light); margin-bottom: 1rem; position: relative;">
+                    <img id="modal-beggar-qr-img" src="" alt="Beggar UPI QR" style="width: 175px; height: 175px; display: block; object-fit: contain;">
+                    <div style="position: absolute; bottom: 4px; right: 8px; font-size: 0.65rem; color: #333; font-weight: 700; font-family: var(--font-mono);">
+                        Digital Katora 🥣
+                    </div>
+                </div>
+
+                <!-- UPI ID Copy Bar -->
+                <div style="background: var(--bg-elevated); border: 1px solid var(--border-subtle); border-radius: var(--radius-pill); padding: 0.45rem 1rem; display: inline-flex; align-items: center; gap: 0.6rem; margin-bottom: 1.25rem; max-width: 90%; cursor: pointer;" onclick="copyModalUpiId()" title="Click to copy UPI ID">
+                    <span style="font-size: 0.85rem; color: var(--text-muted);">UPI:</span>
+                    <span id="modal-beggar-upi-id" style="font-family: var(--font-mono); font-size: 0.9rem; font-weight: 700; color: var(--primary-light);">rahul@upi</span>
+                    <span style="font-size: 0.75rem; background: var(--bg-surface); padding: 0.2rem 0.5rem; border-radius: 999px; border: 1px solid var(--border-subtle);">📋 Copy</span>
+                </div>
+
+                <!-- Deep Link for Mobile UPI -->
+                <div style="margin-bottom: 1rem;">
+                    <a id="modal-upi-intent-link" href="#" class="btn btn-glass" style="width: 100%; justify-content: center; display: inline-flex; text-decoration: none; border-color: rgba(0, 184, 148, 0.4); color: var(--green-light) !important;">
+                        <span>📲</span> Open GPay / PhonePe / Paytm App
+                    </a>
+                </div>
+
+                <!-- UTR Ref Input (Optional) -->
+                <div style="margin-bottom: 1rem;">
+                    <input type="text" id="modal-utr-input" style="width: 100%; height: 42px; padding: 0 1rem; background: var(--bg-elevated); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); font-family: var(--font-mono); font-size: 0.88rem; color: var(--text-primary); text-align: center; outline: none;" placeholder="12-digit UPI UTR / Ref No. (Optional)">
+                </div>
+
+                <!-- Verification Confirm Button -->
+                <div style="display: flex; gap: 0.6rem;">
+                    <button type="button" class="btn btn-glass" style="flex: 1;" onclick="goToModalStep1()">
+                        &larr; Back
+                    </button>
+                    <button type="button" class="btn btn-paisa-green btn-lg" style="flex: 2; font-size: 1.05rem;" onclick="verifyAndSubmitPayment()">
+                        <span>✅</span> Maine Pay Kar Diya!
+                    </button>
+                </div>
+            </div>
+
+            <!-- STEP 3: DONATION ANIMATION CELEBRATION STAGE -->
+            <div id="modal-step-3" style="display: none; text-align: center; padding: 0.5rem 0.25rem; position: relative;">
+                <!-- Mini flying coin container -->
+                <div class="modal-anim-stage" id="modalAnimStage">
+                    <div class="modal-confetti-halo"></div>
+                    
+                    <div class="modal-anim-actors">
+                        <!-- Donor Phone -->
+                        <div class="modal-anim-donor">
+                            <div class="modal-anim-avatar">
+                                <img src="mascot-donor-3d.png" alt="Donor">
+                            </div>
+                            <span class="modal-anim-tag">😎 आप (दानी)</span>
+                        </div>
+
+                        <!-- Flying Golden Coin -->
+                        <div class="modal-anim-flying-coin" id="modalAnimFlyingCoin">
+                            <span class="modal-coin-inner">₹</span>
+                        </div>
+
+                        <!-- Comic Shockwave Pop -->
+                        <div class="modal-ting-shockwave" id="modalTingShockwave">
+                            TING! 🪙
+                        </div>
+
+                        <!-- Beggar Katora Bowl -->
+                        <div class="modal-anim-beggar" id="modalAnimBeggar">
+                            <div class="modal-anim-avatar modal-beggar-avatar">
+                                <img id="modalAnimBeggarImg" src="mascot-beggar-3d.jpg" alt="Beggar">
+                                <div class="modal-katora-bowl" id="modalKatoraBowl">
+                                    <span>✨</span>
+                                </div>
+                            </div>
+                            <span class="modal-anim-tag" id="modalAnimBeggarName">🥺 राहुल</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Celebration Info -->
+                <div class="modal-success-banner" style="margin-top: 1rem;">
+                    <div class="modal-success-title">
+                        🎉 <span class="gradient-text-green" id="modalSuccessAmtDisplay">₹51</span> ट्रांसफर सफल!
+                    </div>
+                    <p class="modal-success-sub" id="modalSuccessSub">
+                        सिक्का कटोरे में गिर चुका है और कर्मा आशीर्वाद प्राप्त हुआ! ✨
+                    </p>
+                </div>
+
+                <!-- Punya Ka Ghada Mini Card -->
+                <div class="modal-punya-bar-card">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.35rem;">
+                        <span style="font-size: 0.85rem; font-weight: 700; color: var(--gold-light); display: flex; align-items: center; gap: 0.35rem;">
+                            🏺 पुण्य का घड़ा
+                        </span>
+                        <span class="punya-points-badge" id="modalEarnedPunyaPts">+102 Punya</span>
+                    </div>
+                    <div class="ghada-meter-track" style="height: 10px;">
+                        <div class="ghada-meter-fill" id="modalGhadaMeterFill" style="width: 82%;"></div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-muted); margin-top: 0.35rem; font-family: var(--font-mono);">
+                        <span id="modalGhadaFillPct">82% Full</span>
+                        <span style="color: var(--green-light); font-weight: 700;">🌟 VIP Swarg Pass!</span>
+                    </div>
+                </div>
+
+                <!-- Manual Close Button -->
+                <div style="margin-top: 1.15rem;">
+                    <button type="button" class="btn btn-glass btn-sm" onclick="closeDonationModal()" style="width: 100%; border-color: rgba(0, 184, 148, 0.4); color: var(--green-light) !important;">
+                        <span>✅</span> बढ़िया! (Band Karein)
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="data-store.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

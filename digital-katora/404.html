@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="hi" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🥣 Katora Mil Nahi Raha 404 — Digital Katora</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Unified Design System Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+    
+    <meta name="description" content="404 Page Not Found — Katora mil nahi raha! Internet ke raste mein katora gir gaya. Wapas ghar chalo ya naye katore dhoondo.">
+    <meta name="theme-color" content="#6C5CE7">
+
+    <style>
+      /* ═════════════════════════════════════════════════════════════════════
+         404 NOT FOUND SPECIALIZED STYLES
+         ═════════════════════════════════════════════════════════════════════ */
+      .page-404-root {
+        min-height: 80vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 3rem 1.25rem 5rem;
+        position: relative;
+        text-align: center;
+      }
+
+      /* Giant 404 Number Layer */
+      .error-404-number-wrap {
+        position: relative;
+        display: inline-block;
+        margin-bottom: 1.5rem;
+      }
+
+      .error-404-number {
+        font-family: var(--font-mono);
+        font-size: clamp(6.5rem, 16vw, 11rem);
+        font-weight: 900;
+        line-height: 0.9;
+        letter-spacing: -0.06em;
+        background: linear-gradient(135deg, rgba(255, 107, 107, 0.9) 0%, rgba(255, 184, 0, 0.8) 50%, rgba(108, 92, 231, 0.85) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 0 10px 40px rgba(255, 107, 107, 0.25);
+        user-select: none;
+        animation: floatSlow 4s ease-in-out infinite alternate;
+      }
+
+      /* 3D Mascot & Empty Katora Stage Box */
+      .error-mascot-stage {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1.5rem;
+        margin: 1rem auto 2rem;
+        max-width: 520px;
+        position: relative;
+      }
+
+      .mascot-confused-card {
+        width: 140px;
+        height: 160px;
+        border-radius: 24px;
+        background: var(--bg-surface);
+        border: 1.5px solid var(--border-glow);
+        box-shadow: 0 16px 35px rgba(0, 0, 0, 0.4);
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+
+      .mascot-confused-card:hover {
+        transform: translateY(-6px) rotate(-3deg) scale(1.04);
+      }
+
+      .mascot-confused-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center 15%;
+      }
+
+      .mascot-thought-bubble {
+        position: absolute;
+        top: -12px;
+        right: -10px;
+        background: var(--bg-elevated);
+        border: 1px solid var(--border-subtle);
+        padding: 4px 10px;
+        border-radius: var(--radius-pill);
+        font-size: 0.85rem;
+        font-weight: 800;
+        box-shadow: var(--shadow-sm);
+        animation: pulseHeart 2s infinite ease-in-out;
+      }
+
+      /* Empty Floating Katora */
+      .empty-katora-box {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .empty-3d-bowl {
+        width: 110px;
+        height: 65px;
+        background: linear-gradient(180deg, #FFB800 0%, #D97706 100%);
+        border-radius: 0 0 55px 55px / 0 0 70px 70px;
+        position: relative;
+        box-shadow: 0 14px 35px rgba(255, 184, 0, 0.4), inset 0 -8px 16px rgba(0, 0, 0, 0.3);
+        animation: bowlWobble 3s infinite ease-in-out;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+      }
+
+      .empty-3d-bowl:hover {
+        transform: scale(1.1) rotate(4deg);
+      }
+
+      .empty-3d-bowl::before {
+        content: '';
+        position: absolute;
+        top: -8px;
+        left: -4px;
+        right: -4px;
+        height: 16px;
+        background: radial-gradient(ellipse at center, #FFEAA7 0%, #FFB800 80%, #D97706 100%);
+        border-radius: 50%;
+        border: 1.5px solid #FFF;
+        box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.25);
+      }
+
+      .empty-3d-bowl::after {
+        content: 'KHAALI';
+        position: absolute;
+        top: 24px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-family: var(--font-mono);
+        font-size: 0.65rem;
+        font-weight: 900;
+        letter-spacing: 2px;
+        color: rgba(15, 14, 23, 0.4);
+      }
+
+      @keyframes bowlWobble {
+        0%, 100% { transform: translateY(0) rotate(0deg); }
+        33% { transform: translateY(-8px) rotate(-4deg); }
+        66% { transform: translateY(-4px) rotate(4deg); }
+      }
+
+      /* Mini Golden Coin Dropping Animation */
+      .empty-bowl-coin {
+        position: absolute;
+        top: -38px;
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 30% 30%, #FFD93D, #FFB800 70%, #E67E22);
+        box-shadow: 0 0 14px #FFD93D;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        font-weight: 900;
+        color: #8B4513;
+        font-family: var(--font-mono);
+        animation: coinDropFloat 3.5s infinite ease-in-out;
+      }
+
+      @keyframes coinDropFloat {
+        0%, 100% { transform: translateY(0) rotate(0deg) scale(1); opacity: 0.9; }
+        50% { transform: translateY(18px) rotate(180deg) scale(0.85); opacity: 1; }
+      }
+
+      /* Status Diagnostic Pill */
+      .error-status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: rgba(255, 107, 107, 0.12);
+        border: 1px solid rgba(255, 107, 107, 0.35);
+        color: var(--coral-light);
+        padding: 0.45rem 1.25rem;
+        border-radius: var(--radius-pill);
+        font-family: var(--font-mono);
+        font-size: 0.82rem;
+        font-weight: 700;
+        margin-bottom: 1.25rem;
+      }
+
+      /* Path Display */
+      .attempted-url-tag {
+        display: inline-block;
+        background: var(--bg-elevated);
+        border: 1px dashed var(--border-subtle);
+        padding: 0.35rem 0.85rem;
+        border-radius: 8px;
+        font-family: var(--font-mono);
+        font-size: 0.85rem;
+        color: var(--gold-light);
+        margin-bottom: 1.5rem;
+        max-width: 90%;
+        word-break: break-all;
+      }
+
+      /* Search & Live Results */
+      .search-katora-box-404 {
+        max-width: 480px;
+        width: 100%;
+        margin: 2rem auto 1rem;
+        position: relative;
+      }
+
+      .search-form-404 {
+        display: flex;
+        gap: 0.5rem;
+        position: relative;
+      }
+
+      .search-input-404 {
+        flex: 1;
+        height: 50px;
+        padding: 0 1.25rem 0 3rem;
+        background: var(--bg-surface);
+        border: 1.5px solid var(--border-subtle);
+        border-radius: var(--radius-pill);
+        font-family: var(--font-body);
+        font-size: 0.95rem;
+        color: var(--text-primary);
+        outline: none;
+        transition: all 0.25s ease;
+      }
+
+      .search-input-404:focus {
+        border-color: var(--primary-light);
+        box-shadow: 0 0 0 4px var(--primary-glow);
+      }
+
+      .search-icon-404 {
+        position: absolute;
+        left: 1.1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 1.1rem;
+        pointer-events: none;
+        opacity: 0.6;
+      }
+
+      .search-results-dropdown-404 {
+        display: none;
+        position: absolute;
+        top: 58px;
+        left: 0;
+        right: 0;
+        background: var(--bg-surface);
+        border: 1.5px solid var(--border-glow);
+        border-radius: 20px;
+        padding: 0.75rem;
+        box-shadow: var(--shadow-card);
+        z-index: 100;
+        text-align: left;
+        max-height: 280px;
+        overflow-y: auto;
+      }
+
+      .search-result-item-404 {
+        display: flex;
+        align-items: center;
+        gap: 0.85rem;
+        padding: 0.65rem 0.85rem;
+        border-radius: 12px;
+        text-decoration: none;
+        color: var(--text-primary);
+        transition: background 0.2s ease;
+      }
+
+      .search-result-item-404:hover {
+        background: rgba(108, 92, 231, 0.1);
+      }
+
+      /* Random Katora Action Box */
+      .random-katora-box {
+        margin-top: 1.25rem;
+        display: flex;
+        justify-content: center;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+      }
+
+      /* Reduced Motion */
+      @media (prefers-reduced-motion: reduce) {
+        .error-404-number,
+        .empty-3d-bowl,
+        .empty-bowl-coin,
+        .mascot-thought-bubble {
+          animation: none !important;
+          transform: none !important;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .error-mascot-stage {
+          flex-direction: column;
+          gap: 1rem;
+        }
+        .search-form-404 {
+          flex-direction: column;
+        }
+        .search-input-404 {
+          border-radius: var(--radius-md);
+        }
+      }
+    </style>
+</head>
+<body>
+    <!-- Ambient Canvas Background -->
+    <div class="ambient-canvas">
+        <div class="mesh-blob blob-coral"></div>
+        <div class="mesh-blob blob-purple"></div>
+        <div class="mesh-blob blob-gold"></div>
+        <div class="floating-coin-bg" style="top: 18%; left: 8%;">💨</div>
+        <div class="floating-coin-bg" style="top: 55%; right: 10%; animation-delay: -3s;">🥣</div>
+        <div class="floating-coin-bg" style="bottom: 15%; left: 15%; animation-delay: -5s;">🪙</div>
+    </div>
+
+    <!-- 1. UNIFIED NAVBAR -->
+    <nav class="navbar" role="navigation" aria-label="Main Navigation">
+        <div class="container nav-wrap">
+            <a href="index.html" class="brand-logo" aria-label="Digital Katora Home">
+                <div class="logo-bowl-glow">
+                    <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 26px; height: 26px;">
+                        <path d="M4 14C4 22.8 10.2 30 18 30C25.8 30 32 22.8 32 14H4Z" fill="url(#brandBowlGrad404)" stroke="#FFD93D" stroke-width="1.8"/>
+                        <ellipse cx="18" cy="14" rx="14" ry="4" fill="#FFB800" stroke="#FFEAA7" stroke-width="1.2"/>
+                        <circle cx="18" cy="7.5" r="4" fill="#FFD93D" stroke="#E67E22" stroke-width="1"/>
+                        <text x="18" y="9.5" font-size="5" font-weight="bold" fill="#8B4513" text-anchor="middle" font-family="'JetBrains Mono', monospace">₹</text>
+                        <defs>
+                            <linearGradient id="brandBowlGrad404" x1="4" y1="14" x2="32" y2="30" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#6C5CE7"/>
+                                <stop offset="1" stop-color="#FFB800"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <span>Digital <span class="gradient-text">Katora</span></span>
+            </a>
+
+            <!-- Center Pill Navigation -->
+            <div class="nav-center-menu">
+                <a href="katoras.html" class="nav-link-pill">🥣 Katoras</a>
+                <a href="leaderboard.html" class="nav-link-pill">👑 Top Donors</a>
+                <a href="about.html" class="nav-link-pill">💡 How It Works</a>
+                <a href="donation-animation.html" class="nav-link-pill">✨ Magic Demo</a>
+            </div>
+
+            <!-- Right Actions -->
+            <div class="nav-actions">
+                <button class="theme-toggle-btn" id="themeToggleBtn" title="Toggle Theme" aria-label="Toggle Dark/Light Theme">
+                    <span class="theme-icon">🌙</span>
+                </button>
+                <a href="create-katora.html" class="btn btn-primary btn-magnetic nav-cta-btn">
+                    <span>🥣 Create Katora</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 2. MAIN 404 EXPERIENCE -->
+    <main class="page-404-root">
+        <div class="container" style="max-width: 760px;">
+            
+            <!-- Technical Status Pill -->
+            <div class="error-status-badge">
+                <span>⚠️ ERROR: 404</span>
+                <span>•</span>
+                <span>KATORA: MISSING</span>
+                <span>•</span>
+                <span>PUNYA: SEARCHING...</span>
+            </div>
+
+            <!-- Giant 404 Headline with Idle Float -->
+            <div class="error-404-number-wrap">
+                <div class="error-404-number" aria-label="Error 404">404</div>
+            </div>
+
+            <!-- Mascot & Empty Katora Visual -->
+            <div class="error-mascot-stage">
+                <!-- Confused Mascot Card -->
+                <div class="mascot-confused-card" title="Rahul Bhai is confused: Katora kahan gaya?">
+                    <img src="mascot-beggar-3d.jpg" alt="Confused Digital Katora Mascot" loading="eager">
+                    <div class="mascot-thought-bubble">Kahan Gaya? 🤔</div>
+                </div>
+
+                <!-- Empty 3D Golden Katora with Floating Dropping Coin -->
+                <div class="empty-katora-box" title="Click to shake empty katora" onclick="shakeEmptyBowl()">
+                    <div class="empty-bowl-coin">₹</div>
+                    <div class="empty-3d-bowl" id="emptyBowlEl"></div>
+                </div>
+            </div>
+
+            <!-- Humorous Headings & Playful Copy -->
+            <h1 style="font-size: clamp(1.8rem, 4.5vw, 2.8rem); font-weight: 800; margin: 0 0 0.75rem; letter-spacing: -0.02em;">
+                🥣 Katora Mil Nahi Raha <span class="gradient-text">😂</span>
+            </h1>
+
+            <p style="color: var(--text-secondary); font-size: 1.15rem; line-height: 1.65; max-width: 580px; margin: 0 auto 1.25rem;">
+                Lagta hai ye katora internet ke raste mein kahin gir gaya. Jo page aap dhoond rahe hain uska katora bilkul khaali hai!
+            </p>
+
+            <!-- Optional Path Display -->
+            <div id="pathDisplayWrap" style="display: none;">
+                <div class="attempted-url-tag">
+                    Attempted URL: <span id="attemptedPathText">/unknown</span>
+                </div>
+            </div>
+
+            <!-- Primary & Secondary Action CTAs -->
+            <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem;">
+                <a href="index.html" class="btn btn-primary btn-magnetic" style="font-size: 1.05rem; padding: 0.9rem 2.2rem;">
+                    <span>🏠 Katora Ghar Chalo</span>
+                </a>
+                <a href="katoras.html" class="btn btn-secondary btn-magnetic" style="font-size: 1.05rem; padding: 0.9rem 2.2rem;">
+                    <span>🥣 Katoras Dekho</span>
+                </a>
+            </div>
+
+            <!-- 8. SEARCH OPTION -->
+            <div class="search-katora-box-404">
+                <form class="search-form-404" onsubmit="handle404Search(event)">
+                    <span class="search-icon-404">🔍</span>
+                    <input type="text" id="search404Input" class="search-input-404" placeholder="Katora ya naam search karo..." autocomplete="off" oninput="handle404LiveSearch(this.value)">
+                    <button type="submit" class="btn btn-primary btn-sm" style="border-radius: var(--radius-pill); padding: 0 1.5rem;">
+                        Search
+                    </button>
+                </form>
+
+                <!-- Search Results Dropdown -->
+                <div class="search-results-dropdown-404" id="searchResultsDropdown404">
+                    <!-- Dynamic live matches -->
+                </div>
+            </div>
+
+            <!-- 10. RANDOM KATORA DISCOVERY -->
+            <div class="random-katora-box">
+                <button type="button" class="btn btn-glass btn-sm btn-magnetic" onclick="openRandomKatora()" style="font-weight: 700;">
+                    <span>🎲 Koi Random Katora Dikhao</span>
+                </button>
+                <a href="create-katora.html" class="btn btn-glass btn-sm" style="font-weight: 700;">
+                    <span>✨ Apna Naya Katora Banao</span>
+                </a>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- 3. UNIFIED FOOTER -->
+    <footer class="site-footer">
+        <div class="container footer-grid">
+            <div class="footer-col brand-col">
+                <a href="index.html" class="brand-logo" style="margin-bottom: 1rem; display: inline-flex;">
+                    <div class="logo-bowl-glow">
+                        <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 26px; height: 26px;">
+                            <path d="M4 14C4 22.8 10.2 30 18 30C25.8 30 32 22.8 32 14H4Z" fill="url(#brandBowlGradFooter404)" stroke="#FFD93D" stroke-width="1.8"/>
+                            <ellipse cx="18" cy="14" rx="14" ry="4" fill="#FFB800" stroke="#FFEAA7" stroke-width="1.2"/>
+                            <circle cx="18" cy="7.5" r="4" fill="#FFD93D" stroke="#E67E22" stroke-width="1"/>
+                            <text x="18" y="9.5" font-size="5" font-weight="bold" fill="#8B4513" text-anchor="middle" font-family="'JetBrains Mono', monospace">₹</text>
+                            <defs>
+                                <linearGradient id="brandBowlGradFooter404" x1="4" y1="14" x2="32" y2="30" gradientUnits="userSpaceOnUse">
+                                    <stop stop-color="#6C5CE7"/>
+                                    <stop offset="1" stop-color="#FFB800"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <span>Digital <span class="gradient-text">Katora</span></span>
+                </a>
+                <p class="footer-tagline">
+                    India's premier satirical micro-tipping community. Khule paise nahi hain? Digital Katora scan karo!
+                </p>
+                <div class="social-links-row">
+                    <a href="https://instagram.com" target="_blank" class="social-icon-circle" title="Instagram" aria-label="Instagram">
+                        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                    </a>
+                    <a href="https://twitter.com" target="_blank" class="social-icon-circle" title="Twitter / X" aria-label="Twitter">
+                        <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <ul class="footer-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="katoras.html">Explore Katoras</a></li>
+                    <li><a href="create-katora.html">Start a Katora</a></li>
+                    <li><a href="leaderboard.html">Top Donors</a></li>
+                    <li><a href="donation-animation.html">✨ Magic Demo</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Company & Fun</h4>
+                <ul class="footer-links">
+                    <li><a href="about.html">Our Story</a></li>
+                    <li><a href="faq.html">FAQs</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                    <li><a href="admin.html">Admin Panel</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Beggar Wisdom</h4>
+                <div class="card" style="padding: 1.25rem; background: var(--bg-surface); border: 1px solid var(--border-color);">
+                    <p style="font-style: italic; color: var(--gold); font-size: 0.9rem; margin-bottom: 0.5rem;">
+                        "Sharam chhoro, katora jodo! Dost se udhaar maangne se behtar hai public se maang lo."
+                    </p>
+                    <span style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);">— Ancient Tapri Proverb</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="container footer-bottom-flex">
+                <p>© 2025 Digital Katora. Made for fun. ❤️ 100% Satirical Platform.</p>
+                <div class="footer-legal-links">
+                    <a href="faq.html">Privacy & Terms</a>
+                    <a href="contact.html">Report Issue</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MOBILE STICKY BOTTOM NAV -->
+    <nav class="mobile-bottom-nav">
+        <a href="index.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">🏠</span>
+            <span>Home</span>
+        </a>
+        <a href="katoras.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">🥣</span>
+            <span>Katoras</span>
+        </a>
+        <a href="create-katora.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">➕</span>
+            <span>Create</span>
+        </a>
+        <a href="donation-animation.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">✨</span>
+            <span>Demo</span>
+        </a>
+        <a href="leaderboard.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">👑</span>
+            <span>Ranks</span>
+        </a>
+    </nav>
+
+    <!-- Scripts -->
+    <script src="data-store.js"></script>
+    <script src="script.js"></script>
+    <script>
+      // 1. ATTEMPTED URL PATH DETECTION
+      document.addEventListener('DOMContentLoaded', () => {
+        const path = window.location.pathname;
+        const search = window.location.search;
+        if (path && path !== '/' && !path.endsWith('404.html')) {
+          const wrap = document.getElementById('pathDisplayWrap');
+          const text = document.getElementById('attemptedPathText');
+          if (wrap && text) {
+            text.textContent = path + (search || '');
+            wrap.style.display = 'block';
+          }
+        }
+      });
+
+      // 2. EMPTY BOWL SHAKE INTERACTION
+      function shakeEmptyBowl() {
+        const bowl = document.getElementById('emptyBowlEl');
+        if (!bowl) return;
+        bowl.style.animation = 'none';
+        bowl.offsetHeight; // Trigger reflow
+        bowl.style.animation = 'katoraShakeAnim 0.5s ease-in-out';
+        if (window.DK && window.DK.showToast) {
+          window.DK.showToast('🥣 Sikka gira, par katora khaali hai!');
+        }
+      }
+
+      // 3. RANDOM KATORA PICKER (Uses DataStore)
+      function openRandomKatora() {
+        if (!window.dataStore) {
+          window.location.href = 'katoras.html';
+          return;
+        }
+        const katoras = window.dataStore.getKatoras();
+        if (katoras && katoras.length > 0) {
+          const randomIndex = Math.floor(Math.random() * katoras.length);
+          const randomKatora = katoras[randomIndex];
+          window.location.href = `katora-detail.html?id=${encodeURIComponent(randomKatora.id)}`;
+        } else {
+          window.location.href = 'katoras.html';
+        }
+      }
+
+      // 4. LIVE SEARCH & RESULTS DROPDOWN
+      let search404Debounce = null;
+      function handle404LiveSearch(val) {
+        clearTimeout(search404Debounce);
+        search404Debounce = setTimeout(() => {
+          const dropdown = document.getElementById('searchResultsDropdown404');
+          if (!dropdown) return;
+          const q = (val || '').trim().toLowerCase();
+          if (!q) {
+            dropdown.style.display = 'none';
+            return;
+          }
+
+          if (!window.dataStore) {
+            dropdown.style.display = 'none';
+            return;
+          }
+
+          const katoras = window.dataStore.getKatoras();
+          const matches = katoras.filter(k => 
+            (k.title && k.title.toLowerCase().includes(q)) ||
+            (k.creator && k.creator.toLowerCase().includes(q)) ||
+            (k.tagline && k.tagline.toLowerCase().includes(q)) ||
+            (k.category && k.category.toLowerCase().includes(q))
+          ).slice(0, 5);
+
+          if (matches.length === 0) {
+            dropdown.innerHTML = `
+              <div style="padding: 0.75rem; text-align: center; color: var(--text-muted); font-size: 0.88rem;">
+                Ye katora bhi nahi mila 😂
+                <div style="margin-top: 0.5rem;">
+                  <a href="katoras.html" class="btn btn-glass btn-sm" style="font-size: 0.78rem;">View All Katoras</a>
+                </div>
+              </div>
+            `;
+          } else {
+            dropdown.innerHTML = matches.map(k => `
+              <a href="katora-detail.html?id=${encodeURIComponent(k.id)}" class="search-result-item-404">
+                <span style="font-size: 1.4rem;">${k.avatar || '🥣'}</span>
+                <div style="flex: 1; min-width: 0;">
+                  <div style="font-weight: 700; font-size: 0.88rem; color: var(--text-primary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${k.title}</div>
+                  <div style="font-size: 0.75rem; color: var(--text-muted);">${k.creator || 'Anonymous'} • ₹${(k.currentAmount || 0).toLocaleString('en-IN')} / ₹${(k.targetAmount || 0).toLocaleString('en-IN')}</div>
+                </div>
+                <span style="font-size: 0.75rem; color: var(--primary-light); font-weight: 700;">Open &rarr;</span>
+              </a>
+            `).join('');
+          }
+          dropdown.style.display = 'block';
+        }, 150);
+      }
+
+      function handle404Search(e) {
+        e.preventDefault();
+        const input = document.getElementById('search404Input');
+        const q = input ? input.value.trim() : '';
+        if (q) {
+          window.location.href = `katoras.html?search=${encodeURIComponent(q)}`;
+        } else {
+          window.location.href = 'katoras.html';
+        }
+      }
+
+      // Close search dropdown on click outside
+      document.addEventListener('click', (e) => {
+        const box = document.querySelector('.search-katora-box-404');
+        const dropdown = document.getElementById('searchResultsDropdown404');
+        if (dropdown && box && !box.contains(e.target)) {
+          dropdown.style.display = 'none';
+        }
+      });
+    </script>
+</body>
+</html>

@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="hi" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🛡️ Admin Moderation Center — Digital Katora</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Design System Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+    
+    <meta name="description" content="Digital Katora Admin Approval & Moderation Dashboard. Fast review workflow, payment verification, and public deployment.">
+    <meta name="theme-color" content="#6C5CE7">
+</head>
+<body>
+    <!-- Ambient Background Blobs -->
+    <div class="ambient-canvas">
+        <div class="mesh-blob blob-purple"></div>
+        <div class="mesh-blob blob-gold"></div>
+        <div class="mesh-blob blob-coral"></div>
+    </div>
+
+    <!-- ROOT ADMIN LAYOUT -->
+    <div class="admin-layout-root">
+        
+        <!-- 3. COLLAPSIBLE ADMIN SIDEBAR -->
+        <aside class="admin-sidebar" id="adminSidebar" aria-label="Admin Navigation Sidebar">
+            <div>
+                <!-- Brand Top -->
+                <div style="display: flex; align-items: center; justify-content: space-between; padding-bottom: 1.25rem; border-bottom: 1px solid var(--border-subtle);">
+                    <a href="index.html" class="brand-logo" style="text-decoration: none;">
+                        <div class="logo-bowl-glow" style="width: 32px; height: 32px;">🥣</div>
+                        <span class="sidebar-brand-text">Digital <span class="gradient-text">Admin</span></span>
+                    </a>
+                    <button type="button" class="btn btn-glass btn-sm" onclick="toggleAdminSidebar()" style="padding: 0.3rem 0.6rem;" title="Collapse/Expand Sidebar">
+                        <span>⇄</span>
+                    </button>
+                </div>
+
+                <!-- Navigation Items -->
+                <nav class="admin-sidebar-menu">
+                    <a href="admin.html" class="admin-nav-item active">
+                        <span class="admin-nav-icon">🥣</span>
+                        <span class="sidebar-label">Katora Approvals</span>
+                        <span class="sidebar-badge badge" style="background: rgba(255, 184, 0, 0.2); color: var(--gold-light); font-size: 0.72rem; margin-left: auto;">8</span>
+                    </a>
+                    <a href="katoras.html" class="admin-nav-item" target="_blank">
+                        <span class="admin-nav-icon">🌐</span>
+                        <span class="sidebar-label">Live Katoras</span>
+                    </a>
+                    <a href="index.html" class="admin-nav-item" target="_blank">
+                        <span class="admin-nav-icon">🏠</span>
+                        <span class="sidebar-label">Public Website</span>
+                    </a>
+                    <a href="leaderboard.html" class="admin-nav-item" target="_blank">
+                        <span class="admin-nav-icon">👑</span>
+                        <span class="sidebar-label">Top Donors</span>
+                    </a>
+                    <a href="#reports" class="admin-nav-item" onclick="showToast('🚩 0 New User Reports. Everything clean!')">
+                        <span class="admin-nav-icon">🚩</span>
+                        <span class="sidebar-label">User Reports</span>
+                    </a>
+                    <a href="#analytics" class="admin-nav-item" onclick="showToast('📊 12,482 Active users today. Server FPS: 60')">
+                        <span class="admin-nav-icon">📊</span>
+                        <span class="sidebar-label">Analytics</span>
+                    </a>
+                </nav>
+            </div>
+
+            <!-- Sidebar Bottom Profile Context -->
+            <div style="border-top: 1px solid var(--border-subtle); padding-top: 1rem; display: flex; align-items: center; gap: 0.75rem;">
+                <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--gold-gradient); display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+                    👑
+                </div>
+                <div class="sidebar-label" style="min-width: 0;">
+                    <div style="font-weight: 800; font-size: 0.88rem; color: var(--text-primary);">Admin Sahab</div>
+                    <div style="font-size: 0.72rem; color: var(--green-light); font-family: var(--font-mono);">Superadmin Active</div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN ADMIN STAGE -->
+        <div class="admin-main-stage">
+            
+            <!-- 2. ADMIN STICKY TOP NAVBAR -->
+            <header class="admin-top-navbar">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <span class="hero-pill-badge" style="font-size: 0.78rem;">🛡️ MODERATION CONSOLE</span>
+                    <span style="font-size: 0.85rem; color: var(--text-muted); font-family: var(--font-mono);" id="adminLiveTimePill">
+                        ⚡ LIVE QUEUE
+                    </span>
+                </div>
+
+                <div class="admin-top-actions">
+                    <!-- Notification Bell with Pending Counter -->
+                    <div style="position: relative;">
+                        <button type="button" class="btn btn-glass btn-sm" onclick="toggleAdminNotifications()" style="position: relative; padding: 0.45rem 0.85rem;">
+                            <span>🔔</span>
+                            <span id="adminNavPendingBadge" style="position: absolute; top: -6px; right: -6px; background: var(--coral); color: #FFF; font-size: 0.68rem; font-weight: 900; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">8</span>
+                        </button>
+
+                        <!-- Notification Dropdown -->
+                        <div class="notification-dropdown-box" id="adminNotificationBox">
+                            <h4 style="font-size: 0.95rem; margin: 0 0 0.75rem; display: flex; justify-content: space-between;">
+                                <span>Recent Notifications</span>
+                                <small style="color: var(--primary-light); cursor: pointer;" onclick="toggleAdminNotifications()">✕ Close</small>
+                            </h4>
+                            <div style="display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.82rem;">
+                                <div style="padding: 0.5rem; background: var(--bg-elevated); border-radius: 8px;">
+                                    <strong>Rahul Sharma</strong> submitted "Tapri Debt" <small style="color: var(--gold-light);">12m ago</small>
+                                </div>
+                                <div style="padding: 0.5rem; background: var(--bg-elevated); border-radius: 8px;">
+                                    <strong>Priya Sen</strong> updated UPI QR code <small style="color: var(--green-light);">45m ago</small>
+                                </div>
+                                <div style="padding: 0.5rem; background: var(--bg-elevated); border-radius: 8px;">
+                                    ⚡ 3 urgent katoras waiting > 24 hours
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Theme Toggle -->
+                    <button id="theme-toggle-btn" class="theme-toggle-btn" title="Toggle Theme" aria-label="Toggle Theme">
+                        <span class="theme-icon">🌙</span>
+                    </button>
+
+                    <!-- Exit Admin Button -->
+                    <a href="index.html" class="btn btn-glass btn-sm" style="font-size: 0.85rem;">
+                        <span>🚪</span> Exit Admin
+                    </a>
+                </div>
+            </header>
+
+            <!-- MAIN DASHBOARD CONTENT -->
+            <main style="padding: 2rem 2.5rem 6rem; max-width: 1400px; width: 100%;">
+                
+                <!-- 4. DASHBOARD HEADER -->
+                <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+                    <div>
+                        <h1 class="text-h2" style="font-size: 2.2rem; margin: 0 0 0.35rem;">
+                            Katora <span class="gradient-text">Approval Center 🛡️</span>
+                        </h1>
+                        <p style="color: var(--text-secondary); font-size: 0.95rem; margin: 0;">
+                            Review, verify aur approve karo — phir katora duniya ke saamne live ho jayega!
+                        </p>
+                    </div>
+
+                    <div style="display: flex; gap: 0.75rem;">
+                        <button type="button" class="btn btn-primary-gradient btn-sm" onclick="openAdminReviewModal('katora-chai-fund')">
+                            <span>⚡</span> Quick Review (Hotkeys: A / C / R / N)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 5. 4 PRIMARY STATISTICS CARDS -->
+                <section class="admin-stats-4grid" aria-label="Moderation Statistics">
+                    <div class="admin-stat-card pending">
+                        <span style="font-size: 0.78rem; font-family: var(--font-mono); font-weight: 700; color: var(--gold-light);">⏳ PENDING APPROVAL</span>
+                        <div class="admin-stat-num" style="color: var(--gold-light);" id="adminStatPending">8</div>
+                        <span style="font-size: 0.8rem; color: var(--gold);">⚠️ Action Required</span>
+                    </div>
+
+                    <div class="admin-stat-card">
+                        <span style="font-size: 0.78rem; font-family: var(--font-mono); font-weight: 700; color: var(--green-light);">✅ APPROVED TODAY</span>
+                        <div class="admin-stat-num" style="color: var(--green-light);" id="adminStatApproved">18</div>
+                        <span style="font-size: 0.8rem; color: var(--green);">↗ +24% vs yesterday</span>
+                    </div>
+
+                    <div class="admin-stat-card">
+                        <span style="font-size: 0.78rem; font-family: var(--font-mono); font-weight: 700; color: var(--primary-light);">✏️ CHANGES REQUESTED</span>
+                        <div class="admin-stat-num" style="color: var(--primary-light);" id="adminStatChanges">4</div>
+                        <span style="font-size: 0.8rem; color: var(--text-muted);">⏳ Waiting for user edit</span>
+                    </div>
+
+                    <div class="admin-stat-card">
+                        <span style="font-size: 0.78rem; font-family: var(--font-mono); font-weight: 700; color: var(--coral-light);">🚫 REJECTED</span>
+                        <div class="admin-stat-num" style="color: var(--coral-light);" id="adminStatRejected">2</div>
+                        <span style="font-size: 0.8rem; color: var(--coral);">Spam / Fraud filtered</span>
+                    </div>
+                </section>
+
+                <!-- 6. PRIORITY ALERT BANNER -->
+                <div class="priority-alert-banner" id="adminPriorityAlertBanner">
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <span style="font-size: 1.6rem; animation: pulseGlow 1.5s infinite ease-in-out;">⚠️</span>
+                        <div>
+                            <strong style="color: var(--coral-light);">3 Katoras have been waiting for review > 24 hours!</strong>
+                            <div style="font-size: 0.82rem; color: var(--text-secondary);">First in, first out rule apply karein aur jaldi review karein.</div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-glass btn-sm" onclick="filterAdminQueueStatus('pending', document.getElementById('adminTabPending'))" style="border-color: rgba(255, 107, 107, 0.4); color: var(--coral-light) !important;">
+                        Review Urgent Queue &rarr;
+                    </button>
+                </div>
+
+                <!-- 7. FILTER BAR -->
+                <section class="admin-filter-bar" aria-label="Moderation Filters">
+                    <div class="admin-search-input-wrap">
+                        <span style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); font-size: 1rem;">🔍</span>
+                        <input type="text" id="adminSearchInput" class="admin-search-input" placeholder="Naam, Katora ID ya reason search karo..." oninput="handleAdminSearchInput(event)">
+                    </div>
+
+                    <!-- Status Filter Tabs -->
+                    <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+                        <button type="button" id="adminTabPending" class="btn btn-glass btn-sm admin-status-tab-btn active" onclick="filterAdminQueueStatus('pending', this)">
+                            Pending (8)
+                        </button>
+                        <button type="button" class="btn btn-glass btn-sm admin-status-tab-btn" onclick="filterAdminQueueStatus('approved', this)">
+                            Approved
+                        </button>
+                        <button type="button" class="btn btn-glass btn-sm admin-status-tab-btn" onclick="filterAdminQueueStatus('changes_requested', this)">
+                            Changes
+                        </button>
+                        <button type="button" class="btn btn-glass btn-sm admin-status-tab-btn" onclick="filterAdminQueueStatus('rejected', this)">
+                            Rejected
+                        </button>
+                        <button type="button" id="adminTabAll" class="btn btn-glass btn-sm admin-status-tab-btn" onclick="filterAdminQueueStatus('all', this)">
+                            All Katoras
+                        </button>
+                        <button type="button" class="btn btn-glass btn-sm" onclick="clearAdminFilters()" style="color: var(--coral-light) !important;">
+                            ✕ Clear
+                        </button>
+                    </div>
+                </section>
+
+                <!-- 8. PENDING KATORA QUEUE & BULK ACTIONS -->
+                <section class="admin-queue-card" aria-label="Pending Katora Queue">
+                    <!-- Bulk Actions Toolbar -->
+                    <div style="padding: 1rem 1.25rem; background: var(--bg-elevated); border-bottom: 1.5px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
+                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                            <input type="checkbox" id="adminMasterCheckbox" onchange="toggleAdminSelectAll(this)" style="accent-color: var(--primary); width: 17px; height: 17px; cursor: pointer;">
+                            <span style="font-size: 0.88rem; font-weight: 700; color: var(--text-primary);">Select All Submissions</span>
+                        </div>
+
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button type="button" class="btn btn-glass btn-sm" onclick="adminBulkApproveSelected()" style="border-color: rgba(0, 184, 148, 0.4); color: var(--green-light) !important;">
+                                <span>✅</span> Bulk Approve Selected
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Queue Table (Desktop) -->
+                    <div style="overflow-x: auto;">
+                        <table class="admin-queue-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 40px;"></th>
+                                    <th style="width: 60px;">PHOTO</th>
+                                    <th>CREATOR & ID</th>
+                                    <th>REASON & GOAL</th>
+                                    <th>PAYMENT</th>
+                                    <th>PRIORITY</th>
+                                    <th>STATUS</th>
+                                    <th style="text-align: right;">ACTIONS</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminQueueTableBody">
+                                <!-- Populated dynamically via script.js -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- 10. RECENT ADMIN AUDIT LOG FEED -->
+                <section class="card" style="background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 24px; padding: 1.75rem;" aria-label="Admin Audit Logs">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <h3 style="font-size: 1.15rem; margin: 0; display: flex; align-items: center; gap: 0.5rem;">
+                            <span>📜</span> Live Moderation Audit Log (सुरक्षा रिकॉर्ड)
+                        </h3>
+                        <span style="font-size: 0.78rem; color: var(--green-light); font-family: var(--font-mono); font-weight: 700;">
+                            REALTIME LOGS
+                        </span>
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 0.6rem;" id="adminAuditLogsFeed">
+                        <!-- Populated dynamically via script.js -->
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- 10. FULL 3-COLUMN REVIEW WORKSPACE MODAL -->
+    <div class="admin-review-modal-overlay" id="adminReviewModalOverlay">
+        <div class="admin-review-workspace">
+            
+            <!-- Modal Header -->
+            <div class="admin-workspace-header">
+                <div style="display: flex; align-items: center; gap: 0.85rem;">
+                    <span class="hero-pill-badge" style="font-size: 0.75rem;">🔍 SUBMISSION REVIEW WORKSPACE</span>
+                    <h3 style="font-size: 1.25rem; margin: 0;" id="modCreatorName">Rahul Sharma</h3>
+                    <span class="badge" id="modCategoryTag" style="font-size: 0.75rem; background: rgba(108, 92, 231, 0.15); color: var(--primary-light);">🏷️ Chai & Food</span>
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 0.6rem;">
+                    <span style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);">Shortcuts: [A] Approve • [C] Changes • [R] Reject</span>
+                    <button type="button" class="btn btn-glass btn-sm" onclick="closeAdminReviewModal()" style="font-size: 1.1rem; padding: 0.25rem 0.65rem;">
+                        ✕
+                    </button>
+                </div>
+            </div>
+
+            <!-- Modal Body (3-Column Grid) -->
+            <div class="admin-workspace-body-3col">
+                
+                <!-- COLUMN 1: USER SUBMISSION DATA -->
+                <div class="review-col-box">
+                    <h4 style="font-size: 0.95rem; margin: 0 0 0.5rem; color: var(--text-secondary); text-transform: uppercase; font-family: var(--font-mono);">
+                        1. User Submission Details
+                    </h4>
+
+                    <!-- Photo with Moderation Controls -->
+                    <div style="width: 100%; height: 160px; border-radius: 14px; overflow: hidden; background: #000; position: relative;">
+                        <img id="modPhotoImg" src="mascot-beggar-3d.jpg" alt="Mascot" style="width: 100%; height: 100%; object-fit: cover; object-position: center 15%;">
+                    </div>
+                    <div style="display: flex; gap: 0.4rem; justify-content: space-between;">
+                        <button type="button" class="btn btn-glass btn-sm" style="font-size: 0.72rem; flex: 1; color: var(--green-light) !important;" onclick="showToast('✓ Photo Approved')">✓ Photo OK</button>
+                        <button type="button" class="btn btn-glass btn-sm" style="font-size: 0.72rem; flex: 1; color: var(--coral-light) !important;" onclick="showToast('✏️ New Photo Requested')">✏️ Bad Photo</button>
+                    </div>
+
+                    <!-- Meta Details -->
+                    <div style="font-size: 0.85rem; display: flex; flex-direction: column; gap: 0.45rem;">
+                        <div><strong style="color: var(--text-muted);">Katora ID:</strong> <span id="modKatoraId" style="font-family: var(--font-mono); color: var(--primary-light);"></span></div>
+                        <div><strong style="color: var(--text-muted);">Submitted:</strong> <span id="modDateSubmitted">12 min ago</span></div>
+                        <div><strong style="color: var(--text-muted);">Target Goal:</strong> <span id="modTargetGoal" style="font-family: var(--font-mono); font-weight: 800; color: var(--gold-light);">₹500</span></div>
+                        <div><strong style="color: var(--text-muted);">Payout UPI:</strong> <span id="modUpiText" style="font-family: var(--font-mono); color: var(--green-light);">rahul@upi</span></div>
+                    </div>
+
+                    <!-- Story & Reason -->
+                    <div style="border-top: 1px solid var(--border-subtle); padding-top: 0.75rem;">
+                        <div style="font-weight: 700; font-size: 0.85rem; color: var(--text-primary); margin-bottom: 0.25rem;">Reason Headline:</div>
+                        <p id="modReasonQuote" style="font-size: 0.85rem; color: var(--text-secondary); font-style: italic; margin: 0 0 0.5rem; line-height: 1.4;"></p>
+                        
+                        <div style="font-weight: 700; font-size: 0.85rem; color: var(--text-primary); margin-bottom: 0.25rem;">Detailed Story:</div>
+                        <p id="modStoryFull" style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; margin: 0;"></p>
+                    </div>
+                </div>
+
+                <!-- COLUMN 2: PUBLIC KATORA PREVIEW -->
+                <div class="review-col-box" style="border-color: var(--border-glow); background: var(--bg-surface);">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span class="hero-pill-badge" style="font-size: 0.72rem;">👁️ EXACT PUBLIC PREVIEW</span>
+                        <a id="modOpenFullPrevLink" href="#" target="_blank" style="font-size: 0.75rem; color: var(--primary-light); font-weight: 700;">
+                            ↗ Full Page
+                        </a>
+                    </div>
+
+                    <!-- Replica of Public Katora Card -->
+                    <div style="border: 1px solid var(--border-subtle); border-radius: 20px; overflow: hidden; background: var(--bg-elevated); box-shadow: var(--shadow-sm);">
+                        <div style="height: 175px; position: relative; overflow: hidden; background: #000;">
+                            <img id="modPrevCardImg" src="mascot-beggar-3d.jpg" alt="Preview" style="width: 100%; height: 100%; object-fit: cover; object-position: center 15%;">
+                            <div style="position: absolute; bottom: 8px; right: 8px; font-size: 0.72rem; font-weight: 800; background: rgba(0,0,0,0.7); padding: 0.2rem 0.5rem; border-radius: 999px; color: var(--gold-light);">
+                                🥣 Digital Katora
+                            </div>
+                        </div>
+                        <div style="padding: 1.15rem;">
+                            <h4 id="modPrevCardName" style="font-size: 1.1rem; margin: 0 0 0.35rem;">Rahul Sharma</h4>
+                            <p id="modPrevCardReason" style="font-size: 0.85rem; color: var(--text-secondary); font-style: italic; margin: 0 0 0.75rem; line-height: 1.35;"></p>
+                            <div class="garib-progress-wrap">
+                                <div class="garib-progress-labels">
+                                    <span class="garib-raised-val" style="font-size: 0.95rem;">₹0</span>
+                                    <span class="garib-goal-val" id="modPrevCardGoal">/ ₹500</span>
+                                </div>
+                                <div class="garib-meter-track" style="height: 7px;">
+                                    <div class="garib-meter-fill" style="width: 15%;"></div>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-primary-gradient btn-sm" style="width: 100%; margin-top: 0.75rem; font-size: 0.88rem;" disabled>
+                                <span>🥣</span> DALO ₹1 😂
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- COLUMN 3: PAYMENT VERIFICATION & MODERATION CHECKLIST -->
+                <div class="review-col-box">
+                    <h4 style="font-size: 0.95rem; margin: 0 0 0.5rem; color: var(--text-secondary); text-transform: uppercase; font-family: var(--font-mono);">
+                        3. Payment & Moderation Checklist
+                    </h4>
+
+                    <!-- Payment Verification Panel -->
+                    <div style="background: var(--bg-surface); border: 1.5px solid rgba(0, 184, 148, 0.4); border-radius: 16px; padding: 1rem;">
+                        <div style="font-size: 0.78rem; font-weight: 800; color: var(--green-light); font-family: var(--font-mono); margin-bottom: 0.5rem;">
+                            💳 PAYMENT VERIFICATION
+                        </div>
+                        <div style="display: flex; gap: 0.85rem; align-items: center;">
+                            <img id="modQrThumbImg" src="" alt="QR" style="width: 65px; height: 65px; object-fit: contain; background: #FFF; padding: 4px; border-radius: 8px;">
+                            <div>
+                                <div style="font-size: 0.75rem; color: var(--text-muted);">Detected UPI ID:</div>
+                                <div id="modDetectedUpiDisplay" style="font-family: var(--font-mono); font-weight: 700; color: var(--primary-light); font-size: 0.88rem;"></div>
+                                <span style="font-size: 0.72rem; color: var(--green-light); font-weight: 700;">✓ Valid UPI Format</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Moderation Checklist -->
+                    <div class="moderation-checklist-box">
+                        <label class="mod-check-item">
+                            <input type="checkbox" onchange="updateModerationApproveButtonState()">
+                            <span>Photo is clear & face visible</span>
+                        </label>
+                        <label class="mod-check-item">
+                            <input type="checkbox" onchange="updateModerationApproveButtonState()">
+                            <span>Reason is funny & non-abusive</span>
+                        </label>
+                        <label class="mod-check-item">
+                            <input type="checkbox" onchange="updateModerationApproveButtonState()">
+                            <span>Goal amount is reasonable</span>
+                        </label>
+                        <label class="mod-check-item">
+                            <input type="checkbox" onchange="updateModerationApproveButtonState()">
+                            <span>UPI payment details verified</span>
+                        </label>
+                    </div>
+
+                    <!-- Internal Admin Note Box -->
+                    <div style="margin-top: 0.5rem;">
+                        <div style="display: flex; gap: 0.4rem;">
+                            <input type="text" id="adminNoteInput" placeholder="Private internal note..." style="flex: 1; height: 36px; padding: 0 0.6rem; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 6px; font-size: 0.8rem; color: var(--text-primary); outline: none;">
+                            <button type="button" class="btn btn-glass btn-sm" onclick="addAdminInternalNote()">+ Note</button>
+                        </div>
+                        <div id="adminNotesHistoryList" style="display: flex; flex-direction: column; gap: 0.35rem; margin-top: 0.5rem; max-height: 80px; overflow-y: auto;">
+                            <!-- Notes added dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Final Decision Action Triggers -->
+                    <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--border-subtle);">
+                        <button type="button" id="adminModalApproveBtn" class="btn btn-paisa-green btn-lg" onclick="adminApproveCurrentKatora()" style="width: 100%; font-size: 1.05rem; justify-content: center;">
+                            <span>✅</span> Approve & Make Public (Live!)
+                        </button>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button type="button" class="btn btn-glass btn-sm" onclick="adminRequestChangesCurrentKatora()" style="flex: 1; border-color: rgba(108, 92, 231, 0.4); color: var(--primary-light) !important;">
+                                <span>✏️</span> Request Changes
+                            </button>
+                            <button type="button" class="btn btn-glass btn-sm" onclick="adminRejectCurrentKatora()" style="flex: 1; border-color: rgba(255, 107, 107, 0.4); color: var(--coral-light) !important;">
+                                <span>🚫</span> Reject Katora
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="data-store.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

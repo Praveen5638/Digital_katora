@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="hi" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>❓ Help Center & FAQs — Digital Katora</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Unified Design System Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+    
+    <meta name="description" content="Digital Katora Help Center & FAQs. Instant answers for Katora creation, UPI QR payments, approval moderation, refunds, and achievements.">
+    <meta name="theme-color" content="#6C5CE7">
+
+    <style>
+      /* ═════════════════════════════════════════════════════════════════════
+         FAQ / HELP CENTER CUSTOM STYLES
+         ═════════════════════════════════════════════════════════════════════ */
+      .faq-hero-section {
+        padding: 4rem 1.25rem 2.5rem;
+        position: relative;
+        text-align: center;
+      }
+
+      /* Search Bar & Suggestions */
+      .faq-search-box-wrap {
+        max-width: 680px;
+        margin: 2rem auto 1rem;
+        position: relative;
+      }
+
+      .faq-search-input {
+        width: 100%;
+        height: 58px;
+        padding: 0 1.5rem 0 3.5rem;
+        background: var(--bg-surface);
+        border: 2px solid var(--border-glow);
+        border-radius: var(--radius-pill);
+        font-family: var(--font-body);
+        font-size: 1.05rem;
+        color: var(--text-primary);
+        outline: none;
+        box-shadow: var(--shadow-card);
+        transition: all 0.25s ease;
+      }
+
+      .faq-search-input:focus {
+        border-color: var(--primary-light);
+        box-shadow: 0 0 0 5px var(--primary-glow);
+      }
+
+      .faq-search-icon {
+        position: absolute;
+        left: 1.25rem;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 1.35rem;
+        pointer-events: none;
+        opacity: 0.7;
+      }
+
+      .faq-suggestions-row {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 1rem;
+      }
+
+      .faq-sugg-pill {
+        background: var(--bg-surface);
+        border: 1px solid var(--border-subtle);
+        color: var(--text-secondary);
+        font-size: 0.78rem;
+        font-weight: 600;
+        padding: 4px 12px;
+        border-radius: var(--radius-pill);
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .faq-sugg-pill:hover {
+        background: var(--bg-elevated);
+        border-color: var(--primary-light);
+        color: var(--text-primary);
+      }
+
+      /* Category Pills Bar */
+      .faq-categories-track {
+        display: flex;
+        gap: 0.65rem;
+        overflow-x: auto;
+        padding: 0.5rem 0.25rem 1.5rem;
+        margin: 2rem 0;
+        scrollbar-width: none;
+        justify-content: center;
+      }
+
+      .faq-categories-track::-webkit-scrollbar {
+        display: none;
+      }
+
+      .faq-cat-btn {
+        background: var(--bg-surface);
+        border: 1.5px solid var(--border-subtle);
+        color: var(--text-secondary);
+        font-family: var(--font-heading);
+        font-weight: 700;
+        font-size: 0.88rem;
+        padding: 0.6rem 1.25rem;
+        border-radius: var(--radius-pill);
+        cursor: pointer;
+        white-space: nowrap;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.45rem;
+      }
+
+      .faq-cat-btn:hover {
+        color: var(--text-primary);
+        border-color: var(--primary-light);
+      }
+
+      .faq-cat-btn.active {
+        background: var(--primary-gradient);
+        color: #FFF;
+        border-color: transparent;
+        box-shadow: 0 4px 15px var(--primary-glow);
+      }
+
+      /* 4 Quick Actions */
+      .faq-quick-actions-4grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1rem;
+        margin-bottom: 3.5rem;
+      }
+
+      .faq-quick-card {
+        background: var(--bg-surface);
+        border: 1.5px solid var(--border-subtle);
+        border-radius: 20px;
+        padding: 1.25rem;
+        text-align: center;
+        text-decoration: none;
+        color: var(--text-primary);
+        transition: all 0.25s ease;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.4rem;
+      }
+
+      .faq-quick-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--primary-light);
+        box-shadow: var(--shadow-sm);
+      }
+
+      /* Accordion Styling */
+      .faq-accordion-group {
+        margin-bottom: 3rem;
+      }
+
+      .faq-item {
+        background: var(--bg-surface);
+        border: 1.5px solid var(--border-subtle);
+        border-radius: 18px;
+        margin-bottom: 0.85rem;
+        overflow: hidden;
+        transition: border-color 0.25s ease, box-shadow 0.25s ease;
+      }
+
+      .faq-item.active {
+        border-color: var(--primary-light);
+        box-shadow: 0 6px 25px rgba(108, 92, 231, 0.12);
+      }
+
+      .faq-question-btn {
+        width: 100%;
+        padding: 1.25rem 1.5rem;
+        background: transparent;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        text-align: left;
+        font-family: var(--font-heading);
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        cursor: pointer;
+        gap: 1rem;
+      }
+
+      .faq-chevron {
+        font-size: 0.9rem;
+        color: var(--gold);
+        transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+
+      .faq-item.active .faq-chevron {
+        transform: rotate(180deg);
+      }
+
+      .faq-answer-body {
+        display: none;
+        padding: 0 1.5rem 1.25rem;
+        font-size: 0.95rem;
+        line-height: 1.7;
+        color: var(--text-secondary);
+        border-top: 1px solid var(--border-subtle);
+        padding-top: 1rem;
+      }
+
+      .faq-item.active .faq-answer-body {
+        display: block;
+        animation: slideFeedElastic 0.3s ease;
+      }
+
+      /* Safety Highlight Card */
+      .faq-safety-banner {
+        background: linear-gradient(135deg, rgba(255, 184, 0, 0.12) 0%, rgba(255, 107, 107, 0.1) 100%);
+        border: 1.5px solid rgba(255, 184, 0, 0.35);
+        border-radius: 24px;
+        padding: 2.25rem;
+        margin: 3.5rem 0;
+      }
+
+      /* Empty Search State */
+      .faq-empty-search {
+        display: none;
+        text-align: center;
+        padding: 3.5rem 1.5rem;
+        background: var(--bg-surface);
+        border: 1.5px dashed var(--border-subtle);
+        border-radius: 24px;
+        margin: 2rem 0;
+      }
+
+      .faq-empty-search.active {
+        display: block;
+      }
+
+      @media (max-width: 900px) {
+        .faq-categories-track {
+          justify-content: flex-start;
+        }
+        .faq-quick-actions-4grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media (max-width: 600px) {
+        .faq-quick-actions-4grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+</head>
+<body>
+    <!-- Ambient Canvas Background -->
+    <div class="ambient-canvas">
+        <div class="mesh-blob blob-purple"></div>
+        <div class="mesh-blob blob-gold"></div>
+        <div class="mesh-blob blob-coral"></div>
+        <div class="floating-coin-bg" style="top: 15%; left: 8%;">❓</div>
+        <div class="floating-coin-bg" style="top: 50%; right: 10%; animation-delay: -3s;">💡</div>
+        <div class="floating-coin-bg" style="bottom: 18%; left: 14%; animation-delay: -5s;">🥣</div>
+    </div>
+
+    <!-- 1. UNIFIED NAVBAR -->
+    <nav class="navbar" role="navigation" aria-label="Main Navigation">
+        <div class="container nav-wrap">
+            <a href="index.html" class="brand-logo" aria-label="Digital Katora Home">
+                <div class="logo-bowl-glow">
+                    <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 26px; height: 26px;">
+                        <path d="M4 14C4 22.8 10.2 30 18 30C25.8 30 32 22.8 32 14H4Z" fill="url(#brandBowlGradFaq)" stroke="#FFD93D" stroke-width="1.8"/>
+                        <ellipse cx="18" cy="14" rx="14" ry="4" fill="#FFB800" stroke="#FFEAA7" stroke-width="1.2"/>
+                        <circle cx="18" cy="7.5" r="4" fill="#FFD93D" stroke="#E67E22" stroke-width="1"/>
+                        <text x="18" y="9.5" font-size="5" font-weight="bold" fill="#8B4513" text-anchor="middle" font-family="'JetBrains Mono', monospace">₹</text>
+                        <defs>
+                            <linearGradient id="brandBowlGradFaq" x1="4" y1="14" x2="32" y2="30" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#6C5CE7"/>
+                                <stop offset="1" stop-color="#FFB800"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <span>Digital <span class="gradient-text">Katora</span></span>
+            </a>
+
+            <!-- Center Pill Navigation -->
+            <div class="nav-center-menu">
+                <a href="katoras.html" class="nav-link-pill">🥣 Katoras</a>
+                <a href="leaderboard.html" class="nav-link-pill">👑 Top Donors</a>
+                <a href="about.html" class="nav-link-pill">💡 How It Works</a>
+                <a href="achievements.html" class="nav-link-pill">🏆 Badges</a>
+                <a href="donation-animation.html" class="nav-link-pill">✨ Magic Demo</a>
+            </div>
+
+            <!-- Right Actions -->
+            <div class="nav-actions">
+                <button class="theme-toggle-btn" id="themeToggleBtn" title="Toggle Theme" aria-label="Toggle Dark/Light Theme">
+                    <span class="theme-icon">🌙</span>
+                </button>
+                <a href="create-katora.html" class="btn btn-primary btn-magnetic nav-cta-btn">
+                    <span>🥣 Create Katora</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 2. HERO SECTION -->
+    <header class="faq-hero-section">
+        <div class="container" style="max-width: 850px;">
+            <div class="hero-badge-pill animate-fade-in" style="margin-bottom: 1.25rem;">
+                <span class="badge-dot"></span>
+                <span>❓ Katora Help Center & FAQs ❓</span>
+            </div>
+
+            <h1 class="page-title" style="font-size: clamp(2.3rem, 5vw, 3.8rem); margin-bottom: 1rem;">
+                Koi Sawaal? <span class="gradient-text-gold">Katora Se Poocho.</span> 😂
+            </h1>
+
+            <p style="color: var(--text-secondary); font-size: 1.15rem; line-height: 1.7; margin: 0 auto;">
+                Katora banana ho, donation karna ho ya QR ka scene samajhna ho — saare official jawab yahin milenge!
+            </p>
+
+            <!-- 3. REAL-TIME SEARCH BAR -->
+            <div class="faq-search-box-wrap">
+                <span class="faq-search-icon">🔍</span>
+                <input type="text" id="faqSearchInput" class="faq-search-input" placeholder="Apna sawaal search karo... (e.g. Katora kaise banayein?)" autocomplete="off" oninput="handleFaqSearch(this.value)">
+                
+                <!-- Suggestions -->
+                <div class="faq-suggestions-row">
+                    <span class="faq-sugg-pill" onclick="applyFaqSuggestion('Katora kaise banayein?')">Katora kaise banayein?</span>
+                    <span class="faq-sugg-pill" onclick="applyFaqSuggestion('Donation kaise hota hai?')">Donation kaise hota hai?</span>
+                    <span class="faq-sugg-pill" onclick="applyFaqSuggestion('QR code')">QR code</span>
+                    <span class="faq-sugg-pill" onclick="applyFaqSuggestion('Payment pending')">Payment pending?</span>
+                    <span class="faq-sugg-pill" onclick="applyFaqSuggestion('Refund')">Refund</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- 4. QUICK ACTIONS -->
+        <section class="faq-quick-actions-4grid">
+            <a href="create-katora.html" class="faq-quick-card">
+                <span style="font-size: 2rem;">🥣</span>
+                <strong style="font-size: 0.95rem;">Apna Katora Banao</strong>
+                <small style="color: var(--text-muted); font-size: 0.75rem;">Create profile in 2 mins</small>
+            </a>
+            <a href="katoras.html" class="faq-quick-card">
+                <span style="font-size: 2rem;">💰</span>
+                <strong style="font-size: 0.95rem;">Donation Karo</strong>
+                <small style="color: var(--text-muted); font-size: 0.75rem;">Explore live katoras</small>
+            </a>
+            <a href="achievements.html" class="faq-quick-card">
+                <span style="font-size: 2rem;">🏆</span>
+                <strong style="font-size: 0.95rem;">Achievements Dekho</strong>
+                <small style="color: var(--text-muted); font-size: 0.75rem;">Flex your donor badges</small>
+            </a>
+            <a href="contact.html" class="faq-quick-card">
+                <span style="font-size: 2rem;">💬</span>
+                <strong style="font-size: 0.95rem;">Support Se Baat Karo</strong>
+                <small style="color: var(--text-muted); font-size: 0.75rem;">Send direct message</small>
+            </a>
+        </section>
+
+        <!-- 5. CATEGORY TABS -->
+        <section>
+            <div class="faq-categories-track" id="faqCategoryTrack">
+                <button class="faq-cat-btn active" onclick="filterFaqCategory('all', this)">⚡ All Questions (25+)</button>
+                <button class="faq-cat-btn" onclick="filterFaqCategory('katora', this)">🥣 Katora & Creation</button>
+                <button class="faq-cat-btn" onclick="filterFaqCategory('donation', this)">💰 Donations & Micro-tips</button>
+                <button class="faq-cat-btn" onclick="filterFaqCategory('payment', this)">💳 Payments & UPI</button>
+                <button class="faq-cat-btn" onclick="filterFaqCategory('safety', this)">🛡️ Safety & Approval</button>
+                <button class="faq-cat-btn" onclick="filterFaqCategory('achievements', this)">🏆 Achievements & Ranks</button>
+                <button class="faq-cat-btn" onclick="filterFaqCategory('refund', this)">↩ Refunds & Issues</button>
+            </div>
+        </section>
+
+        <!-- 6. ACCORDION QUESTIONS LIST -->
+        <section class="faq-accordion-group" id="faqAccordionList">
+            
+            <!-- Katora 1 -->
+            <div class="faq-item" data-category="katora" data-keywords="digital katora kya hai what is platform satirical">
+                <button type="button" class="faq-question-btn" onclick="toggleFaqAccordion(this)">
+                    <span>Digital Katora kya hai? 🤔</span>
+                    <span class="faq-chevron">▼</span>
+                </button>
+                <div class="faq-answer-body">
+                    Digital Katora ek fun, parody-style digital micro-tipping platform hai jahan log relatable reasons (Chai udhaar, hostel WiFi, Breakup biryani) ke liye apna virtual katora banate hain aur dost unhe direct UPI micro-donations bhejte hain.
+                </div>
+            </div>
+
+            <!-- Katora 2 -->
+            <div class="faq-item" data-category="katora" data-keywords="apna katora kaise banaye create profile steps">
+                <button type="button" class="faq-question-btn" onclick="toggleFaqAccordion(this)">
+                    <span>Apna Katora kaise banayein? 🥣</span>
+                    <span class="faq-chevron">▼</span>
+                </button>
+                <div class="faq-answer-body">
+                    <a href="create-katora.html" style="color: var(--primary-light); font-weight: 700;">Create Katora page</a> par jao, apni photo upload karo, funny reason likho, donation target set karo, aur apna UPI QR/ID add karke submit kar do.
+                </div>
+            </div>
+
+            <!-- Katora 3 -->
+            <div class="faq-item" data-category="katora" data-keywords="katora public kab hoga approve status verification">
+                <button type="button" class="faq-question-btn" onclick="toggleFaqAccordion(this)">
+                    <span>Katora public kaise hota hai aur kitna time lagta hai? ⏳</span>
+                    <span class="faq-chevron">▼</span>
+                </button>
+                <div class="faq-answer-body">
+                    Safety aur spam prevention ke liye submission ke baad hamari admin team katora review karti hai (avg. 2 minutes). Approve hote hi katora live ho jata hai aur WhatsApp/Instagram par shareable hota hai.
+                </div>
+            </div>
+
+            <!-- Donation 1 -->
+            <div class="faq-item" data-category="donation" data-keywords="donation kaise karein 1 rupee chhota shagun amount">
+                <button type="button" class="faq-question-btn" onclick="toggleFaqAccordion(this)">
+                    <span>Kya sach mein sirf ₹1 donate kar sakte hain? 🪙</span>
+                    <span class="faq-chevron">▼</span>
+                </button>
+                <div class="faq-answer-body">
+                    Haan bilkul! Digital Katora micro-tipping ke liye hi bana hai. Aap ₹1, ₹5, ₹11, ₹51 se lekar ₹501 tak koi bhi shagun amount direct creator ko de sakte hain.
+                </div>
+            </div>
+
+            <!-- Donation 2 -->
+            <div class="faq-item" data-category="donation" data-keywords="anonymous donation privacy gupt daanveer identity">
+                <button type="button" class="faq-question-btn" onclick="toggleFaqAccordion(this)">
+                    <span>Kya donation anonymous (gupt daan) ho sakta hai? 🕶️</span>
+                    <span class="faq-chevron">▼</span>
+                </button>
+                <div class="faq-answer-body">
+                    Haan! Donation karte waqt 'Anonymous Daanveer' option check kar lijiye. Public leaderboard aur live feed mein aapka naam secretly hide ho jayega.
+                </div>
+            </div>
+
+            <!-- Payment 1 -->
+            <div class="faq-item" data-category="payment" data-keywords="commission platform fee charges free upi zero">
+                <button type="button" class="faq-question-btn" onclick="toggleFaqAccordion(this)">
+                    <span>Kya Digital Katora koi commission ya cut leta hai? 💸</span>
+                    <span class="faq-chevron">▼</span>
+                </button>
+                <div class="faq-answer-body">
+                    Nahi! <strong>0% Platform Fee</strong>. Poora 100% donation direct creator ke UPI account mein bina kisi deduction ke transfer hota hai.
+                </div>
+            </div>
+
+            <!-- Payment 2 -->
+            <div class="faq-item" data-category="payment" data-keywords="payment fail pending transaction paisa kat gaya">
+                <button type="button" class="faq-question-btn" onclick="toggleFaqAccordion(this)">
+                    <span>Payment fail ho gaya lekin bank se paisa kat gaya toh kya karein? ⚠️</span>
+                    <span class="faq-chevron">▼</span>
+                </button>
+                <div class="faq-answer-body">
+                    UPI transactions mein agar payment pending ho jaye toh banking system use 24-48 ghante mein auto-reverse kar deta hai. Agar problem solve na ho, toh <a href="contact.html" style="color: var(--primary-light);">Contact Support</a> par transaction ID bhej dein.
+                </div>
+            </div>
+
+            <!-- QR / UPI 1 -->
+            <div class="faq-item" data-category="payment" data-keywords="qr code scan camera upi id gpay phonepe paytm">
+                <button type="button" class="faq-question-btn" onclick="toggleFaqAccordion(this)">
+                    <span>QR scan nahi ho raha toh kya karein? 📷</span>
+                    <span class="faq-chevron">▼</span>
+                </button>
+                <div class="faq-answer-body">
+                    Aap direct creator ki UPI ID (e.g. name@okhdfcbank) copy karke apne GPay, PhonePe ya Paytm app mein paste karke payment kar sakte hain.
+                </div>
+            </div>
+
+            <!-- Safety 1 -->
+            <div class="faq-item" data-category="safety" data-keywords="safety otp upi pin fraud security warning">
+                <button type="button" class="faq-question-btn" onclick="toggleFaqAccordion(this)">
+                    <span>Kya Digital Katora kabhi OTP ya UPI PIN maangta hai? 🚨</span>
+                    <span class="faq-chevron">▼</span>
+                </button>
+                <div class="faq-answer-body">
+                    <strong>KABHI NAHI!</strong> Paise receive karne ke liye kabhi PIN ya OTP ki zaroorat nahi hoti. Kisi ke saath apna banking password ya PIN share na karein.
+                </div>
+            </div>
+
+            <!-- Achievements 1 -->
+            <div class="faq-item" data-category="achievements" data-keywords="achievements badges katora king maha daani trophies">
+                <button type="button" class="faq-question-btn" onclick="toggleFaqAccordion(this)">
+                    <span>Donor Badges aur Trophies kaise unlock hoti hain? 🏆</span>
+                    <span class="faq-chevron">▼</span>
+                </button>
+                <div class="faq-answer-body">
+                    Jaise jaise aapka total donation badhta hai, aap automatic badges unlock karte hain: ₹1+ par <em>Katora Friend</em>, ₹100+ par <em>Supporter</em>, ₹500+ par <em>Maha-Daani</em>, aur ₹1,000+ par <em>Katora King</em>! <a href="achievements.html" style="color: var(--gold-light);">View Badges</a>.
+                </div>
+            </div>
+
+            <!-- Refund 1 -->
+            <div class="faq-item" data-category="refund" data-keywords="refund policy galat amount double payment return">
+                <button type="button" class="faq-question-btn" onclick="toggleFaqAccordion(this)">
+                    <span>Refund kaise request karein? ↩</span>
+                    <span class="faq-chevron">▼</span>
+                </button>
+                <div class="faq-answer-body">
+                    Agar aapne galti se galat katora mein donation bhej diya hai ya double payment hui hai, toh <a href="contact.html" style="color: var(--primary-light);">Contact page</a> par Donation ID select karke request raise karein.
+                </div>
+            </div>
+
+        </section>
+
+        <!-- 7. EMPTY SEARCH STATE -->
+        <div class="faq-empty-search" id="faqEmptySearch">
+            <div style="font-size: 3rem; margin-bottom: 0.5rem;">😅</div>
+            <h3 style="font-size: 1.3rem; margin-bottom: 0.5rem;">Ye sawaal abhi hamare katora dimaag mein nahi hai!</h3>
+            <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem;">
+                Search thoda different shabdon mein try karein ya humein direct support message bhejein.
+            </p>
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <a href="contact.html" class="btn btn-primary btn-magnetic">
+                    <span>💬 Contact Support</span>
+                </a>
+                <button type="button" class="btn btn-glass" onclick="resetFaqSearch()">
+                    <span>View All FAQs</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- 8. PAYMENT SAFETY HIGHLIGHT BANNER -->
+        <section class="faq-safety-banner">
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+                <span style="font-size: 1.8rem;">🚨</span>
+                <h3 style="font-size: 1.25rem; margin: 0; color: var(--gold-light);">Payment Se Pehle Ek Baar Check Kar Lena</h3>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; font-size: 0.88rem; color: var(--text-secondary); margin-top: 1rem;">
+                <div>✓ Amount aur Katora Name verify karein</div>
+                <div>✓ Creator ka verified UPI ID check karein</div>
+                <div>✓ OTP / UPI PIN kabhi share mat karein</div>
+                <div>✓ Suspicious profile turant report karein</div>
+            </div>
+        </section>
+
+        <!-- 9. CONTACT SUPPORT CTA -->
+        <section class="section" style="text-align: center; padding: 3rem 0 5rem;">
+            <div style="font-size: 3.5rem; margin-bottom: 1rem; animation: floatSlow 3s infinite ease-in-out;">💬</div>
+            <h2 style="font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 800; margin-bottom: 0.75rem;">
+                Answer Nahi Mila? 😅
+            </h2>
+            <p style="color: var(--text-secondary); font-size: 1.1rem; max-width: 580px; margin: 0 auto 2rem;">
+                Koi tension nahi! Tapri HQ ki friendly support team se baat karo aur instant ticket reference pao.
+            </p>
+            <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+                <a href="contact.html" class="btn btn-primary btn-magnetic" style="font-size: 1.05rem; padding: 0.9rem 2.2rem;">
+                    <span>💬 Contact Support</span>
+                </a>
+                <a href="katoras.html" class="btn btn-secondary btn-magnetic" style="font-size: 1.05rem; padding: 0.9rem 2.2rem;">
+                    <span>🥣 Katoras Dekho</span>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- 10. UNIFIED FOOTER -->
+    <footer class="site-footer">
+        <div class="container footer-grid">
+            <div class="footer-col brand-col">
+                <a href="index.html" class="brand-logo" style="margin-bottom: 1rem; display: inline-flex;">
+                    <div class="logo-bowl-glow">
+                        <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 26px; height: 26px;">
+                            <path d="M4 14C4 22.8 10.2 30 18 30C25.8 30 32 22.8 32 14H4Z" fill="url(#brandBowlGradFooterFaq)" stroke="#FFD93D" stroke-width="1.8"/>
+                            <ellipse cx="18" cy="14" rx="14" ry="4" fill="#FFB800" stroke="#FFEAA7" stroke-width="1.2"/>
+                            <circle cx="18" cy="7.5" r="4" fill="#FFD93D" stroke="#E67E22" stroke-width="1"/>
+                            <text x="18" y="9.5" font-size="5" font-weight="bold" fill="#8B4513" text-anchor="middle" font-family="'JetBrains Mono', monospace">₹</text>
+                            <defs>
+                                <linearGradient id="brandBowlGradFooterFaq" x1="4" y1="14" x2="32" y2="30" gradientUnits="userSpaceOnUse">
+                                    <stop stop-color="#6C5CE7"/>
+                                    <stop offset="1" stop-color="#FFB800"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <span>Digital <span class="gradient-text">Katora</span></span>
+                </a>
+                <p class="footer-tagline">
+                    India's premier satirical micro-tipping community. Khule paise nahi hain? Digital Katora scan karo!
+                </p>
+                <div class="social-links-row">
+                    <a href="https://instagram.com" target="_blank" class="social-icon-circle" title="Instagram" aria-label="Instagram">
+                        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                    </a>
+                    <a href="https://twitter.com" target="_blank" class="social-icon-circle" title="Twitter / X" aria-label="Twitter">
+                        <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <ul class="footer-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="katoras.html">Explore Katoras</a></li>
+                    <li><a href="create-katora.html">Start a Katora</a></li>
+                    <li><a href="leaderboard.html">Top Donors</a></li>
+                    <li><a href="donation-animation.html">✨ Magic Demo</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Company & Fun</h4>
+                <ul class="footer-links">
+                    <li><a href="about.html">Our Story</a></li>
+                    <li><a href="faq.html">FAQs</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                    <li><a href="admin.html">Admin Panel</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Beggar Wisdom</h4>
+                <div class="card" style="padding: 1.25rem; background: var(--bg-surface); border: 1px solid var(--border-color);">
+                    <p style="font-style: italic; color: var(--gold); font-size: 0.9rem; margin-bottom: 0.5rem;">
+                        "Sharam chhoro, katora jodo! Dost se udhaar maangne se behtar hai public se maang lo."
+                    </p>
+                    <span style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);">— Ancient Tapri Proverb</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="container footer-bottom-flex">
+                <p>© 2025 Digital Katora. Made for fun. ❤️ 100% Satirical Platform.</p>
+                <div class="footer-legal-links">
+                    <a href="faq.html">Privacy & Terms</a>
+                    <a href="contact.html">Report Issue</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MOBILE STICKY BOTTOM NAV -->
+    <nav class="mobile-bottom-nav">
+        <a href="index.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">🏠</span>
+            <span>Home</span>
+        </a>
+        <a href="katoras.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">🥣</span>
+            <span>Katoras</span>
+        </a>
+        <a href="create-katora.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">➕</span>
+            <span>Create</span>
+        </a>
+        <a href="donation-animation.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">✨</span>
+            <span>Demo</span>
+        </a>
+        <a href="leaderboard.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">👑</span>
+            <span>Ranks</span>
+        </a>
+    </nav>
+
+    <!-- Scripts -->
+    <script src="data-store.js"></script>
+    <script src="script.js"></script>
+    <script>
+      function toggleFaqAccordion(btn) {
+        const item = btn.closest('.faq-item');
+        if (!item) return;
+        const isActive = item.classList.contains('active');
+        
+        // Optional: close other accordions
+        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+        
+        if (!isActive) {
+          item.classList.add('active');
+        }
+      }
+
+      function filterFaqCategory(category, btn) {
+        // Update category tabs active state
+        document.querySelectorAll('.faq-cat-btn').forEach(b => b.classList.remove('active'));
+        if (btn) btn.classList.add('active');
+
+        // Filter accordion items
+        const items = document.querySelectorAll('.faq-item');
+        let visibleCount = 0;
+
+        items.forEach(item => {
+          const itemCat = item.getAttribute('data-category');
+          if (category === 'all' || itemCat === category) {
+            item.style.display = 'block';
+            visibleCount++;
+          } else {
+            item.style.display = 'none';
+          }
+        });
+
+        const empty = document.getElementById('faqEmptySearch');
+        if (empty) empty.classList.remove('active');
+      }
+
+      let searchDebounce = null;
+      function handleFaqSearch(query) {
+        clearTimeout(searchDebounce);
+        searchDebounce = setTimeout(() => {
+          const q = (query || '').trim().toLowerCase();
+          const items = document.querySelectorAll('.faq-item');
+          const empty = document.getElementById('faqEmptySearch');
+          let matchCount = 0;
+
+          if (!q) {
+            items.forEach(item => item.style.display = 'block');
+            if (empty) empty.classList.remove('active');
+            return;
+          }
+
+          items.forEach(item => {
+            const text = item.textContent.toLowerCase();
+            const keywords = (item.getAttribute('data-keywords') || '').toLowerCase();
+            if (text.includes(q) || keywords.includes(q)) {
+              item.style.display = 'block';
+              item.classList.add('active'); // auto expand matches
+              matchCount++;
+            } else {
+              item.style.display = 'none';
+              item.classList.remove('active');
+            }
+          });
+
+          if (empty) {
+            if (matchCount === 0) {
+              empty.classList.add('active');
+            } else {
+              empty.classList.remove('active');
+            }
+          }
+        }, 150);
+      }
+
+      function applyFaqSuggestion(text) {
+        const input = document.getElementById('faqSearchInput');
+        if (input) {
+          input.value = text;
+          handleFaqSearch(text);
+          input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }
+
+      function resetFaqSearch() {
+        const input = document.getElementById('faqSearchInput');
+        if (input) input.value = '';
+        filterFaqCategory('all', document.querySelector('.faq-cat-btn'));
+      }
+    </script>
+</body>
+</html>

@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="hi" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🥣 Hamari Kahani — About Digital Katora</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Design System Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+    
+    <meta name="description" content="Discover the hilarious story, philosophy, transparency, and crew behind Digital Katora — India's premier satirical micro-tipping community.">
+    <meta name="theme-color" content="#6C5CE7">
+
+    <style>
+      /* ═════════════════════════════════════════════════════════════════════
+         ABOUT PAGE CUSTOM STORYTELLING STYLES
+         ═════════════════════════════════════════════════════════════════════ */
+      .about-hero-section {
+        padding: 4.5rem 1.25rem 3.5rem;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .about-hero-grid {
+        display: grid;
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: 3rem;
+        align-items: center;
+      }
+
+      .hero-katora-stage-card {
+        background: var(--bg-surface);
+        border: 1.5px solid var(--border-glow);
+        border-radius: 28px;
+        padding: 2.25rem;
+        box-shadow: var(--shadow-card);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero-mascot-row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1.5rem;
+        margin: 1.25rem 0;
+      }
+
+      .hero-mascot-avatar {
+        width: 110px;
+        height: 125px;
+        border-radius: 20px;
+        overflow: hidden;
+        border: 1.5px solid var(--border-subtle);
+        background: var(--bg-elevated);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.35);
+      }
+
+      .hero-mascot-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center 15%;
+      }
+
+      .hero-interactive-bowl {
+        width: 120px;
+        height: 70px;
+        background: linear-gradient(180deg, #FFB800 0%, #D97706 100%);
+        border-radius: 0 0 60px 60px / 0 0 80px 80px;
+        position: relative;
+        box-shadow: 0 15px 35px rgba(255, 184, 0, 0.4), inset 0 -10px 20px rgba(0,0,0,0.3);
+        cursor: pointer;
+        animation: floatSlow 3s infinite ease-in-out;
+      }
+
+      .hero-interactive-bowl::before {
+        content: '';
+        position: absolute;
+        top: -8px;
+        left: -4px;
+        right: -4px;
+        height: 16px;
+        background: radial-gradient(ellipse at center, #FFEAA7 0%, #FFB800 80%, #D97706 100%);
+        border-radius: 50%;
+        border: 1.5px solid #FFF;
+      }
+
+      .hero-floating-coin-mini {
+        position: absolute;
+        top: -40px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 30% 30%, #FFD93D, #FFB800 70%, #E67E22);
+        box-shadow: 0 0 15px #FFD93D;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-mono);
+        font-size: 16px;
+        font-weight: 900;
+        color: #8B4513;
+        animation: floatSlow 2.5s infinite ease-in-out alternate;
+      }
+
+      /* Comparison Cards */
+      .comparison-grid-2col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        margin: 2.5rem 0;
+        position: relative;
+      }
+
+      .comparison-card {
+        background: var(--bg-surface);
+        border: 1.5px solid var(--border-subtle);
+        border-radius: 24px;
+        padding: 2.25rem;
+        position: relative;
+      }
+
+      .comparison-card.digital {
+        border-color: var(--primary-light);
+        background: linear-gradient(180deg, rgba(108, 92, 231, 0.08) 0%, var(--bg-surface) 100%);
+        box-shadow: 0 12px 35px var(--primary-glow);
+      }
+
+      .comparison-upgrade-badge {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: var(--gold-gradient);
+        color: #0F0E17;
+        font-family: var(--font-mono);
+        font-size: 0.85rem;
+        font-weight: 900;
+        padding: 0.55rem 1.25rem;
+        border-radius: var(--radius-pill);
+        box-shadow: 0 8px 25px rgba(255, 184, 0, 0.4);
+        z-index: 10;
+        white-space: nowrap;
+      }
+
+      /* 5-Step Process Cards */
+      .steps-5grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 1.25rem;
+        margin: 2.5rem 0;
+      }
+
+      .step-item-box {
+        background: var(--bg-surface);
+        border: 1.5px solid var(--border-subtle);
+        border-radius: 20px;
+        padding: 1.5rem 1.15rem;
+        text-align: center;
+        transition: transform 0.25s ease, border-color 0.25s ease;
+        position: relative;
+      }
+
+      .step-item-box:hover {
+        transform: translateY(-5px);
+        border-color: var(--primary-light);
+      }
+
+      .step-num-pill {
+        position: absolute;
+        top: -12px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--bg-elevated);
+        border: 1px solid var(--border-subtle);
+        color: var(--gold-light);
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        font-weight: 800;
+        padding: 2px 10px;
+        border-radius: var(--radius-pill);
+      }
+
+      /* Philosophy 3 Cards */
+      .philosophy-3grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.75rem;
+        margin: 2.5rem 0;
+      }
+
+      .philosophy-card {
+        background: var(--bg-surface);
+        border: 1.5px solid var(--border-subtle);
+        border-radius: 24px;
+        padding: 2.25rem 1.75rem;
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.25s ease, border-color 0.25s ease;
+      }
+
+      .philosophy-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--primary-light);
+      }
+
+      /* Mascot Crew Cards */
+      .crew-2grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        margin: 2.5rem 0;
+      }
+
+      .crew-profile-card {
+        background: var(--bg-surface);
+        border: 1.5px solid var(--border-subtle);
+        border-radius: 24px;
+        padding: 2rem;
+        display: flex;
+        gap: 1.75rem;
+        align-items: center;
+        transition: transform 0.25s ease;
+      }
+
+      .crew-profile-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--gold);
+      }
+
+      .crew-avatar-frame {
+        width: 130px;
+        height: 145px;
+        border-radius: 20px;
+        overflow: hidden;
+        border: 1.5px solid var(--border-glow);
+        background: var(--bg-elevated);
+        flex-shrink: 0;
+      }
+
+      .crew-avatar-frame img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center 15%;
+      }
+
+      /* Happiness Meter */
+      .happiness-meter-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: var(--bg-surface);
+        border: 1.5px solid var(--border-subtle);
+        border-radius: 24px;
+        padding: 1.5rem 2rem;
+        margin: 2.5rem 0;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .happiness-node {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.45rem;
+      }
+
+      .happiness-emoji {
+        font-size: 2.2rem;
+        transition: transform 0.25s ease;
+      }
+
+      .happiness-node:hover .happiness-emoji {
+        transform: scale(1.3) rotate(6deg);
+      }
+
+      /* Social Quote Banner */
+      .social-quote-box {
+        background: linear-gradient(135deg, rgba(108, 92, 231, 0.15) 0%, rgba(255, 184, 0, 0.12) 100%);
+        border: 2px solid var(--border-glow);
+        border-radius: 28px;
+        padding: 3.5rem 2.5rem;
+        text-align: center;
+        margin: 4rem 0;
+        position: relative;
+        box-shadow: var(--shadow-card);
+      }
+
+      .quote-giant-mark {
+        font-size: 5rem;
+        line-height: 1;
+        font-family: var(--font-heading);
+        color: var(--primary-light);
+        opacity: 0.4;
+        margin-bottom: -1.5rem;
+      }
+
+      @media (max-width: 992px) {
+        .about-hero-grid {
+          grid-template-columns: 1fr;
+          text-align: center;
+        }
+        .steps-5grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .philosophy-3grid {
+          grid-template-columns: 1fr;
+        }
+        .crew-2grid {
+          grid-template-columns: 1fr;
+        }
+        .comparison-upgrade-badge {
+          position: static;
+          transform: none;
+          display: inline-block;
+          margin: 1rem auto;
+        }
+        .comparison-grid-2col {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .steps-5grid {
+          grid-template-columns: 1fr;
+        }
+        .crew-profile-card {
+          flex-direction: column;
+          text-align: center;
+        }
+        .happiness-meter-bar {
+          justify-content: center;
+          gap: 1.5rem;
+        }
+      }
+    </style>
+</head>
+<body>
+    <!-- Ambient Canvas Background -->
+    <div class="ambient-canvas">
+        <div class="mesh-blob blob-purple"></div>
+        <div class="mesh-blob blob-gold"></div>
+        <div class="mesh-blob blob-coral"></div>
+        <div class="floating-coin-bg" style="top: 15%; left: 8%;">🥣</div>
+        <div class="floating-coin-bg" style="top: 55%; right: 10%; animation-delay: -3s;">☕</div>
+        <div class="floating-coin-bg" style="bottom: 20%; left: 12%; animation-delay: -5s;">🪙</div>
+    </div>
+
+    <!-- 1. UNIFIED NAVBAR -->
+    <nav class="navbar" role="navigation" aria-label="Main Navigation">
+        <div class="container nav-wrap">
+            <a href="index.html" class="brand-logo" aria-label="Digital Katora Home">
+                <div class="logo-bowl-glow">
+                    <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 26px; height: 26px;">
+                        <path d="M4 14C4 22.8 10.2 30 18 30C25.8 30 32 22.8 32 14H4Z" fill="url(#brandBowlGradAbout)" stroke="#FFD93D" stroke-width="1.8"/>
+                        <ellipse cx="18" cy="14" rx="14" ry="4" fill="#FFB800" stroke="#FFEAA7" stroke-width="1.2"/>
+                        <circle cx="18" cy="7.5" r="4" fill="#FFD93D" stroke="#E67E22" stroke-width="1"/>
+                        <text x="18" y="9.5" font-size="5" font-weight="bold" fill="#8B4513" text-anchor="middle" font-family="'JetBrains Mono', monospace">₹</text>
+                        <defs>
+                            <linearGradient id="brandBowlGradAbout" x1="4" y1="14" x2="32" y2="30" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#6C5CE7"/>
+                                <stop offset="1" stop-color="#FFB800"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <span>Digital <span class="gradient-text">Katora</span></span>
+            </a>
+
+            <!-- Center Pill Navigation -->
+            <div class="nav-center-menu">
+                <a href="katoras.html" class="nav-link-pill">🥣 Katoras</a>
+                <a href="leaderboard.html" class="nav-link-pill">👑 Top Donors</a>
+                <a href="about.html" class="nav-link-pill active">💡 How It Works</a>
+                <a href="donation-animation.html" class="nav-link-pill">✨ Magic Demo</a>
+            </div>
+
+            <!-- Right Actions -->
+            <div class="nav-actions">
+                <button class="theme-toggle-btn" id="themeToggleBtn" title="Toggle Theme" aria-label="Toggle Dark/Light Theme">
+                    <span class="theme-icon">🌙</span>
+                </button>
+                <a href="create-katora.html" class="btn btn-primary btn-magnetic nav-cta-btn">
+                    <span>🥣 Create Katora</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 2. HERO SECTION -->
+    <header class="about-hero-section">
+        <div class="container about-hero-grid">
+            <div>
+                <!-- Badge -->
+                <div class="hero-badge-pill animate-fade-in" style="margin-bottom: 1.25rem;">
+                    <span class="badge-dot"></span>
+                    <span>🥣 Digital Katora Ki Kahani</span>
+                </div>
+
+                <!-- Main Headline -->
+                <h1 class="page-title" style="font-size: clamp(2.2rem, 4.8vw, 3.8rem); margin-bottom: 1.25rem; line-height: 1.15;">
+                    Ek Katora. <br><span class="gradient-text">Hazaar Kahaniyan.</span> 😂
+                </h1>
+
+                <!-- Supporting Text -->
+                <p style="color: var(--text-secondary); font-size: 1.15rem; line-height: 1.75; margin-bottom: 2rem; max-width: 540px;">
+                    Digital Katora ek fun digital platform hai jahan log apni funny kahaniyon ke saath apna virtual katora bana sakte hain aur khushi baant sakte hain.
+                </p>
+
+                <!-- Hero Actions -->
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <a href="create-katora.html" class="btn btn-primary btn-magnetic" style="padding: 0.9rem 2rem;">
+                        <span>🥣 Apna Katora Banao</span>
+                    </a>
+                    <a href="katoras.html" class="btn btn-secondary btn-magnetic" style="padding: 0.9rem 2rem;">
+                        <span>😂 Katoras Dekho</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- 3. HERO VISUAL STAGE CARD -->
+            <div class="hero-katora-stage-card">
+                <span class="badge" style="background: rgba(255, 184, 0, 0.15); color: var(--gold-light); margin-bottom: 0.75rem;">
+                    ✨ Live Katora Physics
+                </span>
+
+                <div class="hero-mascot-row">
+                    <!-- Beggar Mascot -->
+                    <div class="hero-mascot-avatar" title="Rahul - Beggar Mascot">
+                        <img src="mascot-beggar-3d.jpg" alt="Rahul 3D Beggar Mascot">
+                    </div>
+
+                    <!-- Interactive Floating Golden Katora -->
+                    <div class="hero-interactive-bowl" id="aboutHeroBowl" title="Click to shake!" onclick="shakeAboutBowl()">
+                        <div class="hero-floating-coin-mini">₹</div>
+                    </div>
+
+                    <!-- Donor Mascot -->
+                    <div class="hero-mascot-avatar" title="Aman - Donor Mascot">
+                        <img src="mascot-donor-3d.png" alt="Aman 3D Donor Mascot">
+                    </div>
+                </div>
+
+                <div style="font-size: 0.88rem; font-weight: 700; color: var(--text-muted); margin-top: 0.5rem;">
+                    Click katora to test physics! 🪙
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- 4. WHAT IS DIGITAL KATORA? -->
+        <section class="section" style="padding: 3rem 0;">
+            <div class="container" style="max-width: 900px; text-align: center;">
+                <div class="hero-badge-pill" style="margin-bottom: 1rem;">
+                    <span>🤔 Concept Samjho</span>
+                </div>
+                <h2 style="font-size: clamp(1.8rem, 4vw, 2.6rem); margin-bottom: 1.25rem;">
+                    Toh Digital Katora Hai Kya? 🤔
+                </h2>
+                <p style="color: var(--text-secondary); font-size: 1.12rem; line-height: 1.8; margin-bottom: 1.5rem;">
+                    Digital Katora ek playful online experience hai jahan log apne dost, hostel roommates, ya internet community ke saamne apne funny kharche (Chai ka udhaar, WiFi bill, Breakup biryani) ka virtual katora pesh karte hain.
+                </p>
+                <p style="color: var(--text-secondary); font-size: 1.05rem; line-height: 1.8;">
+                    Har donation par koi boring banking OTP screen nahi aati — balki ek 3D sikka hawa mein rotate hota hai, katora khanakta hai, aur receiver ka reaction sad 🥺 se happy 😁 ho jata hai!
+                </p>
+            </div>
+        </section>
+
+        <!-- 5. TRADITIONAL VS DIGITAL KATORA -->
+        <section class="section" style="background: var(--bg-surface); padding: 4rem 0; border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle);">
+            <div class="container" style="max-width: 1000px;">
+                <div style="text-align: center; margin-bottom: 2.5rem;">
+                    <h2 style="font-size: clamp(1.8rem, 3.5vw, 2.4rem);">
+                        The Core Idea: Evolution of Katora 🥣
+                    </h2>
+                    <p style="color: var(--text-secondary);">Dekho kaise Internet ne purani parampara ko Gen-Z upgrade diya hai!</p>
+                </div>
+
+                <div class="comparison-grid-2col">
+                    <!-- Traditional -->
+                    <div class="comparison-card">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">🪨</div>
+                        <h3 style="font-size: 1.3rem; margin-bottom: 0.5rem; color: var(--text-muted);">Purana Traditional Katora</h3>
+                        <ul style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.8; padding-left: 1.25rem;">
+                            <li>Ghar-ghar jaake sharam mehsoos karna 🙈</li>
+                            <li>Khule paise (chillar) ka hamesha shortage 🪙</li>
+                            <li>Sirf aas-paas ke 4 log dekh paate hain</li>
+                            <li>Koi achievement ya points nahi milte</li>
+                        </ul>
+                    </div>
+
+                    <!-- Upgrade Center Badge -->
+                    <div class="comparison-upgrade-badge">
+                        ⚡ Internet ne upgrade kar diya 😂
+                    </div>
+
+                    <!-- Digital Katora -->
+                    <div class="comparison-card digital">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">✨🥣</div>
+                        <h3 style="font-size: 1.3rem; margin-bottom: 0.5rem; color: var(--gold-light);">Naya Digital Katora</h3>
+                        <ul style="color: var(--text-primary); font-size: 0.95rem; line-height: 1.8; padding-left: 1.25rem;">
+                            <li>Apni funny story daalo aur WhatsApp pe flex karo 🚀</li>
+                            <li>Direct zero-fee UPI (GPay/PhonePe) se payment 📱</li>
+                            <li>Puri duniya se micro-tips aur good karma pao 🌍</li>
+                            <li>Real-time 3D coin drop animation + Leaderboard crowns 👑</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. HOW THE IDEA WORKS (5 STEPS) -->
+        <section class="section" style="padding: 4.5rem 0;">
+            <div class="container">
+                <div style="text-align: center; max-width: 700px; margin: 0 auto 3rem;">
+                    <div class="hero-badge-pill" style="margin-bottom: 1rem;">
+                        <span>⚙️ 5 Simple Steps</span>
+                    </div>
+                    <h2 style="font-size: clamp(1.8rem, 3.5vw, 2.5rem);">
+                        Ye Sab Kaise Chalta Hai?
+                    </h2>
+                    <p style="color: var(--text-secondary);">Katora banane se lekar pehla sikka aane tak ka asaan safar.</p>
+                </div>
+
+                <div class="steps-5grid">
+                    <!-- Step 1 -->
+                    <div class="step-item-box">
+                        <span class="step-num-pill">STEP 01</span>
+                        <div style="font-size: 2.2rem; margin: 0.75rem 0;">📸</div>
+                        <h4 style="font-size: 1.05rem; margin-bottom: 0.4rem;">Apna Katora Banao</h4>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">Apni photo ya funny avatar upload karo aur goal set karo.</p>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="step-item-box">
+                        <span class="step-num-pill">STEP 02</span>
+                        <div style="font-size: 2.2rem; margin: 0.75rem 0;">😂</div>
+                        <h4 style="font-size: 1.05rem; margin-bottom: 0.4rem;">Apni Kahani Batao</h4>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">Kyun chahiye chanda? Chai, Biryani ya GPU fund ka reason likho.</p>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="step-item-box">
+                        <span class="step-num-pill">STEP 03</span>
+                        <div style="font-size: 2.2rem; margin: 0.75rem 0;">🛡️</div>
+                        <h4 style="font-size: 1.05rem; margin-bottom: 0.4rem;">Admin Review Hoga</h4>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">Safe & funny content verify hote hi katora live ho jata hai.</p>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="step-item-box">
+                        <span class="step-num-pill">STEP 04</span>
+                        <div style="font-size: 2.2rem; margin: 0.75rem 0;">🪙</div>
+                        <h4 style="font-size: 1.05rem; margin-bottom: 0.4rem;">Koi Katora Bharta Hai</h4>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">Dost aur daanveer ₹1 se lekar ₹501 tak direct UPI bhejte hain.</p>
+                    </div>
+
+                    <!-- Step 5 -->
+                    <div class="step-item-box">
+                        <span class="step-num-pill">STEP 05</span>
+                        <div style="font-size: 2.2rem; margin: 0.75rem 0;">🥣</div>
+                        <h4 style="font-size: 1.05rem; margin-bottom: 0.4rem;">Katora + Khushi</h4>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">Sikka khanakta hai, character nachta hai, aur punya milta hai!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. THE DIGITAL KATORA EXPERIENCE (PREVIEW) -->
+        <section class="section" style="background: var(--bg-surface); padding: 4rem 0; border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle);">
+            <div class="container" style="max-width: 900px; text-align: center;">
+                <div class="hero-badge-pill" style="margin-bottom: 1rem;">
+                    <span>✨ Interactive Preview</span>
+                </div>
+                <h2 style="font-size: clamp(1.8rem, 3.5vw, 2.5rem); margin-bottom: 1rem;">
+                    The 3D Donation Experience 🪙
+                </h2>
+                <p style="color: var(--text-secondary); font-size: 1.05rem; margin-bottom: 2rem;">
+                    Donor Phone 📱 &rarr; Parabolic Golden Coin ✨ &rarr; Golden Katora 🥣 &rarr; Beggar Happy Dance 🕺
+                </p>
+
+                <div class="card" style="padding: 2.5rem; background: var(--bg-elevated); border: 1.5px solid var(--border-glow); border-radius: 24px; margin-bottom: 2rem;">
+                    <div style="font-size: 3.5rem; margin-bottom: 1rem; animation: floatSlow 3s infinite ease-in-out;">
+                        📱 ➔ 🪙 ➔ 🥣 ➔ 😍
+                    </div>
+                    <h3 style="font-size: 1.3rem; margin-bottom: 0.75rem;">Kya aapne Magic Donation Simulator try kiya?</h3>
+                    <p style="color: var(--text-muted); font-size: 0.95rem; max-width: 500px; margin: 0 auto 1.5rem;">
+                        Real-time physics, crystal audio chimes, aur instant meme reactions ka maza lijiye.
+                    </p>
+                    <a href="donation-animation.html" class="btn btn-primary btn-magnetic">
+                        <span>✨ Magic Animation Dekho &rarr;</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 8. WHY WE MADE IT & 9. OUR PHILOSOPHY -->
+        <section class="section" style="padding: 4.5rem 0;">
+            <div class="container">
+                <div style="text-align: center; max-width: 750px; margin: 0 auto 3rem;">
+                    <div class="hero-badge-pill" style="margin-bottom: 1rem;">
+                        <span>💡 Hamari Soch</span>
+                    </div>
+                    <h2 style="font-size: clamp(1.8rem, 3.5vw, 2.5rem); margin-bottom: 1rem;">
+                        Humne Ye Banaya Kyun? 😂
+                    </h2>
+                    <p style="color: var(--text-secondary); font-size: 1.08rem; line-height: 1.75;">
+                        Internet par har cheez ka ek serious, corporate version hai. Toh humne socha... <em>"Kya ho agar ek digital katora bhi ho jo logo ke chehre par muskaan laaye?"</em> Giving and receiving should feel human, visual, and delightfully entertaining!
+                    </p>
+                </div>
+
+                <div class="philosophy-3grid">
+                    <!-- Card 1 -->
+                    <div class="philosophy-card">
+                        <div style="font-size: 2.8rem; margin-bottom: 1rem;">😂</div>
+                        <h3 style="font-size: 1.25rem; margin-bottom: 0.5rem; color: var(--gold-light);">100% Pure Fun</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.65;">
+                            Internet thoda boring ho gaya tha. Humne micro-tipping ko ek wholesome comedy festival bana diya.
+                        </p>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="philosophy-card">
+                        <div style="font-size: 2.8rem; margin-bottom: 1rem;">❤️</div>
+                        <h3 style="font-size: 1.25rem; margin-bottom: 0.5rem; color: var(--coral-light);">Human Connection</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.65;">
+                            Har katora ke peeche ek asali insaan, uski relatable kahani, aur chhota sa sapna hota hai.
+                        </p>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div class="philosophy-card">
+                        <div style="font-size: 2.8rem; margin-bottom: 1rem;">🤝</div>
+                        <h3 style="font-size: 1.25rem; margin-bottom: 0.5rem; color: var(--green-light);">Community & Punya</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.65;">
+                            ₹1 ka chhota sa shagun bhi kisi ke din ko bright aur memorable bana sakta hai.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 10. TRANSPARENCY, APPROVAL & PAYMENT SAFETY -->
+        <section class="section" style="background: var(--bg-surface); padding: 4.5rem 0; border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle);">
+            <div class="container" style="max-width: 960px;">
+                <div style="text-align: center; margin-bottom: 3rem;">
+                    <div class="hero-badge-pill" style="margin-bottom: 1rem;">
+                        <span>🛡️ Trust & Safety</span>
+                    </div>
+                    <h2 style="font-size: clamp(1.8rem, 3.5vw, 2.5rem); margin-bottom: 0.75rem;">
+                        Thoda Mazak, Thodi Transparency 👀
+                    </h2>
+                    <p style="color: var(--text-secondary);">Satire apni jagah hai, par safety aur honesty sabse pehle aati hai.</p>
+                </div>
+
+                <div class="card card-glow" style="padding: 2.5rem; background: var(--bg-elevated); border: 1.5px solid var(--border-subtle); border-radius: 24px; margin-bottom: 2rem;">
+                    <h3 style="font-size: 1.25rem; margin-bottom: 1rem; color: var(--green-light); display: flex; align-items: center; gap: 0.5rem;">
+                        <span>🛡️</span> Har Katora Seedha Live Nahi Hota
+                    </h3>
+                    <p style="color: var(--text-secondary); font-size: 0.98rem; line-height: 1.75; margin-bottom: 1.25rem;">
+                        Platform ki safety maintain rakhne ke liye har user-submitted katora hamari admin team review karti hai. Hate speech, offensive media, ya illegal content ko turant block kiya jata hai.
+                    </p>
+                    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-muted);">
+                        <span>USER SUBMIT</span> &rarr; <span>ADMIN REVIEW 🛡️</span> &rarr; <span>APPROVED ✅</span> &rarr; <span>PUBLIC KATORA 🚀</span>
+                    </div>
+                </div>
+
+                <div class="card" style="padding: 2rem; background: var(--bg-elevated); border: 1.5px solid rgba(255, 184, 0, 0.3); border-radius: 20px;">
+                    <h4 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--gold-light); display: flex; align-items: center; gap: 0.5rem;">
+                        <span>⚠️</span> Payment Karne Se Pehle Ek Baar Check Kar Lena
+                    </h4>
+                    <p style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.65; margin: 0;">
+                        Digital Katora direct creator ke UPI ID / QR par zero platform fee payout enable karta hai. Donation karne se pehle katora creator ka verified naam aur amount dhyan se check karein. Donate responsibly!
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 11. KATORA CREW / MASCOTS -->
+        <section class="section" style="padding: 4.5rem 0;">
+            <div class="container">
+                <div style="text-align: center; max-width: 700px; margin: 0 auto 3rem;">
+                    <div class="hero-badge-pill" style="margin-bottom: 1rem;">
+                        <span>👥 Mascot Family</span>
+                    </div>
+                    <h2 style="font-size: clamp(1.8rem, 3.5vw, 2.5rem);">
+                        Milte Hain Hamare Katora Crew Se 😂
+                    </h2>
+                    <p style="color: var(--text-secondary);">Inhi dono ke dum par Digital Katora ka pahiya ghoomta hai!</p>
+                </div>
+
+                <div class="crew-2grid">
+                    <!-- Beggar Crew -->
+                    <div class="crew-profile-card">
+                        <div class="crew-avatar-frame">
+                            <img src="mascot-beggar-3d.jpg" alt="Rahul - Beggar Mascot">
+                        </div>
+                        <div>
+                            <div class="badge" style="background: rgba(255, 107, 107, 0.15); color: var(--coral-light); margin-bottom: 0.4rem;">🥺 Chief Begging Officer</div>
+                            <h3 style="font-size: 1.25rem; margin-bottom: 0.25rem;">Rahul "Broke" Sharma</h3>
+                            <p style="font-style: italic; color: var(--gold); font-size: 0.9rem; margin-bottom: 0.5rem;">"Bas bhai, katora khaali hai. Ek cutting chai pilwa do! 😂"</p>
+                            <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; margin: 0;">Representing every student, coder, and dreamer jinka mahine ke aakhiri hafte bank balance zero ho jata hai.</p>
+                        </div>
+                    </div>
+
+                    <!-- Donor Crew -->
+                    <div class="crew-profile-card">
+                        <div class="crew-avatar-frame">
+                            <img src="mascot-donor-3d.png" alt="Aman - Donor Mascot">
+                        </div>
+                        <div>
+                            <div class="badge" style="background: rgba(0, 184, 148, 0.15); color: var(--green-light); margin-bottom: 0.4rem;">👑 Supreme Daanveer</div>
+                            <h3 style="font-size: 1.25rem; margin-bottom: 0.25rem;">Aman "Ambani" Verma</h3>
+                            <p style="font-style: italic; color: var(--gold); font-size: 0.9rem; margin-bottom: 0.5rem;">"₹1 se shuru karein ya seedha ₹501 ka shagun daalein?"</p>
+                            <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; margin: 0;">Unmatched good karma hunter. Inka manna hai ki chanda dene se agle janam mein BMW milti hai.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 12. KATORA HAPPINESS PROGRESSION -->
+        <section class="section" style="background: var(--bg-surface); padding: 4rem 0; border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle);">
+            <div class="container" style="max-width: 900px; text-align: center;">
+                <div class="hero-badge-pill" style="margin-bottom: 1rem;">
+                    <span>📈 Emotion Engine</span>
+                </div>
+                <h2 style="font-size: clamp(1.8rem, 3.5vw, 2.4rem); margin-bottom: 0.75rem;">
+                    Jitna Bharo, Utni Khushi 🥣
+                </h2>
+                <p style="color: var(--text-secondary);">Har percentage par katora aur creator dono ka mood upgrade hota hai:</p>
+
+                <div class="happiness-meter-bar">
+                    <div class="happiness-node">
+                        <span class="happiness-emoji">😐</span>
+                        <strong style="font-size: 0.9rem;">0%</strong>
+                        <small style="color: var(--text-muted); font-size: 0.75rem;">Khaali Katora</small>
+                    </div>
+                    <div style="color: var(--border-glow); font-size: 1.2rem;">&rarr;</div>
+                    <div class="happiness-node">
+                        <span class="happiness-emoji">🙂</span>
+                        <strong style="font-size: 0.9rem;">25%</strong>
+                        <small style="color: var(--text-muted); font-size: 0.75rem;">Thoda Punya 😇</small>
+                    </div>
+                    <div style="color: var(--border-glow); font-size: 1.2rem;">&rarr;</div>
+                    <div class="happiness-node">
+                        <span class="happiness-emoji">😄</span>
+                        <strong style="font-size: 0.9rem;">50%</strong>
+                        <small style="color: var(--text-muted); font-size: 0.75rem;">Achha Bhai 😌</small>
+                    </div>
+                    <div style="color: var(--border-glow); font-size: 1.2rem;">&rarr;</div>
+                    <div class="happiness-node">
+                        <span class="happiness-emoji">😁</span>
+                        <strong style="font-size: 0.9rem;">75%</strong>
+                        <small style="color: var(--text-muted); font-size: 0.75rem;">Dil Jeet Liya ❤️</small>
+                    </div>
+                    <div style="color: var(--border-glow); font-size: 1.2rem;">&rarr;</div>
+                    <div class="happiness-node">
+                        <span class="happiness-emoji">🎉</span>
+                        <strong style="font-size: 0.9rem; color: var(--gold-light);">100%</strong>
+                        <small style="color: var(--gold-light); font-size: 0.75rem; font-weight: 700;">KATORA FULL! 🚀</small>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 13. ACHIEVEMENTS & LEADERBOARD PREVIEWS -->
+        <section class="section" style="padding: 4.5rem 0;">
+            <div class="container">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                    <!-- Badges Preview -->
+                    <div class="card card-glow" style="padding: 2.25rem; background: var(--bg-surface); border: 1.5px solid var(--border-subtle); border-radius: 24px;">
+                        <span class="badge" style="background: rgba(255, 184, 0, 0.15); color: var(--gold-light); margin-bottom: 0.75rem;">🏆 Gamified Badges</span>
+                        <h3 style="font-size: 1.3rem; margin-bottom: 0.5rem;">Donor Achievements</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.6; margin-bottom: 1.25rem;">
+                            Har donation par titles aur badges unlock karo — Katora Friend (₹1) se lekar Katora Legend (₹5,000+) tak!
+                        </p>
+                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem;">
+                            <span class="hero-pill-badge" style="font-size: 0.75rem;">🪙 Katora Friend</span>
+                            <span class="hero-pill-badge" style="font-size: 0.75rem;">💛 Supporter</span>
+                            <span class="hero-pill-badge" style="font-size: 0.75rem;">😇 Maha-Daani</span>
+                            <span class="hero-pill-badge" style="font-size: 0.75rem;">👑 King</span>
+                        </div>
+                        <a href="achievements.html" class="btn btn-glass btn-sm" style="font-weight: 700;">
+                            <span>🏆 See All Badges &rarr;</span>
+                        </a>
+                    </div>
+
+                    <!-- Leaderboard Preview -->
+                    <div class="card card-glow" style="padding: 2.25rem; background: var(--bg-surface); border: 1.5px solid var(--border-subtle); border-radius: 24px;">
+                        <span class="badge" style="background: rgba(108, 92, 231, 0.15); color: var(--primary-light); margin-bottom: 0.75rem;">👑 Hall of Fame</span>
+                        <h3 style="font-size: 1.3rem; margin-bottom: 0.5rem;">Top Donors Leaderboard</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.6; margin-bottom: 1.25rem;">
+                            Kaun hai platform ka sabse bada mahadaani? Live ranks, weekly trophies, aur flex karne ke badges dekhein.
+                        </p>
+                        <div style="display: flex; gap: 0.75rem; align-items: center; margin-bottom: 1.5rem; font-size: 0.9rem; font-weight: 700;">
+                            <span>🥇 #1 Samir Rao</span> • <span>🥈 #2 Aman V.</span> • <span>🥉 #3 Vikas S.</span>
+                        </div>
+                        <a href="leaderboard.html" class="btn btn-glass btn-sm" style="font-weight: 700;">
+                            <span>👑 View Leaderboard &rarr;</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 14. FUNNY QUOTE BANNER -->
+        <section class="container">
+            <div class="social-quote-box">
+                <div class="quote-giant-mark">“</div>
+                <h2 style="font-size: clamp(1.6rem, 3.8vw, 2.5rem); font-weight: 800; line-height: 1.35; margin-bottom: 1rem; color: var(--text-primary);">
+                    Digital duniya hai bhai... <br><span class="gradient-text">katora bhi digital hona chahiye!</span> 😂
+                </h2>
+                <p style="color: var(--gold-light); font-family: var(--font-mono); font-size: 0.95rem; font-weight: 700; margin: 0;">
+                    — Ancient 2:00 AM Tapri Proverb
+                </p>
+            </div>
+        </section>
+
+        <!-- 15. FAQ PREVIEW -->
+        <section class="section" style="padding: 3rem 0 4.5rem;">
+            <div class="container" style="max-width: 800px;">
+                <div style="text-align: center; margin-bottom: 2.5rem;">
+                    <div class="hero-badge-pill" style="margin-bottom: 0.75rem;">
+                        <span>❓ Sawaal-Jawaab</span>
+                    </div>
+                    <h2 style="font-size: clamp(1.6rem, 3vw, 2.2rem);">Aksar Pooche Jaane Wale Sawaal</h2>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem;">
+                    <div class="card" style="padding: 1.25rem 1.5rem; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 16px;">
+                        <h4 style="font-size: 1.05rem; margin-bottom: 0.35rem; color: var(--gold-light);">Q: Digital Katora kya hai?</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; margin: 0;">Digital Katora ek satirical micro-tipping community hai jahan relatable funny reasons ke liye virtual katora banaya jata hai.</p>
+                    </div>
+                    <div class="card" style="padding: 1.25rem 1.5rem; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 16px;">
+                        <h4 style="font-size: 1.05rem; margin-bottom: 0.35rem; color: var(--gold-light);">Q: Kya Digital Katora koi commission leta hai?</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; margin: 0;">Nahi! 0% platform fee. Paise direct creator ke UPI ID / QR par jaate hain.</p>
+                    </div>
+                    <div class="card" style="padding: 1.25rem 1.5rem; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 16px;">
+                        <h4 style="font-size: 1.05rem; margin-bottom: 0.35rem; color: var(--gold-light);">Q: Mera Katora live kab hoga?</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; margin: 0;">Submission ke baad admin review hota hai (avg. 2 mins), jiske baad aapka link live shareable ho jata hai.</p>
+                    </div>
+                </div>
+
+                <div style="text-align: center;">
+                    <a href="faq.html" class="btn btn-glass" style="font-weight: 700;">
+                        <span>📋 Saare FAQs Dekho &rarr;</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 16. FINAL EMOTIONAL / FUN CTA -->
+        <section class="section" style="background: linear-gradient(180deg, var(--bg-surface) 0%, rgba(108, 92, 231, 0.12) 100%); padding: 5rem 0; text-align: center; border-top: 1px solid var(--border-subtle);">
+            <div class="container" style="max-width: 750px;">
+                <div style="font-size: 3.5rem; margin-bottom: 1rem; animation: floatSlow 3s infinite ease-in-out;">🥣</div>
+                <h2 style="font-size: clamp(2rem, 4.5vw, 3rem); font-weight: 800; margin-bottom: 1rem;">
+                    Ab Tumhara Katora Bhi Hona Chahiye! 😂
+                </h2>
+                <p style="color: var(--text-secondary); font-size: 1.15rem; line-height: 1.7; margin-bottom: 2.25rem;">
+                    Apni photo lagao, funny kahani batao aur apna digital katora duniya ke saamne share karo!
+                </p>
+                <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+                    <a href="create-katora.html" class="btn btn-primary btn-magnetic" style="font-size: 1.1rem; padding: 1rem 2.5rem;">
+                        <span>🥣 Apna Katora Banao</span>
+                    </a>
+                    <a href="katoras.html" class="btn btn-secondary btn-magnetic" style="font-size: 1.1rem; padding: 1rem 2.5rem;">
+                        <span>💰 Kisi Ka Katora Bharo</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 17. UNIFIED FOOTER -->
+    <footer class="site-footer">
+        <div class="container footer-grid">
+            <div class="footer-col brand-col">
+                <a href="index.html" class="brand-logo" style="margin-bottom: 1rem; display: inline-flex;">
+                    <div class="logo-bowl-glow">
+                        <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 26px; height: 26px;">
+                            <path d="M4 14C4 22.8 10.2 30 18 30C25.8 30 32 22.8 32 14H4Z" fill="url(#brandBowlGradFooterAbout)" stroke="#FFD93D" stroke-width="1.8"/>
+                            <ellipse cx="18" cy="14" rx="14" ry="4" fill="#FFB800" stroke="#FFEAA7" stroke-width="1.2"/>
+                            <circle cx="18" cy="7.5" r="4" fill="#FFD93D" stroke="#E67E22" stroke-width="1"/>
+                            <text x="18" y="9.5" font-size="5" font-weight="bold" fill="#8B4513" text-anchor="middle" font-family="'JetBrains Mono', monospace">₹</text>
+                            <defs>
+                                <linearGradient id="brandBowlGradFooterAbout" x1="4" y1="14" x2="32" y2="30" gradientUnits="userSpaceOnUse">
+                                    <stop stop-color="#6C5CE7"/>
+                                    <stop offset="1" stop-color="#FFB800"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <span>Digital <span class="gradient-text">Katora</span></span>
+                </a>
+                <p class="footer-tagline">
+                    India's premier satirical micro-tipping community. Khule paise nahi hain? Digital Katora scan karo!
+                </p>
+                <div class="social-links-row">
+                    <a href="https://instagram.com" target="_blank" class="social-icon-circle" title="Instagram" aria-label="Instagram">
+                        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                    </a>
+                    <a href="https://twitter.com" target="_blank" class="social-icon-circle" title="Twitter / X" aria-label="Twitter">
+                        <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <ul class="footer-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="katoras.html">Explore Katoras</a></li>
+                    <li><a href="create-katora.html">Start a Katora</a></li>
+                    <li><a href="leaderboard.html">Top Donors</a></li>
+                    <li><a href="donation-animation.html">✨ Magic Demo</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Company & Fun</h4>
+                <ul class="footer-links">
+                    <li><a href="about.html">Our Story</a></li>
+                    <li><a href="faq.html">FAQs</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                    <li><a href="admin.html">Admin Panel</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Beggar Wisdom</h4>
+                <div class="card" style="padding: 1.25rem; background: var(--bg-surface); border: 1px solid var(--border-color);">
+                    <p style="font-style: italic; color: var(--gold); font-size: 0.9rem; margin-bottom: 0.5rem;">
+                        "Sharam chhoro, katora jodo! Dost se udhaar maangne se behtar hai public se maang lo."
+                    </p>
+                    <span style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);">— Ancient Tapri Proverb</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="container footer-bottom-flex">
+                <p>© 2025 Digital Katora. Made for fun. ❤️ 100% Satirical Platform.</p>
+                <div class="footer-legal-links">
+                    <a href="faq.html">Privacy & Terms</a>
+                    <a href="contact.html">Report Issue</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MOBILE STICKY BOTTOM NAV -->
+    <nav class="mobile-bottom-nav">
+        <a href="index.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">🏠</span>
+            <span>Home</span>
+        </a>
+        <a href="katoras.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">🥣</span>
+            <span>Katoras</span>
+        </a>
+        <a href="create-katora.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">➕</span>
+            <span>Create</span>
+        </a>
+        <a href="donation-animation.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">✨</span>
+            <span>Demo</span>
+        </a>
+        <a href="leaderboard.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">👑</span>
+            <span>Ranks</span>
+        </a>
+    </nav>
+
+    <!-- Scripts -->
+    <script src="data-store.js"></script>
+    <script src="script.js"></script>
+    <script>
+      function shakeAboutBowl() {
+        const bowl = document.getElementById('aboutHeroBowl');
+        if (!bowl) return;
+        bowl.style.animation = 'none';
+        bowl.offsetHeight;
+        bowl.style.animation = 'katoraShakeAnim 0.5s ease-in-out';
+        if (window.DK && window.DK.showToast) {
+          window.DK.showToast('🪙 TING! Sikka gira aur katora khanak gaya!');
+        }
+      }
+    </script>
+</body>
+</html>

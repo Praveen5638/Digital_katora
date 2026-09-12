@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="hi" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🥣 Create Your Katora — Digital Katora | 30s Instant Setup</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Design System Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+    
+    <meta name="description" content="Build your own Digital Katora in 30 seconds. Drop your story, set your goal, configure direct zero-fee UPI payouts, and preview live!">
+    <meta name="theme-color" content="#6C5CE7">
+</head>
+<body>
+    <!-- Ambient Background Blobs & Floating Coins -->
+    <div class="ambient-canvas">
+        <div class="mesh-blob blob-purple"></div>
+        <div class="mesh-blob blob-gold"></div>
+        <div class="mesh-blob blob-coral"></div>
+        <div class="floating-coin-bg" style="top: 15%; left: 5%;">✨</div>
+        <div class="floating-coin-bg" style="top: 55%; right: 7%; animation-delay: -3s;">🥣</div>
+        <div class="floating-coin-bg" style="bottom: 22%; left: 10%; animation-delay: -6s;">💰</div>
+    </div>
+
+    <!-- 1. STICKY NAVBAR -->
+    <nav class="navbar" id="siteNavbar">
+        <div class="container nav-wrap">
+            <!-- Brand Logo -->
+            <a href="index.html" class="brand-logo" aria-label="Digital Katora Home">
+                <div class="logo-bowl-glow">
+                    <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 26px; height: 26px;">
+                        <path d="M4 14C4 22.8 10.2 30 18 30C25.8 30 32 22.8 32 14H4Z" fill="url(#navBrandBowlGradCreate)" stroke="#FFD93D" stroke-width="1.8"/>
+                        <ellipse cx="18" cy="14" rx="14" ry="4" fill="#FFB800" stroke="#FFEAA7" stroke-width="1.2"/>
+                        <circle cx="18" cy="7.5" r="4" fill="#FFD93D" stroke="#E67E22" stroke-width="1"/>
+                        <text x="18" y="9.5" font-size="5" font-weight="bold" fill="#8B4513" text-anchor="middle" font-family="'JetBrains Mono', monospace">₹</text>
+                        <defs>
+                            <linearGradient id="navBrandBowlGradCreate" x1="4" y1="14" x2="32" y2="30" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#6C5CE7"/>
+                                <stop offset="1" stop-color="#FFB800"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <span>Digital <span class="gradient-text">Katora</span></span>
+            </a>
+
+            <!-- Center Menu -->
+            <div class="nav-center-menu">
+                <a href="index.html" class="nav-link-pill">Home</a>
+                <a href="katoras.html" class="nav-link-pill">Katoras</a>
+                <a href="leaderboard.html" class="nav-link-pill">Top Donors</a>
+                <a href="index.html#how-it-works" class="nav-link-pill">How It Works</a>
+            </div>
+
+            <!-- Right Actions -->
+            <div class="nav-right-actions">
+                <button id="theme-toggle-btn" class="theme-toggle-btn" title="Toggle Dark/Light Mode" aria-label="Toggle Theme">
+                    <span class="theme-icon">🌙</span>
+                </button>
+                <div class="magnetic-btn-wrap">
+                    <a href="create-katora.html" class="btn btn-primary-gradient btn-glow-pulse active" style="padding: 0.65rem 1.4rem; font-size: 0.9rem;">
+                        <span>🥣</span> Mera Katora Banao
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CREATION WORKSPACE CONTAINER -->
+    <main class="create-page-container" id="createKatoraFormWrap">
+        
+        <!-- 2. PAGE HERO -->
+        <section class="create-hero-compact" aria-label="Create Katora Header">
+            <div>
+                <span class="hero-pill-badge" style="margin-bottom: 0.4rem; font-size: 0.78rem;">⚡ 30-SECOND FAST SETUP</span>
+                <h1 class="create-hero-title">
+                    Apna Katora <span class="gradient-text">Banao 😂</span>
+                </h1>
+                <p class="create-hero-subtitle">
+                    शर्म छोड़ो! 30 सेकंड में अपना डिजिटल कटोरा ऑनलाइन रखो, कस्टमाइज करो और सीधा दोस्तों व इंटरनेट से UPI दान पाओ!
+                </p>
+            </div>
+            <div class="create-hero-katora-visual">🥣</div>
+        </section>
+
+        <!-- 3. CREATION PROGRESS INDICATOR -->
+        <div class="create-progress-stepper-wrap">
+            <div class="create-progress-stepper">
+                <div class="stepper-node active" id="stepNode_photo">
+                    <span>1.</span> Photo
+                </div>
+                <div class="stepper-node" id="stepNode_info">
+                    <span>2.</span> Info
+                </div>
+                <div class="stepper-node" id="stepNode_story">
+                    <span>3.</span> Story
+                </div>
+                <div class="stepper-node" id="stepNode_goal">
+                    <span>4.</span> Goal
+                </div>
+                <div class="stepper-node" id="stepNode_payment">
+                    <span>5.</span> Payment
+                </div>
+                <div class="stepper-node" id="stepNode_review">
+                    <span>6.</span> Review
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. MAIN WORKSPACE (2-Column Grid on Desktop) -->
+        <div class="create-workspace-grid">
+            
+            <!-- LEFT: FORM / CREATION CONTROLS -->
+            <form class="create-form-panel" id="katoraCreationForm" onsubmit="submitKatora(event)">
+                
+                <!-- 5. PHOTO UPLOAD SECTION -->
+                <section class="create-form-section" aria-label="Photo Upload">
+                    <div class="create-section-header">
+                        <span class="create-step-pill">STEP 01</span>
+                        <h2 class="create-section-title">📸 अपनी फोटो या 3D मैस्कॉट चुनें</h2>
+                    </div>
+                    
+                    <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0 0 1rem;">
+                        अपनी असली फोटो खींचें या नीचे दिए गए मजेदार 3D मैस्कॉट में से एक चुनें:
+                    </p>
+
+                    <!-- Drag & Drop Zone -->
+                    <div class="photo-upload-dropzone" id="photoDropzone">
+                        <input type="file" id="photoFileInput" accept="image/*" style="display: none;">
+                        
+                        <div id="photoUploadPlaceholder">
+                            <div style="font-size: 2.4rem; margin-bottom: 0.35rem;">📷</div>
+                            <div style="font-weight: 700; font-size: 1rem; color: var(--primary-light);">
+                                ड्रैग एंड ड्रॉप करें या डिवाइस से फोटो चुनें
+                            </div>
+                            <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.35rem;">
+                                JPG, PNG सपोर्टेड (चेहरा अपने आप सुरक्षित फ्रेम होगा)
+                            </div>
+                        </div>
+
+                        <div id="photoUploadPreviewWrap" style="display: none;">
+                            <div class="photo-preview-box">
+                                <img id="photoUploadPreviewImg" src="" alt="Upload Preview" class="photo-preview-img">
+                            </div>
+                            <div style="display: flex; gap: 0.6rem; justify-content: center;">
+                                <button type="button" class="btn btn-glass btn-sm" onclick="document.getElementById('photoFileInput').click()">
+                                    <span>🔄</span> फोटो बदलें
+                                </button>
+                                <button type="button" class="btn btn-glass btn-sm" onclick="removeUploadedPhoto(event)" style="color: var(--coral-light) !important;">
+                                    <span>🗑️</span> हटाएं
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Preset Mascots Row -->
+                    <div class="preset-mascots-row">
+                        <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700;">या मैस्कॉट चुनें:</span>
+                        <div class="preset-mascot-pill active" onclick="selectPresetMascot('mascot-beggar-3d.jpg', this)" title="Desi Beggar Mascot">
+                            <img src="mascot-beggar-3d.jpg" alt="Mascot Beggar">
+                        </div>
+                        <div class="preset-mascot-pill" onclick="selectPresetMascot('mascot-donor-3d.png', this)" title="Donor Swag Mascot">
+                            <img src="mascot-donor-3d.png" alt="Mascot Donor">
+                        </div>
+                        <div class="preset-mascot-pill" onclick="selectPresetMascot('punya-ka-ghada-3d.jpg', this)" title="Punya Ghada">
+                            <img src="punya-ka-ghada-3d.jpg" alt="Punya Ghada">
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 6. BASIC INFORMATION SECTION -->
+                <section class="create-form-section" aria-label="Basic Information">
+                    <div class="create-section-header">
+                        <span class="create-step-pill">STEP 02</span>
+                        <h2 class="create-section-title">👤 आपका नाम और कैटेगरी</h2>
+                    </div>
+
+                    <div class="create-input-group">
+                        <label class="create-input-label" for="createNameInput">
+                            <span>आपका नाम / उपनाम (Nickname) <span style="color: var(--coral-light);">*</span></span>
+                        </label>
+                        <input type="text" id="createNameInput" class="create-text-input" placeholder="जैसे: राहुल शर्मा / Chai Lover" required>
+                    </div>
+
+                    <div class="create-input-group" style="margin-bottom: 0;">
+                        <label class="create-input-label" for="createCategorySelect">
+                            <span>कटोरे की कैटेगरी (Category) <span style="color: var(--coral-light);">*</span></span>
+                        </label>
+                        <select id="createCategorySelect" class="create-text-input" style="cursor: pointer;">
+                            <option value="chai">☕ Chai & Food (चाय-नाश्ता और बिरयानी)</option>
+                            <option value="tech">💻 Tech & Coding (GPU, लैपटॉप और होस्टिंग)</option>
+                            <option value="hostel">🏕️ Hostel Life (WiFi बिल और कमरे का किराया)</option>
+                            <option value="meme">💔 Heartbreak & Drama (ब्रेकअप और इमोशनल सपोर्ट)</option>
+                            <option value="urgent">⚡ Urgent Punya (तुरंत इमरजेंसी राहत)</option>
+                        </select>
+                    </div>
+                </section>
+
+                <!-- 7. FUNNY STORY / REASON SECTION -->
+                <section class="create-form-section" aria-label="Reason and Story">
+                    <div class="create-section-header">
+                        <span class="create-step-pill">STEP 03</span>
+                        <h2 class="create-section-title">😂 पैसे क्यों चाहिए? (मजेदार दास्तान)</h2>
+                    </div>
+
+                    <div class="create-input-group">
+                        <label class="create-input-label" for="createReasonInput">
+                            <span>मुख्य कारण / हेडलाइन (Headline) <span style="color: var(--coral-light);">*</span></span>
+                            <span style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);" id="reasonCharCount">0 / 120</span>
+                        </label>
+                        <textarea id="createReasonInput" class="create-textarea-input" style="height: 75px;" placeholder="जैसे: Sharma ji ke tapri par udhaar ho gaya hai, dukan ke aage se nikal nahi pa raha!" maxlength="120" required></textarea>
+                    </div>
+
+                    <div class="create-input-group" style="margin-bottom: 0;">
+                        <label class="create-input-label" for="createStoryInput">
+                            <span>विस्तृत कहानी (Short Personal Story) <span style="color: var(--coral-light);">*</span></span>
+                            <span style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);" id="storyCharCount">0 / 350</span>
+                        </label>
+                        <textarea id="createStoryInput" class="create-textarea-input" placeholder="दोस्तों को बताएं कि आप कितने लाचार हैं और ये पैसे आपको कैसे बचाएंगे..." maxlength="350" required></textarea>
+                    </div>
+
+                    <!-- Reactive Character Mood Helper -->
+                    <div class="character-mood-box">
+                        <span class="character-mood-avatar" id="prevMoodAvatar">🥺</span>
+                        <div>
+                            <div style="font-size: 0.88rem; font-weight: 700; color: var(--text-primary);" id="prevMoodText">
+                                Nervous & Broke (भूखा और परेशान)
+                            </div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted);">
+                                जैसे-जैसे आप फॉर्म भरेंगे, आपका मैस्कॉट खुश होता जाएगा!
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 8. DONATION GOAL SECTION -->
+                <section class="create-form-section" aria-label="Donation Goal">
+                    <div class="create-section-header">
+                        <span class="create-step-pill">STEP 04</span>
+                        <h2 class="create-section-title">🎯 आपका डोनेशन लक्ष्य (Target Amount)</h2>
+                    </div>
+
+                    <div class="create-input-group" style="margin-bottom: 0;">
+                        <label class="create-input-label" for="createGoalInput">
+                            <span>लक्ष्य राशि (₹ INR) <span style="color: var(--coral-light);">*</span></span>
+                        </label>
+                        <div style="position: relative;">
+                            <span style="position: absolute; left: 1.15rem; top: 50%; transform: translateY(-50%); font-family: var(--font-mono); font-size: 1.3rem; font-weight: 800; color: var(--primary-light);">₹</span>
+                            <input type="number" id="createGoalInput" class="create-text-input" value="2000" min="10" placeholder="2000" style="padding-left: 2.6rem; font-family: var(--font-mono); font-size: 1.25rem; font-weight: 800;" required>
+                        </div>
+
+                        <!-- Goal Quick Preset Pills -->
+                        <div class="goal-preset-pills">
+                            <span style="font-size: 0.78rem; color: var(--text-muted); align-self: center;">त्वरित चयन:</span>
+                            <button type="button" class="goal-preset-btn" onclick="setGoalPreset(500)">₹500 (चाय नाश्ता)</button>
+                            <button type="button" class="goal-preset-btn" onclick="setGoalPreset(1500)">₹1,500 (WiFi बिल)</button>
+                            <button type="button" class="goal-preset-btn" onclick="setGoalPreset(3500)">₹3,500 (उधार मुक्ति)</button>
+                            <button type="button" class="goal-preset-btn" onclick="setGoalPreset(10000)">₹10,000 (बड़ा सपना)</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 9. PAYMENT SETUP SECTION -->
+                <section class="create-form-section" aria-label="Payment Setup">
+                    <div class="create-section-header">
+                        <span class="create-step-pill">STEP 05</span>
+                        <h2 class="create-section-title">💳 अपना पेमेंट कटोरा सेट करें</h2>
+                    </div>
+
+                    <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0 0 1rem;">
+                        दान का 100% पैसा सीधा आपके खाते में आएगा (0% प्लेटफॉर्म फीस):
+                    </p>
+
+                    <!-- 3 Payment Method Tabs -->
+                    <div class="payment-tabs-bar">
+                        <button type="button" class="payment-tab-btn active" id="tabBtn_upi" onclick="switchPaymentTab('upi')">
+                            <span style="font-size: 1.4rem;">🆔</span>
+                            <span>Enter UPI ID</span>
+                        </button>
+                        <button type="button" class="payment-tab-btn" id="tabBtn_upload" onclick="switchPaymentTab('upload')">
+                            <span style="font-size: 1.4rem;">📲</span>
+                            <span>Upload QR</span>
+                        </button>
+                        <button type="button" class="payment-tab-btn" id="tabBtn_scan" onclick="switchPaymentTab('scan')">
+                            <span style="font-size: 1.4rem;">📷</span>
+                            <span>Scan QR</span>
+                        </button>
+                    </div>
+
+                    <!-- OPTION C: UPI ID VIEW -->
+                    <div id="payView_upi">
+                        <div class="create-input-group">
+                            <label class="create-input-label" for="createUpiInput">
+                                <span>आपकी UPI ID <span style="color: var(--coral-light);">*</span></span>
+                            </label>
+                            <input type="text" id="createUpiInput" class="create-text-input" placeholder="उदा: yourname@okhdfcbank / yourname@paytm" required>
+                            <div id="upiValidationIndicator" style="margin-top: 0.4rem; font-size: 0.85rem;"></div>
+                        </div>
+                    </div>
+
+                    <!-- OPTION B: UPLOAD QR VIEW -->
+                    <div id="payView_upload" style="display: none;">
+                        <div class="photo-upload-dropzone" onclick="document.getElementById('qrImageFileInput').click()">
+                            <input type="file" id="qrImageFileInput" accept="image/*" style="display: none;" onchange="handleQrImageUpload(event)">
+                            <div id="qrUploadPlaceholder">
+                                <div style="font-size: 2.2rem; margin-bottom: 0.35rem;">📲</div>
+                                <div style="font-weight: 700; color: var(--primary-light);">GPay / PhonePe / Paytm QR इमेज अपलोड करें</div>
+                                <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.25rem;">ऑटोमैटिक QR जनरेट होगा और डोनर्स को दिखेगा</div>
+                            </div>
+                            <div id="qrUploadPreviewWrap" style="display: none; align-items: center; justify-content: center; gap: 1rem;">
+                                <img id="qrUploadPreviewImg" src="" alt="QR Thumbnail" style="width: 80px; height: 80px; object-fit: contain; border-radius: 8px; border: 2px solid var(--green);">
+                                <div style="text-align: left;">
+                                    <div style="color: var(--green-light); font-weight: 700;">✓ QR सफलतापूर्वक लोड हुआ!</div>
+                                    <div style="font-size: 0.75rem; color: var(--text-muted);">बदलने के लिए क्लिक करें</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- OPTION A: SCAN QR VIEW -->
+                    <div id="payView_scan" style="display: none;">
+                        <div class="camera-scanner-view">
+                            <video id="qrScannerVideo" style="width: 100%; height: 100%; object-fit: cover;"></video>
+                            <div class="scanner-laser-line"></div>
+                            <div style="position: absolute; bottom: 12px; font-size: 0.75rem; color: #FFF; background: rgba(0,0,0,0.6); padding: 0.2rem 0.6rem; border-radius: 4px;" id="qrScannerStatus">
+                                📷 कैमरा चालू करने के लिए बटन दबाएं
+                            </div>
+                        </div>
+                        <div style="margin-top: 0.75rem; display: flex; gap: 0.6rem;">
+                            <button type="button" class="btn btn-primary-gradient btn-sm" onclick="startQrCameraScanner()" style="flex: 1;">
+                                <span>📷</span> कैमरा स्कैनर चालू करें
+                            </button>
+                            <button type="button" class="btn btn-glass btn-sm" onclick="stopQrCameraScanner()">
+                                बंद करें
+                            </button>
+                        </div>
+                        <div id="qrDetectedResultBox" style="display: none; margin-top: 0.75rem; background: rgba(0, 184, 148, 0.15); border: 1px solid var(--green); border-radius: 12px; padding: 0.75rem; text-align: center;">
+                            <div style="color: var(--green-light); font-weight: 700; font-size: 0.88rem;">✓ डिटेक्टेड UPI ID: <span id="qrDetectedUpiDisplay" style="font-family: var(--font-mono);"></span></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 14. REVIEW BEFORE SUBMISSION -->
+                <section class="create-form-section" aria-label="Review Summary">
+                    <div class="create-section-header">
+                        <span class="create-step-pill">STEP 06</span>
+                        <h2 class="create-section-title">📋 अंतिम समीक्षा (Review Details)</h2>
+                    </div>
+
+                    <div class="review-summary-grid">
+                        <div class="review-field-item">
+                            <span class="review-field-label">CREATOR NAME:</span>
+                            <span class="review-field-val" id="revSumName">— (नाम डालें)</span>
+                        </div>
+                        <div class="review-field-item">
+                            <span class="review-field-label">CATEGORY:</span>
+                            <span class="review-field-val" id="revSumCat">Chai & Food</span>
+                        </div>
+                        <div class="review-field-item" style="grid-column: 1 / -1;">
+                            <span class="review-field-label">REASON HEADLINE:</span>
+                            <span class="review-field-val" id="revSumReason">— (कारण डालें)</span>
+                        </div>
+                        <div class="review-field-item">
+                            <span class="review-field-label">TARGET GOAL:</span>
+                            <span class="review-field-val" style="color: var(--gold-light); font-family: var(--font-mono);" id="revSumGoal">₹2,000</span>
+                        </div>
+                        <div class="review-field-item">
+                            <span class="review-field-label">PAYOUT UPI:</span>
+                            <span class="review-field-val" style="color: var(--green-light); font-family: var(--font-mono);" id="revSumPayment">— (पेमेंट सेट करें)</span>
+                        </div>
+                    </div>
+
+                    <!-- 15. SUBMISSION CTA BUTTON -->
+                    <button type="submit" id="submitKatoraBtn" class="btn btn-primary-gradient btn-lg btn-glow-pulse" style="width: 100%; font-size: 1.2rem; padding: 1.1rem;">
+                        <span>🥣</span> Katora Jama Karo &rarr;
+                    </button>
+                    <div style="font-size: 0.78rem; color: var(--text-muted); text-align: center; margin-top: 0.75rem;">
+                        🔒 100% सेफ &bull; तुरंत रिव्यू &bull; 0% प्लेटफॉर्म फीस
+                    </div>
+                </section>
+            </form>
+
+            <!-- RIGHT: STICKY LIVE KATORA PREVIEW (13. LIVE KATORA PREVIEW) -->
+            <aside class="create-preview-sticky-wrap" aria-label="Live Katora Preview">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;">
+                    <span class="hero-pill-badge" style="font-size: 0.75rem;">👁️ LIVE PUBLIC PREVIEW</span>
+                    <span style="font-size: 0.75rem; color: var(--green-light); font-family: var(--font-mono); font-weight: 700;">REALTIME SYNC</span>
+                </div>
+
+                <!-- High-fidelity Live Preview Card -->
+                <div class="live-preview-card">
+                    <div class="live-preview-media-box">
+                        <img id="prevMediaImg" src="mascot-beggar-3d.jpg" alt="Mascot Preview" class="live-preview-img">
+                        <div style="position: absolute; bottom: 12px; right: 12px; background: rgba(18, 18, 30, 0.85); backdrop-filter: blur(8px); border: 1px solid var(--gold); border-radius: 999px; padding: 0.35rem 0.75rem; font-size: 0.78rem; font-weight: 700; color: var(--gold-light);">
+                            🥣 Live Katora
+                        </div>
+                    </div>
+
+                    <div class="live-preview-body">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <h3 id="prevCreatorName" style="font-size: 1.25rem; font-weight: 800; margin: 0;">आपका शुभ नाम (Rahul)</h3>
+                            <span id="prevCategoryTag" style="font-size: 0.72rem; font-weight: 700; color: var(--primary-light); background: rgba(108, 92, 231, 0.15); padding: 0.2rem 0.6rem; border-radius: var(--radius-pill);">🏷️ Chai & Food</span>
+                        </div>
+
+                        <p id="prevReasonText" style="font-size: 0.92rem; color: var(--text-primary); font-style: italic; line-height: 1.4; margin: 0 0 0.5rem;">
+                            "Sharma ji ke tapri par udhaar ho gaya hai..."
+                        </p>
+
+                        <p id="prevStoryText" style="font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5; margin: 0 0 1rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                            Doston, thoda daan karke ek student ki chai bachao! 🙏
+                        </p>
+
+                        <!-- Live Progress Bar -->
+                        <div class="garib-progress-wrap" style="margin-bottom: 1rem;">
+                            <div class="garib-progress-labels">
+                                <span class="garib-raised-val" id="prevRaisedVal">₹0</span>
+                                <span class="garib-goal-val" id="prevGoalVal">/ ₹2,000 लक्ष्य</span>
+                            </div>
+                            <div class="garib-meter-track" style="height: 8px;">
+                                <div class="garib-meter-fill" id="prevProgressFill" style="width: 5%;"></div>
+                            </div>
+                            <div class="garib-status-pill" style="margin-top: 0.35rem;">
+                                <span>👥 0 Donors</span>
+                                <span>⚡ Just Launched</span>
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn btn-primary-gradient btn-sm" style="width: 100%; font-size: 0.95rem;" disabled>
+                            <span>🥣</span> DALO ₹1 😂 (Preview CTA)
+                        </button>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <!-- 16. SUBMISSION SUCCESS CELEBRATION & TIMELINE MODAL -->
+    <div class="submission-success-modal" id="submissionSuccessModal">
+        <div class="submission-success-card">
+            <div style="font-size: 3.5rem; margin-bottom: 0.5rem; animation: floatMascot 2.5s ease-in-out infinite;">🎉 🥣 🥳</div>
+            <h3 style="font-size: 1.8rem; margin: 0 0 0.5rem; color: var(--gold-light);">
+                बधाई हो! कटोरा जमा हो गया!
+            </h3>
+            <p style="color: var(--text-secondary); font-size: 0.95rem; margin: 0 0 1.5rem;">
+                <strong id="succKatoraName" style="color: var(--text-primary);">आपका</strong> कटोरा सफलतापूर्वक सिस्टम में दर्ज हो चुका है!
+            </p>
+
+            <!-- 4-Step Approval Timeline -->
+            <div class="approval-timeline-track">
+                <div style="text-align: center; z-index: 2;">
+                    <div class="timeline-step-node completed">✓</div>
+                    <span style="font-size: 0.72rem; font-weight: 700; color: var(--green-light); display: block; margin-top: 0.35rem;">जमा हुआ</span>
+                </div>
+                <div style="text-align: center; z-index: 2;">
+                    <div class="timeline-step-node active">⏳</div>
+                    <span style="font-size: 0.72rem; font-weight: 700; color: var(--gold-light); display: block; margin-top: 0.35rem;">समीक्षा (2 min)</span>
+                </div>
+                <div style="text-align: center; z-index: 2;">
+                    <div class="timeline-step-node">✨</div>
+                    <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-top: 0.35rem;">स्वीकृत</span>
+                </div>
+                <div style="text-align: center; z-index: 2;">
+                    <div class="timeline-step-node">🚀</div>
+                    <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-top: 0.35rem;">लाइव!</span>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 0.75rem; justify-content: center; margin-top: 1.5rem;">
+                <a id="succViewKatoraLink" href="katoras.html" class="btn btn-primary-gradient" style="flex: 1; justify-content: center;">
+                    <span>🥣</span> अपना कटोरा देखें &rarr;
+                </a>
+                <a href="katoras.html" class="btn btn-glass" style="flex: 1; justify-content: center;">
+                    Explore Katoras
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 17. UNIFIED FOOTER -->
+    <footer class="footer">
+        <div class="container footer-grid">
+            <div class="footer-brand">
+                <a href="index.html" class="brand-logo" style="margin-bottom: 1rem; display: inline-flex;">
+                    <div class="logo-bowl-glow">
+                        <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 24px; height: 24px;">
+                            <path d="M4 14C4 22.8 10.2 30 18 30C25.8 30 32 22.8 32 14H4Z" fill="url(#brandBowlGradFooterCreate)" stroke="#FFD93D" stroke-width="1.8"/>
+                            <ellipse cx="18" cy="14" rx="14" ry="4" fill="#FFB800" stroke="#FFEAA7" stroke-width="1.2"/>
+                            <circle cx="18" cy="7.5" r="4" fill="#FFD93D" stroke="#E67E22" stroke-width="1"/>
+                            <text x="18" y="9.5" font-size="5" font-weight="bold" fill="#8B4513" text-anchor="middle" font-family="'JetBrains Mono', monospace">₹</text>
+                            <defs>
+                                <linearGradient id="brandBowlGradFooterCreate" x1="4" y1="14" x2="32" y2="30" gradientUnits="userSpaceOnUse">
+                                    <stop stop-color="#6C5CE7"/>
+                                    <stop offset="1" stop-color="#FFB800"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <span>Digital <span class="gradient-text">Katora</span></span>
+                </a>
+                <p class="footer-tagline">
+                    India's premier satirical micro-tipping community. Khule paise nahi hain? Digital Katora scan karo!
+                </p>
+                <div class="social-links-row">
+                    <a href="https://instagram.com" target="_blank" class="social-icon-circle" title="Instagram" aria-label="Instagram">
+                        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                    </a>
+                    <a href="https://twitter.com" target="_blank" class="social-icon-circle" title="Twitter / X" aria-label="Twitter">
+                        <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    </a>
+                    <a href="https://github.com" target="_blank" class="social-icon-circle" title="GitHub" aria-label="GitHub">
+                        <svg viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4>Navigation</h4>
+                <ul class="footer-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="katoras.html">Explore Katoras</a></li>
+                    <li><a href="leaderboard.html">Top Donors</a></li>
+                    <li><a href="index.html#how-it-works">How It Works</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Quick Info</h4>
+                <ul class="footer-links">
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="faq.html">FAQ</a></li>
+                    <li><a href="contact.html">Contact Tapri HQ</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Tapri Proverb</h4>
+                <div class="card" style="padding: 1.25rem; background: var(--bg-surface); border: 1px solid var(--border-subtle);">
+                    <p style="font-style: italic; color: var(--gold); font-size: 0.9rem; margin-bottom: 0.5rem;">
+                        "Sharam chhoro, katora jodo! Dost se udhaar maangne se behtar hai public se maang lo."
+                    </p>
+                    <span style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);">— Ancient Tapri Wisdom</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="container footer-bottom-flex">
+                <p>© 2025 Digital Katora. Crafted with 😂, ☕ & 🥣 in Bharat. 100% Satirical Platform.</p>
+                <div class="footer-legal-links">
+                    <a href="faq.html">Privacy Policy</a>
+                    <a href="faq.html">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MOBILE BOTTOM NAVIGATION BAR -->
+    <nav class="mobile-bottom-nav">
+        <a href="index.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">
+                <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1h-5v-6h-6v6H4a1 1 0 01-1-1V9.5z"/></svg>
+            </span>
+            <span>Home</span>
+        </a>
+        <a href="katoras.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">
+                <svg viewBox="0 0 24 24"><path d="M3 10c0 5.5 4 10 9 10s9-4.5 9-10H3z"/><path d="M3 10c0-1.5 4-2 9-2s9 .5 9 2"/></svg>
+            </span>
+            <span>Katoras</span>
+        </a>
+        <a href="create-katora.html" class="bottom-nav-item active">
+            <span class="bottom-nav-icon">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke="var(--primary-light)" stroke-width="2"/><path d="M12 8v8M8 12h8" stroke="#FFF" stroke-width="2.5" stroke-linecap="round"/></svg>
+            </span>
+            <span>Create</span>
+        </a>
+        <a href="leaderboard.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">
+                <svg viewBox="0 0 24 24"><path d="M6 9V4h12v5c0 3.3-2.7 6-6 6s-6-2.7-6-6z"/><path d="M6 6H3c0 2.2 1.8 4 4 4"/><path d="M18 6h3c0 2.2-1.8 4-4 4"/><path d="M12 15v4m-4 2h8"/></svg>
+            </span>
+            <span>Ranks</span>
+        </a>
+        <a href="profile.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M6 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg>
+            </span>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <script src="data-store.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

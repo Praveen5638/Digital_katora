@@ -1,0 +1,1988 @@
+<!DOCTYPE html>
+<html lang="hi" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mera Profile & Katora Dashboard — Digital Katora 🥣👑</title>
+    <meta name="description" content="Aapka official Digital Katora personal identity, donor level, badges, mere katoras, aur donation history dashboard.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+    <meta name="theme-color" content="#6C5CE7">
+
+    <style>
+      /* ==== USER PROFILE SPECIFIC STYLES ==== */
+      .profile-page-hero {
+        position: relative;
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+      }
+
+      .profile-hero-card {
+        background: var(--bg-surface);
+        border: 1.5px solid var(--border-glow);
+        border-radius: 28px;
+        padding: 2.25rem;
+        position: relative;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        overflow: hidden;
+      }
+
+      .profile-hero-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: var(--gold-gradient);
+      }
+
+      .profile-hero-grid {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        gap: 2rem;
+        align-items: center;
+      }
+
+      @media (max-width: 992px) {
+        .profile-hero-grid {
+          grid-template-columns: 1fr;
+          text-align: center;
+        }
+        .profile-avatar-col {
+          display: flex;
+          justify-content: center;
+        }
+        .profile-actions-col {
+          display: flex;
+          justify-content: center;
+          flex-wrap: wrap;
+        }
+      }
+
+      .profile-avatar-frame {
+        position: relative;
+        width: 110px;
+        height: 110px;
+        border-radius: 50%;
+        padding: 4px;
+        background: linear-gradient(135deg, #FFD93D 0%, #6C5CE7 50%, #00B894 100%);
+        box-shadow: 0 0 30px rgba(108, 92, 231, 0.4);
+      }
+
+      .profile-avatar-img-box {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: var(--bg-elevated);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3.2rem;
+        overflow: hidden;
+        border: 2px solid var(--bg-surface);
+      }
+
+      .profile-avatar-img-box img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .avatar-edit-chip {
+        position: absolute;
+        bottom: 2px;
+        right: 2px;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: var(--primary);
+        color: #FFF;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9rem;
+        cursor: pointer;
+        border: 2px solid var(--bg-surface);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        transition: transform 0.2s var(--ease-squash);
+      }
+
+      .avatar-edit-chip:hover {
+        transform: scale(1.15) rotate(10deg);
+        background: var(--gold);
+        color: #0F0E17;
+      }
+
+      .profile-user-name {
+        font-size: clamp(1.6rem, 3vw, 2.2rem);
+        font-weight: 800;
+        color: var(--text-primary);
+        margin: 0 0 0.35rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+
+      .profile-user-handle {
+        font-family: var(--font-mono);
+        font-size: 0.85rem;
+        color: var(--primary-light);
+        margin-bottom: 0.6rem;
+      }
+
+      .profile-bio-text {
+        font-size: 0.95rem;
+        color: var(--text-secondary);
+        max-width: 600px;
+        line-height: 1.45;
+        margin: 0;
+        font-style: italic;
+      }
+
+      .profile-level-badge-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.3rem 0.85rem;
+        background: rgba(255, 184, 0, 0.15);
+        color: var(--gold-light);
+        border: 1.5px solid rgba(255, 184, 0, 0.4);
+        border-radius: var(--radius-pill);
+        font-size: 0.82rem;
+        font-weight: 700;
+        font-family: var(--font-mono);
+      }
+
+      /* 4-Stat Cards Row */
+      .profile-stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.25rem;
+        margin-top: 1.5rem;
+      }
+
+      @media (max-width: 992px) {
+        .profile-stats-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media (max-width: 550px) {
+        .profile-stats-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .profile-stat-box {
+        background: var(--bg-surface);
+        border: 1px solid var(--border-subtle);
+        border-radius: 20px;
+        padding: 1.25rem 1.4rem;
+        display: flex;
+        align-items: center;
+        gap: 1.1rem;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s var(--ease-squash);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .profile-stat-box:hover {
+        transform: translateY(-4px);
+        border-color: var(--border-glow);
+        box-shadow: 0 14px 32px rgba(0, 0, 0, 0.35);
+      }
+
+      .profile-stat-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.6rem;
+        flex-shrink: 0;
+      }
+
+      .stat-icon-gold { background: rgba(255, 184, 0, 0.15); color: var(--gold); }
+      .stat-icon-purple { background: rgba(108, 92, 231, 0.15); color: var(--primary-light); }
+      .stat-icon-green { background: rgba(0, 184, 148, 0.15); color: var(--green-light); }
+      .stat-icon-coral { background: rgba(255, 107, 107, 0.15); color: #FF6B6B; }
+
+      .profile-stat-val {
+        font-size: 1.55rem;
+        font-weight: 800;
+        font-family: var(--font-mono);
+        color: var(--text-primary);
+        line-height: 1.2;
+      }
+
+      .profile-stat-title {
+        font-size: 0.78rem;
+        color: var(--text-muted);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      /* Donor Level Card */
+      .donor-level-card {
+        background: linear-gradient(135deg, rgba(108, 92, 231, 0.12) 0%, rgba(255, 184, 0, 0.1) 100%), var(--bg-surface);
+        border: 1.5px solid rgba(255, 184, 0, 0.3);
+        border-radius: 24px;
+        padding: 1.75rem 2rem;
+        margin-top: 1.5rem;
+        position: relative;
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+      }
+
+      .level-header-flex {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+      }
+
+      .level-progress-track {
+        width: 100%;
+        height: 12px;
+        background: var(--bg-elevated);
+        border-radius: 999px;
+        overflow: hidden;
+        position: relative;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .level-progress-fill {
+        height: 100%;
+        background: var(--gold-gradient);
+        border-radius: 999px;
+        transition: width 1s var(--ease-squash);
+        position: relative;
+      }
+
+      .level-nodes-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 1.25rem;
+        position: relative;
+        gap: 0.5rem;
+        overflow-x: auto;
+        padding-bottom: 0.5rem;
+      }
+
+      .level-node-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 0.35rem;
+        min-width: 65px;
+      }
+
+      .level-node-circle {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: var(--bg-elevated);
+        border: 2px solid var(--border-subtle);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+      }
+
+      .level-node-item.unlocked .level-node-circle {
+        background: var(--gold-gradient);
+        border-color: #FFF;
+        color: #0F0E17;
+        box-shadow: 0 0 16px rgba(255, 184, 0, 0.5);
+      }
+
+      .level-node-item.current .level-node-circle {
+        border-color: var(--primary-light);
+        animation: pulseRing 1.8s infinite;
+      }
+
+      /* Profile Tabs Navigation */
+      .profile-tabs-wrap {
+        display: flex;
+        gap: 0.6rem;
+        border-bottom: 2px solid var(--border-subtle);
+        padding-bottom: 0.25rem;
+        margin: 2.5rem 0 2rem;
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+      .profile-tabs-wrap::-webkit-scrollbar { display: none; }
+
+      .profile-tab-btn {
+        padding: 0.75rem 1.35rem;
+        font-size: 0.92rem;
+        font-weight: 700;
+        border-radius: 12px 12px 0 0;
+        background: transparent;
+        border: none;
+        color: var(--text-secondary);
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+        position: relative;
+      }
+
+      .profile-tab-btn:hover {
+        color: var(--text-primary);
+        background: rgba(255, 255, 255, 0.04);
+      }
+
+      .profile-tab-btn.active {
+        color: var(--gold-light);
+        background: rgba(255, 184, 0, 0.08);
+      }
+
+      .profile-tab-btn.active::after {
+        content: '';
+        position: absolute;
+        bottom: -0.25rem;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: var(--gold-gradient);
+        border-radius: 3px 3px 0 0;
+      }
+
+      .tab-content-panel {
+        display: none;
+        animation: fadeInTab 0.3s ease;
+      }
+
+      .tab-content-panel.active {
+        display: block;
+      }
+
+      @keyframes fadeInTab {
+        from { opacity: 0; transform: translateY(6px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      /* Activity Timeline */
+      .activity-timeline-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        position: relative;
+        padding-left: 2rem;
+      }
+
+      .activity-timeline-list::before {
+        content: '';
+        position: absolute;
+        top: 8px;
+        bottom: 8px;
+        left: 11px;
+        width: 2px;
+        background: var(--border-subtle);
+      }
+
+      .activity-item {
+        position: relative;
+        background: var(--bg-surface);
+        border: 1px solid var(--border-subtle);
+        border-radius: 16px;
+        padding: 1rem 1.25rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .activity-item::before {
+        content: '';
+        position: absolute;
+        left: -2.35rem;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: var(--gold);
+        border: 2px solid var(--bg-surface);
+        box-shadow: 0 0 8px var(--gold);
+      }
+
+      /* Donation History Table/Cards */
+      .donation-filter-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+      }
+
+      .donation-pill-filters {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+
+      .history-card-item {
+        background: var(--bg-surface);
+        border: 1px solid var(--border-subtle);
+        border-radius: 18px;
+        padding: 1.25rem 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1.25rem;
+        margin-bottom: 1rem;
+        transition: all 0.25s ease;
+        flex-wrap: wrap;
+      }
+
+      .history-card-item:hover {
+        border-color: var(--border-glow);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+      }
+
+      /* Settings Group */
+      .settings-group-card {
+        background: var(--bg-surface);
+        border: 1px solid var(--border-subtle);
+        border-radius: 20px;
+        padding: 1.75rem 2rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .setting-toggle-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 0;
+        border-bottom: 1px solid var(--border-subtle);
+        gap: 1.5rem;
+      }
+
+      .setting-toggle-row:last-child {
+        border-bottom: none;
+      }
+
+      /* Modal Popups */
+      .profile-modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.82);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        z-index: 99999;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 1.5rem;
+        overflow-y: auto;
+      }
+
+      .profile-modal-overlay.active {
+        display: flex;
+      }
+
+      .profile-modal-box {
+        background: var(--bg-surface);
+        border: 2px solid var(--border-glow);
+        border-radius: 28px;
+        padding: 2.25rem;
+        max-width: 540px;
+        width: 100%;
+        position: relative;
+        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+        animation: modalPopIn 0.35s var(--ease-squash);
+      }
+
+      @keyframes modalPopIn {
+        from { transform: scale(0.92) translateY(20px); opacity: 0; }
+        to { transform: scale(1) translateY(0); opacity: 1; }
+      }
+
+      .viral-receipt-preview {
+        background: linear-gradient(135deg, #181622 0%, #252238 100%);
+        border: 2px solid var(--gold);
+        border-radius: 22px;
+        padding: 2rem;
+        text-align: center;
+        position: relative;
+        box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+        margin: 1.5rem 0;
+      }
+
+      [data-theme="light"] .viral-receipt-preview {
+        background: #FFFBEB;
+        border-color: #F59E0B;
+      }
+    </style>
+</head>
+<body>
+    <!-- Ambient Canvas Background -->
+    <div class="ambient-canvas">
+        <div class="mesh-blob blob-purple"></div>
+        <div class="mesh-blob blob-gold"></div>
+        <div class="mesh-blob blob-coral"></div>
+        <div class="floating-coin-bg" style="top: 12%; left: 6%;">🪙</div>
+        <div class="floating-coin-bg" style="top: 48%; right: 8%; animation-delay: -3s;">👑</div>
+        <div class="floating-coin-bg" style="bottom: 15%; left: 12%; animation-delay: -5s;">✨</div>
+    </div>
+
+    <!-- 1. UNIFIED NAVBAR -->
+    <nav class="navbar" role="navigation" aria-label="Main Navigation">
+        <div class="container nav-wrap">
+            <a href="index.html" class="brand-logo" aria-label="Digital Katora Home">
+                <div class="logo-bowl-glow">
+                    <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 26px; height: 26px;">
+                        <path d="M4 14C4 22.8 10.2 30 18 30C25.8 30 32 22.8 32 14H4Z" fill="url(#brandBowlGradProf)" stroke="#FFD93D" stroke-width="1.8"/>
+                        <ellipse cx="18" cy="14" rx="14" ry="4" fill="#FFB800" stroke="#FFEAA7" stroke-width="1.2"/>
+                        <circle cx="18" cy="7.5" r="4" fill="#FFD93D" stroke="#E67E22" stroke-width="1"/>
+                        <text x="18" y="9.5" font-size="5" font-weight="bold" fill="#8B4513" text-anchor="middle" font-family="'JetBrains Mono', monospace">₹</text>
+                        <defs>
+                            <linearGradient id="brandBowlGradProf" x1="4" y1="14" x2="32" y2="30" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#6C5CE7"/>
+                                <stop offset="1" stop-color="#FFB800"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <span>Digital <span class="gradient-text">Katora</span></span>
+            </a>
+
+            <!-- Center Pill Navigation -->
+            <div class="nav-center-menu">
+                <a href="katoras.html" class="nav-link-pill">🥣 Katoras</a>
+                <a href="leaderboard.html" class="nav-link-pill">👑 Top Donors</a>
+                <a href="about.html" class="nav-link-pill">💡 How It Works</a>
+                <a href="achievements.html" class="nav-link-pill">🏆 Badges</a>
+                <a href="donation-animation.html" class="nav-link-pill">✨ Magic Demo</a>
+            </div>
+
+            <!-- Right Actions -->
+            <div class="nav-actions">
+                <button class="theme-toggle-btn" id="themeToggleBtn" title="Toggle Dark/Light Mode" aria-label="Toggle Theme">
+                    <span class="theme-icon">🌙</span>
+                </button>
+                <a href="create-katora.html" class="btn btn-primary btn-magnetic nav-cta-btn">
+                    <span>🥣 Create Katora</span>
+                </a>
+                <!-- Logged in Avatar -->
+                <a href="profile.html" class="avatar-ring-garib" style="width: 38px; height: 38px;" title="Aapka Profile">
+                    <div class="avatar-inner-garib" id="navAvatarInner" style="font-size: 1.2rem;">🧔</div>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 2. MAIN PROFILE CONTAINER -->
+    <main class="container profile-page-hero">
+        <!-- Profile Hero Header Card -->
+        <section class="profile-hero-card">
+            <div class="profile-hero-grid">
+                <!-- Avatar Column -->
+                <div class="profile-avatar-col">
+                    <div class="profile-avatar-frame">
+                        <div class="profile-avatar-img-box" id="heroAvatarDisplay">
+                            🧔
+                        </div>
+                        <div class="avatar-edit-chip" title="Change Avatar" onclick="openEditProfileModal()">
+                            ✏️
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Info Column -->
+                <div>
+                    <div style="display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 0.25rem;">
+                        <h1 class="profile-user-name" id="heroUserName">
+                            <span>Aman Verma</span>
+                            <span style="color: var(--green); font-size: 1.1rem;" title="Verified Digital Beggar & Daanveer">✓</span>
+                        </h1>
+                        <span class="profile-level-badge-pill" id="heroLevelBadge">
+                            👑 Katora King
+                        </span>
+                    </div>
+
+                    <div class="profile-user-handle" id="heroUserHandle">@desi_beggar_king</div>
+
+                    <p class="profile-bio-text" id="heroUserBio">
+                        "Bas ₹1 se duniya badalne nikla hoon 😂 • Certified tapri micro-tipper & broken laptop survivor."
+                    </p>
+                </div>
+
+                <!-- Actions Column -->
+                <div class="profile-actions-col" style="display: flex; flex-direction: column; gap: 0.6rem;">
+                    <button class="btn btn-primary-gradient btn-sm" onclick="openEditProfileModal()" style="min-width: 140px; font-size: 0.88rem;">
+                        <span>✏️</span> Edit Profile
+                    </button>
+                    <button class="btn btn-glass btn-sm" onclick="openShareProfileModal()" style="min-width: 140px; font-size: 0.88rem;">
+                        <span>🚀</span> Share Profile
+                    </button>
+                    <button class="btn btn-paisa-green btn-sm" onclick="openWithdrawModal()" style="min-width: 140px; font-size: 0.88rem;">
+                        <span>💸</span> Payout (₹4,250)
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. DONOR LEVEL PROGRESSION CARD -->
+        <section class="donor-level-card">
+            <div class="level-header-flex">
+                <div>
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+                        <span style="font-size: 1.4rem;">👑</span>
+                        <h3 style="font-size: 1.25rem; margin: 0; color: var(--gold-light);">
+                            Current Donor Rank: <span id="donorRankTitle">Katora King</span>
+                        </h3>
+                    </div>
+                    <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0;">
+                        Next Trophy: <strong style="color: var(--text-primary);" id="nextRankTitle">💎 Katora Legend</strong>
+                    </p>
+                </div>
+
+                <div style="text-align: right;">
+                    <span class="hero-pill-badge" id="levelProgressText">
+                        ⚡ ₹1,240 / ₹5,000 (24.8%)
+                    </span>
+                    <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.25rem;" id="levelRemainingText">
+                        ₹3,760 aur daan karo agla level paane ke liye!
+                    </div>
+                </div>
+            </div>
+
+            <div class="level-progress-track">
+                <div class="level-progress-fill" id="donorProgressBar" style="width: 24.8%;"></div>
+            </div>
+
+            <!-- Milestone Nodes -->
+            <div class="level-nodes-row">
+                <div class="level-node-item unlocked">
+                    <div class="level-node-circle">🪙</div>
+                    <strong style="font-size: 0.75rem;">Friend</strong>
+                    <small style="color: var(--gold-light); font-family: var(--font-mono); font-size: 0.68rem;">₹1+</small>
+                </div>
+                <div class="level-node-item unlocked">
+                    <div class="level-node-circle">💛</div>
+                    <strong style="font-size: 0.75rem;">Supporter</strong>
+                    <small style="color: var(--gold-light); font-family: var(--font-mono); font-size: 0.68rem;">₹100+</small>
+                </div>
+                <div class="level-node-item unlocked">
+                    <div class="level-node-circle">😇</div>
+                    <strong style="font-size: 0.75rem;">Maha-Daani</strong>
+                    <small style="color: var(--gold-light); font-family: var(--font-mono); font-size: 0.68rem;">₹500+</small>
+                </div>
+                <div class="level-node-item unlocked current">
+                    <div class="level-node-circle">👑</div>
+                    <strong style="font-size: 0.75rem; color: var(--gold-light);">King</strong>
+                    <small style="color: var(--gold-light); font-family: var(--font-mono); font-size: 0.68rem;">₹1,000+</small>
+                </div>
+                <div class="level-node-item">
+                    <div class="level-node-circle">💎</div>
+                    <strong style="font-size: 0.75rem; color: var(--text-muted);">Legend</strong>
+                    <small style="color: var(--text-muted); font-family: var(--font-mono); font-size: 0.68rem;">₹5,000+</small>
+                </div>
+                <div class="level-node-item">
+                    <div class="level-node-circle">🏆</div>
+                    <strong style="font-size: 0.75rem; color: var(--text-muted);">Samrat</strong>
+                    <small style="color: var(--text-muted); font-family: var(--font-mono); font-size: 0.68rem;">Top 3</small>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. PROFILE STATS 4-GRID -->
+        <section class="profile-stats-grid">
+            <!-- Stat 1: Total Donated -->
+            <div class="profile-stat-box">
+                <div class="profile-stat-icon stat-icon-gold">💰</div>
+                <div>
+                    <div class="profile-stat-val" id="statTotalDonated">₹1,240</div>
+                    <div class="profile-stat-title">Total Donated</div>
+                </div>
+            </div>
+
+            <!-- Stat 2: Donations Made -->
+            <div class="profile-stat-box">
+                <div class="profile-stat-icon stat-icon-purple">🪙</div>
+                <div>
+                    <div class="profile-stat-val" id="statDonationsCount">28 Drops</div>
+                    <div class="profile-stat-title">Donations Made</div>
+                </div>
+            </div>
+
+            <!-- Stat 3: Katoras Created -->
+            <div class="profile-stat-box">
+                <div class="profile-stat-icon stat-icon-green">🥣</div>
+                <div>
+                    <div class="profile-stat-val" id="statCreatedCount">3 Bowls</div>
+                    <div class="profile-stat-title">Katoras Created</div>
+                </div>
+            </div>
+
+            <!-- Stat 4: Achievements -->
+            <div class="profile-stat-box">
+                <div class="profile-stat-icon stat-icon-coral">🏆</div>
+                <div>
+                    <div class="profile-stat-val" id="statAchievementsCount">7 / 12</div>
+                    <div class="profile-stat-title">Achievements</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. PROFILE TABS NAVIGATION -->
+        <div class="profile-tabs-wrap" role="tablist">
+            <button class="profile-tab-btn active" onclick="switchProfileTab('overview')" id="tab-btn-overview">
+                <span>📊</span> Overview
+            </button>
+            <button class="profile-tab-btn" onclick="switchProfileTab('my-katoras')" id="tab-btn-my-katoras">
+                <span>🥣</span> Mere Katoras <span class="badge" style="background: rgba(108,92,231,0.2); font-size: 0.72rem; padding: 0.1rem 0.45rem;">3</span>
+            </button>
+            <button class="profile-tab-btn" onclick="switchProfileTab('donations')" id="tab-btn-donations">
+                <span>🪙</span> Donations History <span class="badge" style="background: rgba(255,184,0,0.2); color: var(--gold-light); font-size: 0.72rem; padding: 0.1rem 0.45rem;">28</span>
+            </button>
+            <button class="profile-tab-btn" onclick="switchProfileTab('achievements')" id="tab-btn-achievements">
+                <span>🏆</span> Badges Showcase
+            </button>
+            <button class="profile-tab-btn" onclick="switchProfileTab('saved')" id="tab-btn-saved">
+                <span>❤️</span> Saved Katoras
+            </button>
+            <button class="profile-tab-btn" onclick="switchProfileTab('settings')" id="tab-btn-settings">
+                <span>⚙️</span> Settings & Privacy
+            </button>
+        </div>
+
+        <!-- ============================================================
+             TAB 1: OVERVIEW
+             ============================================================ -->
+        <div class="tab-content-panel active" id="tab-overview">
+            <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+                <!-- Punya Ka Ghada 3D Card -->
+                <div class="ghada-3d-showcase" style="margin: 0; display: flex; flex-direction: row; align-items: center; justify-content: space-around; gap: 1.5rem; flex-wrap: wrap; text-align: left; background: rgba(245, 158, 11, 0.08); border: 2px solid rgba(245, 158, 11, 0.4);">
+                    <div class="ghada-image-frame" style="width: 120px; height: 130px; margin: 0;">
+                        <div class="ghada-aura-halo" style="width: 110px; height: 110px;"></div>
+                        <img src="punya-ka-ghada-3d.jpg" alt="Aapka Punya Ka Ghada" class="ghada-3d-img">
+                    </div>
+                    <div style="flex: 1; min-width: 220px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.5rem;">
+                            <h3 style="font-size: 1.15rem; color: var(--gold-light); margin: 0;">
+                                🏺 Punya Ka Ghada
+                            </h3>
+                            <span class="punya-points-badge" style="font-size: 0.8rem; background: var(--gold-gradient); color: #0F0E17; padding: 0.2rem 0.6rem; font-weight: 800;">
+                                ✨ 6,900 Points
+                            </span>
+                        </div>
+                        <div class="ghada-meter-track" style="height: 10px; margin-bottom: 0.5rem;">
+                            <div class="ghada-meter-fill" style="width: 69%;"></div>
+                        </div>
+                        <div class="ghada-status-pill" style="font-size: 0.78rem;">
+                            <span style="color: var(--gold-light); font-weight: 700;">69% Ghada Full</span>
+                            <span class="ghada-status-label" style="color: var(--green-light); font-weight: 800;">👑 Agla Janm Raja Ka</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Leaderboard Rank Standing -->
+                <div class="card" style="padding: 1.75rem; background: var(--bg-surface); border: 1.5px solid var(--border-subtle); display: flex; flex-direction: column; justify-content: space-between;">
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <span class="hero-pill-badge" style="font-size: 0.72rem;">👑 ALL-INDIA RANK</span>
+                            <span style="color: var(--gold-light); font-weight: 800; font-family: var(--font-mono); font-size: 1.4rem;">#17</span>
+                        </div>
+                        <h4 style="font-size: 1.1rem; margin: 0 0 0.4rem;">Top Daanveer Leaderboard</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.85rem; margin: 0; line-height: 1.4;">
+                            Aap All-India Top 20 Daanveeron mein hain! <strong>₹85 aur donate</strong> karein to reach <strong>#16 (Rohit Techie)</strong>.
+                        </p>
+                    </div>
+
+                    <div style="margin-top: 1.25rem;">
+                        <a href="leaderboard.html" class="btn btn-glass btn-sm" style="width: 100%; justify-content: center; font-size: 0.84rem;">
+                            👑 View Full Leaderboard
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Activity Timeline + Latest Achievement -->
+            <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 1.5rem;">
+                <!-- Recent Activity Timeline -->
+                <div class="card" style="padding: 1.75rem; background: var(--bg-surface); border: 1.5px solid var(--border-subtle);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+                        <h3 style="font-size: 1.15rem; margin: 0;">⚡ Recent Activity Timeline</h3>
+                        <span style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);">Live Sync</span>
+                    </div>
+
+                    <div class="activity-timeline-list">
+                        <div class="activity-item">
+                            <div>
+                                <strong style="font-size: 0.88rem; color: var(--text-primary);">🪙 Donated ₹101 to Rahul's Chai Fund</strong>
+                                <div style="font-size: 0.75rem; color: var(--text-muted);">Sharma ji ke tapri ka udhaar chukaya</div>
+                            </div>
+                            <span style="font-size: 0.72rem; color: var(--gold-light); font-family: var(--font-mono);">Aaj, 10:45 AM</span>
+                        </div>
+
+                        <div class="activity-item">
+                            <div>
+                                <strong style="font-size: 0.88rem; color: var(--text-primary);">🏆 Unlocked 👑 Katora King Badge</strong>
+                                <div style="font-size: 0.75rem; color: var(--text-muted);">Crossed ₹1,000 all-time donations milestone</div>
+                            </div>
+                            <span style="font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-mono);">Kal, 06:12 PM</span>
+                        </div>
+
+                        <div class="activity-item">
+                            <div>
+                                <strong style="font-size: 0.88rem; color: var(--text-primary);">🥣 Created "Need RTX 4090" Katora</strong>
+                                <div style="font-size: 0.75rem; color: var(--text-muted);">Goal ₹1,80,000 • Verified live</div>
+                            </div>
+                            <span style="font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-mono);">3 din pehle</span>
+                        </div>
+
+                        <div class="activity-item">
+                            <div>
+                                <strong style="font-size: 0.88rem; color: var(--text-primary);">💸 Received ₹501 from Tech Bro 99</strong>
+                                <div style="font-size: 0.75rem; color: var(--text-muted);">"Kaggle Grandmaster ban ke aana!"</div>
+                            </div>
+                            <span style="font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-mono);">5 din pehle</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Latest Achievement Spotlight -->
+                <div class="card" style="padding: 1.75rem; background: linear-gradient(135deg, rgba(255, 184, 0, 0.08) 0%, rgba(108, 92, 231, 0.08) 100%), var(--bg-surface); border: 2px solid var(--gold); border-radius: 24px; text-align: center; display: flex; flex-direction: column; justify-content: space-between;">
+                    <div>
+                        <span class="hero-pill-badge" style="font-size: 0.72rem; margin-bottom: 0.75rem;">✨ LATEST UNLOCKED TROPHY</span>
+                        <div style="font-size: 3.8rem; margin: 0.5rem 0; animation: bounceSmooth 2s infinite ease-in-out;">👑</div>
+                        <h3 style="font-size: 1.35rem; color: var(--gold-light); margin: 0 0 0.35rem;">Katora King</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.45; margin: 0 0 1rem;">
+                            "Ab katora aapko salaam karta hai! You have donated more than ₹1,000 to broke souls."
+                        </p>
+                    </div>
+
+                    <div>
+                        <button class="btn btn-primary-gradient btn-sm" onclick="openShareModal('Katora King', '👑', 1240)" style="width: 100%; justify-content: center; font-size: 0.85rem;">
+                            🚀 Share Viral Achievement Card
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             TAB 2: MY KATORAS (MERE KATORAS)
+             ============================================================ -->
+        <div class="tab-content-panel" id="tab-my-katoras">
+            <!-- Owner Statistics Summary -->
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.75rem;">
+                <div class="card" style="padding: 1rem 1.25rem; background: var(--bg-surface); border: 1px solid var(--border-subtle); text-align: center;">
+                    <div style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase;">Total Collected</div>
+                    <div style="font-size: 1.4rem; font-weight: 800; color: var(--green-light); font-family: var(--font-mono);">₹8,420</div>
+                </div>
+                <div class="card" style="padding: 1rem 1.25rem; background: var(--bg-surface); border: 1px solid var(--border-subtle); text-align: center;">
+                    <div style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase;">Total Donors</div>
+                    <div style="font-size: 1.4rem; font-weight: 800; color: var(--gold-light); font-family: var(--font-mono);">142 Log</div>
+                </div>
+                <div class="card" style="padding: 1rem 1.25rem; background: var(--bg-surface); border: 1px solid var(--border-subtle); text-align: center;">
+                    <div style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase;">Active Katoras</div>
+                    <div style="font-size: 1.4rem; font-weight: 800; color: var(--primary-light); font-family: var(--font-mono);">2 Live</div>
+                </div>
+                <div class="card" style="padding: 1rem 1.25rem; background: var(--bg-surface); border: 1px solid var(--border-subtle); text-align: center;">
+                    <div style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase;">Goals Completed</div>
+                    <div style="font-size: 1.4rem; font-weight: 800; color: #10B981; font-family: var(--font-mono);">1 Full 🎉</div>
+                </div>
+            </div>
+
+            <!-- Katoras Grid -->
+            <div class="katora-grid" style="margin-bottom: 2rem;">
+                <!-- Katora 1 -->
+                <div class="bhikhari-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span class="katora-cat-pill">☕ Chai & Food</span>
+                        <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.4); font-size: 0.7rem;">✓ Live</span>
+                    </div>
+
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <div class="avatar-ring-garib">
+                            <div class="avatar-inner-garib">☕</div>
+                        </div>
+                        <div>
+                            <h4 class="katora-creator-name">Tapri Ki Chai & Sutta Debt</h4>
+                            <span style="font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-mono);">Created on 10 May 2025</span>
+                        </div>
+                    </div>
+
+                    <p class="katora-story-snippet">"Sharma ji ke tapri par ₹340 ka udhaar ho gaya hai, dukan ke aage se nikal nahi pa raha!"</p>
+
+                    <div class="garib-progress-wrap">
+                        <div class="garib-progress-labels">
+                            <span class="garib-raised-val">₹391 <small style="font-size: 0.7rem; color: var(--text-muted);">/ ₹500</small></span>
+                            <span class="garib-goal-val">78% Full</span>
+                        </div>
+                        <div class="garib-meter-track" style="height: 6px;">
+                            <div class="garib-meter-fill" style="width: 78%;"></div>
+                        </div>
+                        <div class="garib-status-pill" style="margin-top: 0.25rem;">
+                            <span>👥 4 Daanveer</span>
+                            <span style="color: #F59E0B;">⚡ ₹109 Remaining</span>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 0.5rem; margin-top: auto; padding-top: 0.5rem;">
+                        <a href="katora-detail.html?id=katora-chai-fund" class="btn btn-glass" style="flex: 1; font-size: 0.8rem; padding: 0.5rem; text-align: center;">View Live 🥣</a>
+                        <button class="btn btn-primary-gradient" style="flex: 1; font-size: 0.8rem; padding: 0.5rem;" onclick="showToast('🔗 Katora link copied to clipboard!')">Share 🔗</button>
+                    </div>
+                </div>
+
+                <!-- Katora 2 -->
+                <div class="bhikhari-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span class="katora-cat-pill">💻 Tech & Coding</span>
+                        <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.4); font-size: 0.7rem;">✓ Live</span>
+                    </div>
+
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <div class="avatar-ring-garib">
+                            <div class="avatar-inner-garib">💻</div>
+                        </div>
+                        <div>
+                            <h4 class="katora-creator-name">RTX 4090 to Run Hello World</h4>
+                            <span style="font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-mono);">Created on 08 May 2025</span>
+                        </div>
+                    </div>
+
+                    <p class="katora-story-snippet">"My laptop catches fire every time I import pandas. Please help my AI dreams!"</p>
+
+                    <div class="garib-progress-wrap">
+                        <div class="garib-progress-labels">
+                            <span class="garib-raised-val">₹42,560 <small style="font-size: 0.7rem; color: var(--text-muted);">/ ₹1,80,000</small></span>
+                            <span class="garib-goal-val">24% Full</span>
+                        </div>
+                        <div class="garib-meter-track" style="height: 6px;">
+                            <div class="garib-meter-fill" style="width: 24%;"></div>
+                        </div>
+                        <div class="garib-status-pill" style="margin-top: 0.25rem;">
+                            <span>👥 3 Daanveer</span>
+                            <span style="color: #EF4444;">🚨 Urgent Goal</span>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 0.5rem; margin-top: auto; padding-top: 0.5rem;">
+                        <a href="katora-detail.html?id=katora-rtx-4090" class="btn btn-glass" style="flex: 1; font-size: 0.8rem; padding: 0.5rem; text-align: center;">View Live 🥣</a>
+                        <button class="btn btn-primary-gradient" style="flex: 1; font-size: 0.8rem; padding: 0.5rem;" onclick="showToast('🔗 Katora link copied to clipboard!')">Share 🔗</button>
+                    </div>
+                </div>
+
+                <!-- Katora 3 (Under Review) -->
+                <div class="bhikhari-card" style="opacity: 0.85;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span class="katora-cat-pill">🏕️ Hostel Life</span>
+                        <span class="badge" style="background: rgba(245, 158, 11, 0.15); color: #F59E0B; border: 1px solid rgba(245, 158, 11, 0.4); font-size: 0.7rem;">⏳ Under Review</span>
+                    </div>
+
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <div class="avatar-ring-garib">
+                            <div class="avatar-inner-garib">📶</div>
+                        </div>
+                        <div>
+                            <h4 class="katora-creator-name">Hostel Room 304 WiFi Fund</h4>
+                            <span style="font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-mono);">Submitted 2 hours ago</span>
+                        </div>
+                    </div>
+
+                    <p class="katora-story-snippet">"5 boys sharing 1.5GB mobile hotspot. Mid-sems in 2 days. Save our CGPA!"</p>
+
+                    <div class="garib-progress-wrap">
+                        <div class="garib-progress-labels">
+                            <span class="garib-raised-val">₹0 <small style="font-size: 0.7rem; color: var(--text-muted);">/ ₹1,499</small></span>
+                            <span class="garib-goal-val">0%</span>
+                        </div>
+                        <div class="garib-meter-track" style="height: 6px;">
+                            <div class="garib-meter-fill" style="width: 0%;"></div>
+                        </div>
+                        <div class="garib-status-pill" style="margin-top: 0.25rem;">
+                            <span>🕒 Admin review pending</span>
+                            <span style="color: #F59E0B;">ETA ~ 15 mins</span>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 0.5rem; margin-top: auto; padding-top: 0.5rem;">
+                        <button class="btn btn-glass" style="flex: 1; font-size: 0.8rem; padding: 0.5rem;" onclick="showToast('ℹ️ Yeh katora abhi review mein hai. Jald hi live hoga!')">Preview 👁️</button>
+                        <button class="btn btn-glass" style="flex: 1; font-size: 0.8rem; padding: 0.5rem;" onclick="showToast('✏️ Edit mode ready.')">Edit ✏️</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Create Katora CTA Banner -->
+            <div class="card" style="padding: 2rem; text-align: center; background: linear-gradient(135deg, rgba(108,92,231,0.1) 0%, rgba(255,184,0,0.1) 100%), var(--bg-surface); border: 2px dashed var(--border-glow); border-radius: 24px;">
+                <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🥣</div>
+                <h3 style="font-size: 1.3rem; margin-bottom: 0.4rem;">Naya Katora Kholna Hai?</h3>
+                <p style="color: var(--text-secondary); max-width: 500px; margin: 0 auto 1.25rem; font-size: 0.9rem;">
+                    Kisi nayi gareebi ya funny reason ke sath apna digital begging bowl shuru karein aur QR code lagayein.
+                </p>
+                <a href="create-katora.html" class="btn btn-primary-gradient btn-lg btn-glow-pulse" style="font-size: 0.95rem; padding: 0.75rem 1.8rem;">
+                    <span>🥣</span> Apna Katora Banao (Free)
+                </a>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             TAB 3: DONATIONS HISTORY
+             ============================================================ -->
+        <div class="tab-content-panel" id="tab-donations">
+            <div class="donation-filter-row">
+                <div class="donation-pill-filters">
+                    <button class="btn btn-glass btn-sm active" style="font-size: 0.8rem;" onclick="filterDonationHistory('all', this)">All (28)</button>
+                    <button class="btn btn-glass btn-sm" style="font-size: 0.8rem;" onclick="filterDonationHistory('success', this)">✓ Successful (26)</button>
+                    <button class="btn btn-glass btn-sm" style="font-size: 0.8rem;" onclick="filterDonationHistory('pending', this)">⏳ Pending (2)</button>
+                    <button class="btn btn-glass btn-sm" style="font-size: 0.8rem;" onclick="filterDonationHistory('anon', this)">🕶️ Anonymous (8)</button>
+                </div>
+
+                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                    <span style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);">Sort:</span>
+                    <select class="input-field" style="padding: 0.35rem 0.75rem; font-size: 0.8rem; width: auto; margin: 0;" onchange="sortDonationHistory(this.value)">
+                        <option value="newest">Newest First</option>
+                        <option value="oldest">Oldest First</option>
+                        <option value="highest">Highest Amount</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Donations List -->
+            <div id="donationsHistoryList">
+                <!-- Item 1 -->
+                <div class="history-card-item" data-status="success" data-type="public" data-amount="101">
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <div class="avatar-ring-garib" style="width: 44px; height: 44px;">
+                            <div class="avatar-inner-garib">☕</div>
+                        </div>
+                        <div>
+                            <strong style="font-size: 0.95rem; color: var(--text-primary); display: block;">Rahul's Chai & Sutta Debt</strong>
+                            <span style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);">12 Sep 2026, 10:45 AM • UPI Ref #DK9821</span>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; align-items: center; gap: 1.5rem;">
+                        <div style="text-align: right;">
+                            <div style="font-size: 1.15rem; font-weight: 800; color: var(--green-light); font-family: var(--font-mono);">₹101</div>
+                            <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #10B981; font-size: 0.68rem;">✓ Confirmed</span>
+                        </div>
+                        <button class="btn btn-glass btn-sm" onclick="openDonationSlipModal('DK9821', 'Rahul Sharma', 101, '12 Sep 2026, 10:45 AM', 'Successful', '76% → 78%')">
+                            Receipt 🧾
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Item 2 -->
+                <div class="history-card-item" data-status="success" data-type="anon" data-amount="51">
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <div class="avatar-ring-garib" style="width: 44px; height: 44px;">
+                            <div class="avatar-inner-garib">🍗</div>
+                        </div>
+                        <div>
+                            <strong style="font-size: 0.95rem; color: var(--text-primary); display: block;">Kabir's Breakup Biryani Fund</strong>
+                            <span style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);">11 Sep 2026, 08:20 PM • 🕶️ Anonymous Drop</span>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; align-items: center; gap: 1.5rem;">
+                        <div style="text-align: right;">
+                            <div style="font-size: 1.15rem; font-weight: 800; color: var(--green-light); font-family: var(--font-mono);">₹51</div>
+                            <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #10B981; font-size: 0.68rem;">✓ Confirmed</span>
+                        </div>
+                        <button class="btn btn-glass btn-sm" onclick="openDonationSlipModal('DK9432', 'Kabir Singh', 51, '11 Sep 2026, 08:20 PM', 'Successful', '75% → 79%')">
+                            Receipt 🧾
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Item 3 -->
+                <div class="history-card-item" data-status="success" data-type="public" data-amount="501">
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <div class="avatar-ring-garib" style="width: 44px; height: 44px;">
+                            <div class="avatar-inner-garib">🏋️</div>
+                        </div>
+                        <div>
+                            <strong style="font-size: 0.95rem; color: var(--text-primary); display: block;">Vikram's Gym Whey Protein Fund</strong>
+                            <span style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);">09 Sep 2026, 04:15 PM • UPI Ref #DK8910</span>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; align-items: center; gap: 1.5rem;">
+                        <div style="text-align: right;">
+                            <div style="font-size: 1.15rem; font-weight: 800; color: var(--green-light); font-family: var(--font-mono);">₹501</div>
+                            <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #10B981; font-size: 0.68rem;">✓ Confirmed</span>
+                        </div>
+                        <button class="btn btn-glass btn-sm" onclick="openDonationSlipModal('DK8910', 'Vikram Yadav', 501, '09 Sep 2026, 04:15 PM', 'Successful', '41% → 49%')">
+                            Receipt 🧾
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Item 4 -->
+                <div class="history-card-item" data-status="success" data-type="public" data-amount="251">
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <div class="avatar-ring-garib" style="width: 44px; height: 44px;">
+                            <div class="avatar-inner-garib">💌</div>
+                        </div>
+                        <div>
+                            <strong style="font-size: 0.95rem; color: var(--text-primary); display: block;">Priya's Shagun Envelope Fund</strong>
+                            <span style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);">06 Sep 2026, 07:10 PM • UPI Ref #DK8401</span>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; align-items: center; gap: 1.5rem;">
+                        <div style="text-align: right;">
+                            <div style="font-size: 1.15rem; font-weight: 800; color: var(--green-light); font-family: var(--font-mono);">₹251</div>
+                            <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #10B981; font-size: 0.68rem;">✓ Confirmed</span>
+                        </div>
+                        <button class="btn btn-glass btn-sm" onclick="openDonationSlipModal('DK8401', 'Priya Sen', 251, '06 Sep 2026, 07:10 PM', 'Successful', '76% → 88%')">
+                            Receipt 🧾
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Item 5 (Pending) -->
+                <div class="history-card-item" data-status="pending" data-type="public" data-amount="101">
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <div class="avatar-ring-garib" style="width: 44px; height: 44px;">
+                            <div class="avatar-inner-garib">📶</div>
+                        </div>
+                        <div>
+                            <strong style="font-size: 0.95rem; color: var(--text-primary); display: block;">Hostel 304 WiFi Fund</strong>
+                            <span style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);">04 Sep 2026, 11:00 AM • Bank Confirmation Pending</span>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; align-items: center; gap: 1.5rem;">
+                        <div style="text-align: right;">
+                            <div style="font-size: 1.15rem; font-weight: 800; color: #F59E0B; font-family: var(--font-mono);">₹101</div>
+                            <span class="badge" style="background: rgba(245, 158, 11, 0.15); color: #F59E0B; font-size: 0.68rem;">⏳ Processing</span>
+                        </div>
+                        <button class="btn btn-glass btn-sm" onclick="openDonationSlipModal('DK7990', 'Hostel 304', 101, '04 Sep 2026, 11:00 AM', 'Pending', 'Awaiting Gateway')">
+                            Receipt 🧾
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             TAB 4: ACHIEVEMENTS SHOWCASE
+             ============================================================ -->
+        <div class="tab-content-panel" id="tab-achievements">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.75rem; flex-wrap: wrap; gap: 1rem;">
+                <div>
+                    <h2 style="font-size: 1.4rem; margin: 0 0 0.25rem;">Aapke Badges & Trophies 🏆</h2>
+                    <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0;">Click any unlocked badge to generate a shareable viral flex card.</p>
+                </div>
+                <a href="achievements.html" class="btn btn-glass btn-sm">
+                    View Complete Badges Lore ↗
+                </a>
+            </div>
+
+            <div class="achievements-grid">
+                <!-- Badge 1: Katora Friend -->
+                <div class="badge-card unlocked" onclick="openShareModal('Katora Friend', '🪙', 1)">
+                    <span class="badge-status-tag unlocked">✓ UNLOCKED</span>
+                    <div class="badge-icon-box">🪙</div>
+                    <div>
+                        <h3 style="font-size: 1.1rem; margin: 0 0 0.25rem;">Katora Friend</h3>
+                        <p style="color: var(--gold); font-size: 0.78rem; font-family: var(--font-mono); margin-bottom: 0.35rem;">Req: ₹1+</p>
+                        <p style="color: var(--text-secondary); font-size: 0.82rem; margin: 0;">"First coin daala. Bas shuruat hai! 😂"</p>
+                    </div>
+                </div>
+
+                <!-- Badge 2: Supporter -->
+                <div class="badge-card unlocked" onclick="openShareModal('Katora Supporter', '💛', 100)">
+                    <span class="badge-status-tag unlocked">✓ UNLOCKED</span>
+                    <div class="badge-icon-box">💛</div>
+                    <div>
+                        <h3 style="font-size: 1.1rem; margin: 0 0 0.25rem;">Katora Supporter</h3>
+                        <p style="color: var(--gold); font-size: 0.78rem; font-family: var(--font-mono); margin-bottom: 0.35rem;">Req: ₹100+</p>
+                        <p style="color: var(--text-secondary); font-size: 0.82rem; margin: 0;">"Ab katora aapko pehchanne laga hai."</p>
+                    </div>
+                </div>
+
+                <!-- Badge 3: Maha-Daani -->
+                <div class="badge-card unlocked" onclick="openShareModal('Maha-Daani', '😇', 500)">
+                    <span class="badge-status-tag unlocked">✓ UNLOCKED</span>
+                    <div class="badge-icon-box">😇</div>
+                    <div>
+                        <h3 style="font-size: 1.1rem; margin: 0 0 0.25rem;">Maha-Daani</h3>
+                        <p style="color: var(--gold); font-size: 0.78rem; font-family: var(--font-mono); margin-bottom: 0.35rem;">Req: ₹500+</p>
+                        <p style="color: var(--text-secondary); font-size: 0.82rem; margin: 0;">"Katora ne aapko officially notice kar liya."</p>
+                    </div>
+                </div>
+
+                <!-- Badge 4: Katora King -->
+                <div class="badge-card unlocked" onclick="openShareModal('Katora King', '👑', 1000)">
+                    <span class="badge-status-tag unlocked">✓ UNLOCKED</span>
+                    <div class="badge-icon-box">👑</div>
+                    <div>
+                        <h3 style="font-size: 1.1rem; margin: 0 0 0.25rem;">Katora King</h3>
+                        <p style="color: var(--gold); font-size: 0.78rem; font-family: var(--font-mono); margin-bottom: 0.35rem;">Req: ₹1,000+</p>
+                        <p style="color: var(--text-secondary); font-size: 0.82rem; margin: 0;">"Ab katora aapko salaam karta hai."</p>
+                    </div>
+                </div>
+
+                <!-- Badge 5: First Drop -->
+                <div class="badge-card unlocked" onclick="openShareModal('First Drop', '🔥', 1)">
+                    <span class="badge-status-tag unlocked">✓ UNLOCKED</span>
+                    <div class="badge-icon-box">🔥</div>
+                    <div>
+                        <h3 style="font-size: 1.1rem; margin: 0 0 0.25rem;">First Drop</h3>
+                        <p style="color: var(--gold); font-size: 0.78rem; font-family: var(--font-mono); margin-bottom: 0.35rem;">Req: Pehla daan</p>
+                        <p style="color: var(--text-secondary); font-size: 0.82rem; margin: 0;">"Digital Katora par pehli baar kripa barasai."</p>
+                    </div>
+                </div>
+
+                <!-- Badge 6: Tapri Regular -->
+                <div class="badge-card unlocked" onclick="openShareModal('Tapri Regular', '☕', 250)">
+                    <span class="badge-status-tag unlocked">✓ UNLOCKED</span>
+                    <div class="badge-icon-box">☕</div>
+                    <div>
+                        <h3 style="font-size: 1.1rem; margin: 0 0 0.25rem;">Tapri Regular</h3>
+                        <p style="color: var(--gold); font-size: 0.78rem; font-family: var(--font-mono); margin-bottom: 0.35rem;">Req: 5+ Chai Funds</p>
+                        <p style="color: var(--text-secondary); font-size: 0.82rem; margin: 0;">"Chai ke udhaar ke sabse bade rakshak."</p>
+                    </div>
+                </div>
+
+                <!-- Badge 7: Speed Daanveer -->
+                <div class="badge-card unlocked" onclick="openShareModal('Speed Daanveer', '⚡', 51)">
+                    <span class="badge-status-tag unlocked">✓ UNLOCKED</span>
+                    <div class="badge-icon-box">⚡</div>
+                    <div>
+                        <h3 style="font-size: 1.1rem; margin: 0 0 0.25rem;">Speed Daanveer</h3>
+                        <p style="color: var(--gold); font-size: 0.78rem; font-family: var(--font-mono); margin-bottom: 0.35rem;">Req: Fast Payment</p>
+                        <p style="color: var(--text-secondary); font-size: 0.82rem; margin: 0;">"30 seconds ke andar coin drop kiya!"</p>
+                    </div>
+                </div>
+
+                <!-- Locked 8: Katora Legend -->
+                <div class="badge-card locked" onclick="showToast('🔒 ₹3,760 more needed to unlock Katora Legend!')">
+                    <span class="badge-status-tag locked">🔒 LOCKED (24.8%)</span>
+                    <div class="badge-icon-box">💎</div>
+                    <div>
+                        <h3 style="font-size: 1.1rem; margin: 0 0 0.25rem;">Katora Legend</h3>
+                        <p style="color: var(--text-muted); font-size: 0.78rem; font-family: var(--font-mono); margin-bottom: 0.35rem;">Req: ₹5,000+</p>
+                        <p style="color: var(--text-muted); font-size: 0.82rem; margin: 0;">"Diamond level ki Katora generosity."</p>
+                    </div>
+                </div>
+
+                <!-- Locked 9: Legendary Donor Top 3 -->
+                <div class="badge-card locked" onclick="showToast('🔒 Reach Top 3 on the Leaderboard to unlock Legendary Donor!')">
+                    <span class="badge-status-tag locked">🔒 LOCKED (TOP 3)</span>
+                    <div class="badge-icon-box">🏆</div>
+                    <div>
+                        <h3 style="font-size: 1.1rem; margin: 0 0 0.25rem;">Legendary Donor</h3>
+                        <p style="color: var(--text-muted); font-size: 0.78rem; font-family: var(--font-mono); margin-bottom: 0.35rem;">Req: Top 3 Rank</p>
+                        <p style="color: var(--text-muted); font-size: 0.82rem; margin: 0;">"Naam Digital Katora history mein darj."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             TAB 5: SAVED KATORAS
+             ============================================================ -->
+        <div class="tab-content-panel" id="tab-saved">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.75rem; flex-wrap: wrap; gap: 1rem;">
+                <div>
+                    <h2 style="font-size: 1.4rem; margin: 0 0 0.25rem;">❤️ Saved / Favorite Katoras</h2>
+                    <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0;">Jin katore ko aapne bookmark karke rakha hai.</p>
+                </div>
+                <a href="katoras.html" class="btn btn-glass btn-sm">
+                    Explore More Katoras ↗
+                </a>
+            </div>
+
+            <div class="katora-grid" id="savedKatorasGrid">
+                <!-- Saved 1 -->
+                <div class="bhikhari-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span class="katora-cat-pill">🍗 Heartbreak</span>
+                        <span class="bhikhari-tape-tag">💔 भूखा देवदास</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <div class="avatar-ring-garib"><div class="avatar-inner-garib">🍗</div></div>
+                        <div>
+                            <h4 class="katora-creator-name">Breakup Biryani Fund</h4>
+                            <span style="font-size: 0.72rem; color: #EC4899; font-family: var(--font-mono);">Kabir Singh</span>
+                        </div>
+                    </div>
+                    <p class="katora-story-snippet">"दिल टूटा है पर भूख नहीं मरी, डबल मसाला लेग पीस चाहिए! 💔"</p>
+                    <div class="garib-progress-wrap">
+                        <div class="garib-progress-labels">
+                            <span class="garib-raised-val">₹950 <small style="font-size: 0.7rem; color: var(--text-muted);">/ ₹1,200</small></span>
+                            <span class="garib-goal-val">79% Full</span>
+                        </div>
+                        <div class="garib-meter-track" style="height: 6px;"><div class="garib-meter-fill" style="width: 79%;"></div></div>
+                    </div>
+                    <div style="display: flex; gap: 0.5rem; margin-top: auto; padding-top: 0.5rem;">
+                        <a href="katora-detail.html?id=katora-breakup-biryani" class="btn btn-glass" style="flex: 1; font-size: 0.8rem; padding: 0.5rem; text-align: center;">View 🥣</a>
+                        <button class="btn btn-paisa-green" style="flex: 1.2; font-size: 0.8rem; padding: 0.5rem;" onclick="openDonationModal('Kabir Singh', 'katora-breakup-biryani', 51)">🪙 Daan ₹51</button>
+                    </div>
+                </div>
+
+                <!-- Saved 2 -->
+                <div class="bhikhari-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span class="katora-cat-pill">🏋️ Urgent Punya</span>
+                        <span class="bhikhari-tape-tag">💪 बॉडीबिल्डर</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <div class="avatar-ring-garib"><div class="avatar-inner-garib">🏋️</div></div>
+                        <div>
+                            <h4 class="katora-creator-name">Whey Protein Fund</h4>
+                            <span style="font-size: 0.72rem; color: #10B981; font-family: var(--font-mono);">Vikram Yadav</span>
+                        </div>
+                    </div>
+                    <p class="katora-story-snippet">"Desi diet se 14 inch pe atak gaya hu. Ek dabba Gold Standard dila do!"</p>
+                    <div class="garib-progress-wrap">
+                        <div class="garib-progress-labels">
+                            <span class="garib-raised-val">₹3,200 <small style="font-size: 0.7rem; color: var(--text-muted);">/ ₹6,500</small></span>
+                            <span class="garib-goal-val">49% Full</span>
+                        </div>
+                        <div class="garib-meter-track" style="height: 6px;"><div class="garib-meter-fill" style="width: 49%;"></div></div>
+                    </div>
+                    <div style="display: flex; gap: 0.5rem; margin-top: auto; padding-top: 0.5rem;">
+                        <a href="katora-detail.html?id=katora-gym-protein" class="btn btn-glass" style="flex: 1; font-size: 0.8rem; padding: 0.5rem; text-align: center;">View 🥣</a>
+                        <button class="btn btn-paisa-green" style="flex: 1.2; font-size: 0.8rem; padding: 0.5rem;" onclick="openDonationModal('Vikram Yadav', 'katora-gym-protein', 51)">🪙 Daan ₹51</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             TAB 6: SETTINGS & PRIVACY
+             ============================================================ -->
+        <div class="tab-content-panel" id="tab-settings">
+            <!-- Group 1: Privacy Preferences -->
+            <div class="settings-group-card">
+                <h3 style="font-size: 1.2rem; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <span>🛡️</span> Privacy & Visibility Controls
+                </h3>
+                <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1rem;">
+                    Decide what other users can see on your public profile and on the leaderboard.
+                </p>
+
+                <div class="setting-toggle-row">
+                    <div>
+                        <strong style="font-size: 0.92rem; color: var(--text-primary); display: block;">Public Profile</strong>
+                        <span style="font-size: 0.8rem; color: var(--text-muted);">Allow other donors to view your badges and created katoras.</span>
+                    </div>
+                    <label class="switch-toggle" style="position: relative; display: inline-block; width: 46px; height: 24px;">
+                        <input type="checkbox" checked onchange="showToast('✓ Privacy preference updated.')" style="opacity: 0; width: 0; height: 0;">
+                        <span class="slider round" style="position: absolute; cursor: pointer; inset: 0; background-color: var(--primary); border-radius: 34px; transition: .3s;"></span>
+                    </label>
+                </div>
+
+                <div class="setting-toggle-row">
+                    <div>
+                        <strong style="font-size: 0.92rem; color: var(--text-primary); display: block;">Show Real Name on Leaderboard</strong>
+                        <span style="font-size: 0.8rem; color: var(--text-muted);">Display "Aman Verma" instead of "Anonymous Daanveer" on the top donor board.</span>
+                    </div>
+                    <label class="switch-toggle" style="position: relative; display: inline-block; width: 46px; height: 24px;">
+                        <input type="checkbox" checked onchange="showToast('✓ Leaderboard visibility updated.')" style="opacity: 0; width: 0; height: 0;">
+                        <span class="slider round" style="position: absolute; cursor: pointer; inset: 0; background-color: var(--primary); border-radius: 34px; transition: .3s;"></span>
+                    </label>
+                </div>
+
+                <div class="setting-toggle-row">
+                    <div>
+                        <strong style="font-size: 0.92rem; color: var(--text-primary); display: block;">Donate Anonymously by Default</strong>
+                        <span style="font-size: 0.8rem; color: var(--text-muted);">Pre-select anonymous checkbox when making any new donation.</span>
+                    </div>
+                    <label class="switch-toggle" style="position: relative; display: inline-block; width: 46px; height: 24px;">
+                        <input type="checkbox" onchange="showToast('✓ Anonymous default setting updated.')" style="opacity: 0; width: 0; height: 0;">
+                        <span class="slider round" style="position: absolute; cursor: pointer; inset: 0; background-color: rgba(255,255,255,0.2); border-radius: 34px; transition: .3s;"></span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Group 2: Notification Preferences -->
+            <div class="settings-group-card">
+                <h3 style="font-size: 1.2rem; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <span>🔔</span> Notifications & Sound Alerts
+                </h3>
+                <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1rem;">
+                    Control in-app coin drop chimes and real-time donation alerts.
+                </p>
+
+                <div class="setting-toggle-row">
+                    <div>
+                        <strong style="font-size: 0.92rem; color: var(--text-primary); display: block;">Donation Received Alerts</strong>
+                        <span style="font-size: 0.8rem; color: var(--text-muted);">Get notified when someone drops a coin into your katora.</span>
+                    </div>
+                    <label class="switch-toggle" style="position: relative; display: inline-block; width: 46px; height: 24px;">
+                        <input type="checkbox" checked onchange="showToast('✓ Notification preferences saved.')" style="opacity: 0; width: 0; height: 0;">
+                        <span class="slider round" style="position: absolute; cursor: pointer; inset: 0; background-color: var(--primary); border-radius: 34px; transition: .3s;"></span>
+                    </label>
+                </div>
+
+                <div class="setting-toggle-row">
+                    <div>
+                        <strong style="font-size: 0.92rem; color: var(--text-primary); display: block;">Sound Effects (Coin Drop "Ting!")</strong>
+                        <span style="font-size: 0.8rem; color: var(--text-muted);">Play realistic Web Audio brass chime upon successful donation.</span>
+                    </div>
+                    <label class="switch-toggle" style="position: relative; display: inline-block; width: 46px; height: 24px;">
+                        <input type="checkbox" checked onchange="showToast('✓ Sound chime preference saved.')" style="opacity: 0; width: 0; height: 0;">
+                        <span class="slider round" style="position: absolute; cursor: pointer; inset: 0; background-color: var(--primary); border-radius: 34px; transition: .3s;"></span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Group 3: Danger Zone -->
+            <div class="settings-group-card" style="border-color: rgba(239, 68, 68, 0.4);">
+                <h3 style="font-size: 1.2rem; color: #EF4444; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <span>🚨</span> Danger Zone & Local Data
+                </h3>
+                <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1.25rem;">
+                    Manage your device's offline data cache and profile reset options.
+                </p>
+
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <button class="btn btn-glass btn-sm" onclick="resetDemoData()" style="color: #F59E0B; border-color: rgba(245,158,11,0.3);">
+                        🔄 Reset Demo Data to Default
+                    </button>
+                    <button class="btn btn-glass btn-sm" onclick="showToast('🗑️ Local cache cleared successfully.')" style="color: #EF4444; border-color: rgba(239,68,68,0.3);">
+                        🧹 Clear Offline Cache
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ============================================================
+         MODALS (EDIT PROFILE, DONATION SLIP, SHARE, WITHDRAW)
+         ============================================================ -->
+
+    <!-- 1. Edit Profile Modal -->
+    <div class="profile-modal-overlay" id="editProfileModal">
+        <div class="profile-modal-box">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+                <h3 style="font-size: 1.3rem; margin: 0;">✏️ Edit Your Profile</h3>
+                <button class="btn-close-modal" onclick="closeEditProfileModal()" style="background: transparent; border: none; font-size: 1.4rem; color: var(--text-muted); cursor: pointer;">✕</button>
+            </div>
+
+            <form id="editProfileForm" onsubmit="handleSaveProfile(event)">
+                <div style="margin-bottom: 1.25rem;">
+                    <label class="form-label" style="font-size: 0.82rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 0.4rem; display: block;">Select Avatar Emoji</label>
+                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.5rem;" id="avatarChoices">
+                        <button type="button" class="btn btn-glass btn-sm active" style="font-size: 1.4rem; padding: 0.4rem 0.7rem;" onclick="selectAvatarEmoji('🧔', this)">🧔</button>
+                        <button type="button" class="btn btn-glass btn-sm" style="font-size: 1.4rem; padding: 0.4rem 0.7rem;" onclick="selectAvatarEmoji('👨‍💻', this)">👨‍💻</button>
+                        <button type="button" class="btn btn-glass btn-sm" style="font-size: 1.4rem; padding: 0.4rem 0.7rem;" onclick="selectAvatarEmoji('😎', this)">😎</button>
+                        <button type="button" class="btn btn-glass btn-sm" style="font-size: 1.4rem; padding: 0.4rem 0.7rem;" onclick="selectAvatarEmoji('👑', this)">👑</button>
+                        <button type="button" class="btn btn-glass btn-sm" style="font-size: 1.4rem; padding: 0.4rem 0.7rem;" onclick="selectAvatarEmoji('🥣', this)">🥣</button>
+                        <button type="button" class="btn btn-glass btn-sm" style="font-size: 1.4rem; padding: 0.4rem 0.7rem;" onclick="selectAvatarEmoji('🚀', this)">🚀</button>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 1rem;">
+                    <label class="form-label" style="font-size: 0.82rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 0.4rem; display: block;">Display Name</label>
+                    <input type="text" id="editInputName" class="input-field" value="Aman Verma" required style="margin: 0;">
+                </div>
+
+                <div style="margin-bottom: 1rem;">
+                    <label class="form-label" style="font-size: 0.82rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 0.4rem; display: block;">Username / Handle</label>
+                    <input type="text" id="editInputHandle" class="input-field" value="desi_beggar_king" required style="margin: 0;">
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <label class="form-label" style="font-size: 0.82rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 0.4rem; display: block;">Short Bio (Max 120 chars)</label>
+                    <textarea id="editInputBio" class="input-field" rows="2" maxlength="120" style="margin: 0;">Bas ₹1 se duniya badalne nikla hoon 😂 • Certified tapri micro-tipper & broken laptop survivor.</textarea>
+                </div>
+
+                <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+                    <button type="button" class="btn btn-glass" onclick="closeEditProfileModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary-gradient">Save Changes ✓</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 2. Donation Slip / Receipt Modal -->
+    <div class="profile-modal-overlay" id="donationSlipModal">
+        <div class="profile-modal-box" style="max-width: 480px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3 style="font-size: 1.25rem; margin: 0; color: var(--gold-light);">🧾 Donation Receipt</h3>
+                <button class="btn-close-modal" onclick="closeDonationSlipModal()" style="background: transparent; border: none; font-size: 1.4rem; color: var(--text-muted); cursor: pointer;">✕</button>
+            </div>
+
+            <div style="background: var(--bg-elevated); border: 1.5px dashed var(--border-glow); border-radius: 20px; padding: 1.5rem; margin-bottom: 1.25rem;">
+                <div style="text-align: center; border-bottom: 1px dashed var(--border-subtle); padding-bottom: 1rem; margin-bottom: 1rem;">
+                    <div style="font-size: 2rem;">🪙</div>
+                    <div style="font-size: 1.6rem; font-weight: 800; color: var(--green-light); font-family: var(--font-mono);" id="slipAmount">₹101</div>
+                    <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #10B981; font-size: 0.72rem;">✓ Verified On-Chain / UPI Transfer</span>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 0.6rem; font-size: 0.84rem;">
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: var(--text-muted);">Transaction ID:</span>
+                        <strong style="font-family: var(--font-mono);" id="slipTxId">DK9821</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: var(--text-muted);">Recipient Katora:</span>
+                        <strong id="slipRecipient">Rahul Sharma</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: var(--text-muted);">Date & Time:</span>
+                        <span id="slipDate">12 Sep 2026, 10:45 AM</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: var(--text-muted);">Goal Impact:</span>
+                        <strong style="color: var(--gold-light);" id="slipImpact">76% → 78%</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: var(--text-muted);">Punya Points Earned:</span>
+                        <span style="color: var(--gold-light); font-weight: 700;">+151 Points ✨</span>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 0.5rem;">
+                <button class="btn btn-glass" style="flex: 1;" onclick="showToast('📥 Receipt PDF downloaded!')">Download PDF 📥</button>
+                <button class="btn btn-primary-gradient" style="flex: 1;" onclick="showToast('🔗 Receipt link copied!')">Share Receipt 🔗</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Share Achievement / Profile Modal -->
+    <div class="profile-modal-overlay" id="shareProfileModal">
+        <div class="profile-modal-box" style="max-width: 480px; text-align: center;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3 style="font-size: 1.25rem; margin: 0;">🚀 Share Viral Flex Card</h3>
+                <button class="btn-close-modal" onclick="closeShareProfileModal()" style="background: transparent; border: none; font-size: 1.4rem; color: var(--text-muted); cursor: pointer;">✕</button>
+            </div>
+
+            <!-- Viral Receipt Card -->
+            <div class="viral-receipt-preview" id="viralFlexCard">
+                <div style="display: flex; align-items: center; justify-content: center; gap: 0.4rem; margin-bottom: 0.75rem;">
+                    <span style="font-size: 1.4rem;">🥣</span>
+                    <strong style="font-size: 1.1rem; letter-spacing: 0.5px;">DIGITAL KATORA</strong>
+                </div>
+                <div style="font-size: 3.5rem; margin: 0.5rem 0;" id="shareModalIcon">👑</div>
+                <h3 style="font-size: 1.4rem; color: var(--gold-light); margin: 0 0 0.25rem;" id="shareModalTitle">Katora King</h3>
+                <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 0.75rem;" id="shareModalDonor">
+                    Aman Verma • ₹1,240 Total Donated
+                </p>
+                <div class="badge" style="background: rgba(255, 184, 0, 0.2); color: var(--gold-light); border: 1px solid var(--gold); font-size: 0.75rem;">
+                    ✨ Officially Katora Approved ✨
+                </div>
+            </div>
+
+            <!-- Social Action Buttons -->
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin-bottom: 1rem;">
+                <button class="btn btn-glass btn-sm" onclick="shareToSocial('whatsapp')" style="background: rgba(37, 211, 102, 0.15); color: #25D366; border-color: rgba(37, 211, 102, 0.3);">
+                    WhatsApp 💬
+                </button>
+                <button class="btn btn-glass btn-sm" onclick="shareToSocial('twitter')" style="background: rgba(29, 161, 242, 0.15); color: #1DA1F2; border-color: rgba(29, 161, 242, 0.3);">
+                    Twitter / X 🐦
+                </button>
+                <button class="btn btn-glass btn-sm" onclick="shareToSocial('copy')">
+                    Copy Link 🔗
+                </button>
+            </div>
+
+            <button class="btn btn-primary-gradient" style="width: 100%;" onclick="showToast('📸 Viral Flex Card saved to your gallery!')">
+                Download Flex Image 📥
+            </button>
+        </div>
+    </div>
+
+    <!-- 4. Payout / Withdraw Modal -->
+    <div class="profile-modal-overlay" id="withdrawModal">
+        <div class="profile-modal-box" style="max-width: 440px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3 style="font-size: 1.25rem; margin: 0; color: var(--green-light);">💸 UPI Payout Transfer</h3>
+                <button class="btn-close-modal" onclick="closeWithdrawModal()" style="background: transparent; border: none; font-size: 1.4rem; color: var(--text-muted); cursor: pointer;">✕</button>
+            </div>
+
+            <div style="background: var(--bg-elevated); border-radius: 18px; padding: 1.25rem; margin-bottom: 1.25rem;">
+                <div style="font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase;">Available Received Funds</div>
+                <div style="font-size: 1.8rem; font-weight: 800; color: var(--green-light); font-family: var(--font-mono); margin: 0.25rem 0;">₹4,250</div>
+                <div style="font-size: 0.75rem; color: var(--text-secondary);">Direct transfer to your linked UPI address. Zero platform fee!</div>
+            </div>
+
+            <div style="margin-bottom: 1.25rem;">
+                <label class="form-label" style="font-size: 0.82rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 0.4rem; display: block;">Your UPI ID</label>
+                <input type="text" id="withdrawUpiField" class="input-field" value="aman.techie@paytm" style="margin: 0;">
+            </div>
+
+            <button class="btn btn-paisa-green" style="width: 100%; padding: 0.75rem; font-size: 0.95rem;" onclick="handleWithdrawProcess()">
+                💸 Transfer ₹4,250 to Bank (Instant)
+            </button>
+        </div>
+    </div>
+
+    <!-- 6. UNIFIED SITE FOOTER -->
+    <footer class="site-footer">
+        <div class="container footer-grid">
+            <div class="footer-col brand-col">
+                <a href="index.html" class="brand-logo" style="margin-bottom: 1rem; display: inline-flex;">
+                    <div class="logo-bowl-glow">
+                        <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 26px; height: 26px;">
+                            <path d="M4 14C4 22.8 10.2 30 18 30C25.8 30 32 22.8 32 14H4Z" fill="url(#brandBowlGradFooterP)" stroke="#FFD93D" stroke-width="1.8"/>
+                            <ellipse cx="18" cy="14" rx="14" ry="4" fill="#FFB800" stroke="#FFEAA7" stroke-width="1.2"/>
+                            <circle cx="18" cy="7.5" r="4" fill="#FFD93D" stroke="#E67E22" stroke-width="1"/>
+                            <text x="18" y="9.5" font-size="5" font-weight="bold" fill="#8B4513" text-anchor="middle" font-family="'JetBrains Mono', monospace">₹</text>
+                            <defs>
+                                <linearGradient id="brandBowlGradFooterP" x1="4" y1="14" x2="32" y2="30" gradientUnits="userSpaceOnUse">
+                                    <stop stop-color="#6C5CE7"/>
+                                    <stop offset="1" stop-color="#FFB800"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <span>Digital <span class="gradient-text">Katora</span></span>
+                </a>
+                <p class="footer-tagline">
+                    India's premier satirical micro-tipping community. Khule paise nahi hain? Digital Katora scan karo!
+                </p>
+                <div class="social-links-row">
+                    <a href="https://instagram.com" target="_blank" class="social-icon-circle" title="Instagram" aria-label="Instagram">
+                        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                    </a>
+                    <a href="https://twitter.com" target="_blank" class="social-icon-circle" title="Twitter / X" aria-label="Twitter">
+                        <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    </a>
+                    <a href="https://github.com" target="_blank" class="social-icon-circle" title="GitHub" aria-label="GitHub">
+                        <svg viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <ul class="footer-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="katoras.html">Explore Katoras</a></li>
+                    <li><a href="create-katora.html">Start a Katora</a></li>
+                    <li><a href="leaderboard.html">Top Donors</a></li>
+                    <li><a href="achievements.html">Badges & Trophies</a></li>
+                    <li><a href="donation-animation.html">✨ Magic Demo</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Company & Fun</h4>
+                <ul class="footer-links">
+                    <li><a href="about.html">Our Story</a></li>
+                    <li><a href="faq.html">FAQs</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                    <li><a href="admin.html">Admin Panel</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Beggar Wisdom</h4>
+                <div class="card" style="padding: 1.25rem; background: var(--bg-surface); border: 1px solid var(--border-color);">
+                    <p style="font-style: italic; color: var(--gold); font-size: 0.9rem; margin-bottom: 0.5rem;">
+                        "Sharam chhoro, katora jodo! Dost se udhaar maangne se behtar hai public se maang lo."
+                    </p>
+                    <span style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);">— Ancient Tapri Proverb</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="container footer-bottom-flex">
+                <p>© 2026 Digital Katora. Crafted with 😂, ☕ & 🥣 in Bharat. 100% Satirical Platform.</p>
+                <div class="footer-legal-links">
+                    <a href="faq.html">Privacy & Terms</a>
+                    <a href="contact.html">Report Meme</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MOBILE BOTTOM NAVIGATION BAR -->
+    <nav class="mobile-bottom-nav">
+        <a href="index.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">
+                <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1h-5v-6h-6v6H4a1 1 0 01-1-1V9.5z"/></svg>
+            </span>
+            <span>Home</span>
+        </a>
+        <a href="katoras.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">
+                <svg viewBox="0 0 24 24"><path d="M3 10c0 5.5 4 10 9 10s9-4.5 9-10H3z"/><path d="M3 10c0-1.5 4-2 9-2s9 .5 9 2"/></svg>
+            </span>
+            <span>Katoras</span>
+        </a>
+        <a href="create-katora.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke="var(--primary-light)" stroke-width="2"/><path d="M12 8v8M8 12h8" stroke="#FFF" stroke-width="2.5" stroke-linecap="round"/></svg>
+            </span>
+            <span>Create</span>
+        </a>
+        <a href="donation-animation.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">
+                <svg viewBox="0 0 24 24"><path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4L12 2z"/></svg>
+            </span>
+            <span>Demo</span>
+        </a>
+        <a href="leaderboard.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">
+                <svg viewBox="0 0 24 24"><path d="M6 9V4h12v5c0 3.3-2.7 6-6 6s-6-2.7-6-6z"/><path d="M6 6H3c0 2.2 1.8 4 4 4"/><path d="M18 6h3c0 2.2-1.8 4-4 4"/><path d="M12 15v4m-4 2h8"/></svg>
+            </span>
+            <span>Ranks</span>
+        </a>
+        <a href="profile.html" class="bottom-nav-item active">
+            <span class="bottom-nav-icon">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M6 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg>
+            </span>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <!-- Scripts -->
+    <script src="data-store.js"></script>
+    <script src="script.js"></script>
+
+    <!-- Profile Specific Controller -->
+    <script>
+      let currentSelectedAvatar = '🧔';
+
+      // 1. Tab Switching
+      function switchProfileTab(tabName) {
+        document.querySelectorAll('.profile-tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.tab-content-panel').forEach(panel => panel.classList.remove('active'));
+
+        const targetBtn = document.getElementById('tab-btn-' + tabName);
+        const targetPanel = document.getElementById('tab-' + tabName);
+
+        if (targetBtn) targetBtn.classList.add('active');
+        if (targetPanel) targetPanel.classList.add('active');
+      }
+
+      // 2. Load Profile Data from DataStore
+      function loadProfileFromStore() {
+        if (!window.dataStore) return;
+        const user = window.dataStore.getUserProfile();
+
+        // Update Hero
+        const nameEl = document.getElementById('heroUserName');
+        const handleEl = document.getElementById('heroUserHandle');
+        const bioEl = document.getElementById('heroUserBio');
+        const avatarEl = document.getElementById('heroAvatarDisplay');
+        const navAvatar = document.getElementById('navAvatarInner');
+
+        if (nameEl) nameEl.innerHTML = `<span>${user.name || 'Aman Verma'}</span> <span style="color: var(--green); font-size: 1.1rem;" title="Verified Beggar">✓</span>`;
+        if (handleEl) handleEl.textContent = '@' + (user.username || 'desi_beggar_king');
+        if (bioEl) bioEl.textContent = `"${user.bio || 'Bas ₹1 se duniya badalne nikla hoon 😂'}"`;
+        if (avatarEl) avatarEl.textContent = user.avatar || '🧔';
+        if (navAvatar) navAvatar.textContent = user.avatar || '🧔';
+
+        // Update Stats
+        const statTotal = document.getElementById('statTotalDonated');
+        const statDonations = document.getElementById('statDonationsCount');
+        const statCreated = document.getElementById('statCreatedCount');
+
+        if (statTotal) statTotal.textContent = '₹' + (user.totalDonated || 1240).toLocaleString();
+        if (statDonations) statDonations.textContent = (user.donationsMadeCount || 28) + ' Drops';
+        if (statCreated) statCreated.textContent = (user.createdKatorasCount || 3) + ' Bowls';
+      }
+
+      // 3. Edit Profile Modal
+      function openEditProfileModal() {
+        const user = window.dataStore ? window.dataStore.getUserProfile() : {};
+        document.getElementById('editInputName').value = user.name || 'Aman Verma';
+        document.getElementById('editInputHandle').value = user.username || 'desi_beggar_king';
+        document.getElementById('editInputBio').value = user.bio || 'Bas ₹1 se duniya badalne nikla hoon 😂';
+        document.getElementById('editProfileModal').classList.add('active');
+      }
+
+      function closeEditProfileModal() {
+        document.getElementById('editProfileModal').classList.remove('active');
+      }
+
+      function selectAvatarEmoji(emoji, btn) {
+        currentSelectedAvatar = emoji;
+        document.querySelectorAll('#avatarChoices button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      }
+
+      function handleSaveProfile(e) {
+        e.preventDefault();
+        const newName = document.getElementById('editInputName').value.trim();
+        const newHandle = document.getElementById('editInputHandle').value.trim().replace(/^@/, '');
+        const newBio = document.getElementById('editInputBio').value.trim();
+
+        if (window.dataStore) {
+          const user = window.dataStore.getUserProfile();
+          user.name = newName;
+          user.username = newHandle;
+          user.bio = newBio;
+          user.avatar = currentSelectedAvatar;
+          window.dataStore.saveUserProfile(user);
+        }
+
+        loadProfileFromStore();
+        closeEditProfileModal();
+        showToast('✓ Profile successfully updated! 🥣');
+      }
+
+      // 4. Donation Slip Modal
+      function openDonationSlipModal(txId, recipient, amount, date, status, impact) {
+        document.getElementById('slipTxId').textContent = txId;
+        document.getElementById('slipRecipient').textContent = recipient;
+        document.getElementById('slipAmount').textContent = '₹' + amount;
+        document.getElementById('slipDate').textContent = date;
+        document.getElementById('slipImpact').textContent = impact;
+        document.getElementById('donationSlipModal').classList.add('active');
+      }
+
+      function closeDonationSlipModal() {
+        document.getElementById('donationSlipModal').classList.remove('active');
+      }
+
+      // 5. Share Achievement / Profile Modal
+      function openShareModal(title, icon, amount) {
+        document.getElementById('shareModalTitle').textContent = title;
+        document.getElementById('shareModalIcon').textContent = icon;
+        document.getElementById('shareProfileModal').classList.add('active');
+      }
+
+      function openShareProfileModal() {
+        const user = window.dataStore ? window.dataStore.getUserProfile() : {};
+        document.getElementById('shareModalTitle').textContent = '👑 Katora King';
+        document.getElementById('shareModalIcon').textContent = user.avatar || '🧔';
+        document.getElementById('shareModalDonor').textContent = (user.name || 'Aman Verma') + ' • ₹' + (user.totalDonated || 1240) + ' Total Donated';
+        document.getElementById('shareProfileModal').classList.add('active');
+      }
+
+      function closeShareProfileModal() {
+        document.getElementById('shareProfileModal').classList.remove('active');
+      }
+
+      function shareToSocial(platform) {
+        const text = encodeURIComponent('Main Digital Katora par Katora King ban gaya hoon! 😂🥣 Check my profile: ' + window.location.href);
+        if (platform === 'whatsapp') {
+          window.open('https://api.whatsapp.com/send?text=' + text, '_blank');
+        } else if (platform === 'twitter') {
+          window.open('https://twitter.com/intent/tweet?text=' + text, '_blank');
+        } else if (platform === 'copy') {
+          navigator.clipboard.writeText(window.location.href);
+          showToast('🔗 Profile link copied to clipboard!');
+        }
+      }
+
+      // 6. Withdraw Modal
+      function openWithdrawModal() {
+        document.getElementById('withdrawModal').classList.add('active');
+      }
+
+      function closeWithdrawModal() {
+        document.getElementById('withdrawModal').classList.remove('active');
+      }
+
+      function handleWithdrawProcess() {
+        const upi = document.getElementById('withdrawUpiField').value.trim();
+        if (!upi || !upi.includes('@')) {
+          showToast('⚠️ Please enter a valid UPI ID (e.g. name@bank)');
+          return;
+        }
+        closeWithdrawModal();
+        showToast('🎉 ₹4,250 successfully sent to ' + upi + '! Instant transfer completed.');
+      }
+
+      // 7. Donation History Filter
+      function filterDonationHistory(filterType, btn) {
+        document.querySelectorAll('.donation-pill-filters button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const items = document.querySelectorAll('#donationsHistoryList .history-card-item');
+        items.forEach(item => {
+          if (filterType === 'all') {
+            item.style.display = 'flex';
+          } else if (filterType === 'success') {
+            item.style.display = item.dataset.status === 'success' ? 'flex' : 'none';
+          } else if (filterType === 'pending') {
+            item.style.display = item.dataset.status === 'pending' ? 'flex' : 'none';
+          } else if (filterType === 'anon') {
+            item.style.display = item.dataset.type === 'anon' ? 'flex' : 'none';
+          }
+        });
+      }
+
+      function sortDonationHistory(sortVal) {
+        const list = document.getElementById('donationsHistoryList');
+        const items = Array.from(list.querySelectorAll('.history-card-item'));
+
+        if (sortVal === 'highest') {
+          items.sort((a, b) => parseInt(b.dataset.amount || 0) - parseInt(a.dataset.amount || 0));
+        } else if (sortVal === 'oldest') {
+          items.reverse();
+        }
+        items.forEach(item => list.appendChild(item));
+        showToast('⚡ List sorted by ' + sortVal);
+      }
+
+      function resetDemoData() {
+        if (confirm('Kya aap sach me demo data reset karna chahte hain?')) {
+          localStorage.clear();
+          showToast('🔄 Demo data reset! Page reload ho raha hai...');
+          setTimeout(() => window.location.reload(), 800);
+        }
+      }
+
+      // Toast notification helper
+      function showToast(msg) {
+        let toast = document.getElementById('global-toast-notif');
+        if (!toast) {
+          toast = document.createElement('div');
+          toast.id = 'global-toast-notif';
+          toast.style.position = 'fixed';
+          toast.style.bottom = '30px';
+          toast.style.left = '50%';
+          toast.style.transform = 'translateX(-50%)';
+          toast.style.background = '#181622';
+          toast.style.color = '#FFD93D';
+          toast.style.border = '1.5px solid #FFB800';
+          toast.style.padding = '0.75rem 1.6rem';
+          toast.style.borderRadius = '999px';
+          toast.style.boxShadow = '0 12px 30px rgba(0,0,0,0.6)';
+          toast.style.zIndex = '999999';
+          toast.style.fontFamily = 'var(--font-mono)';
+          toast.style.fontSize = '0.88rem';
+          toast.style.transition = 'all 0.3s ease';
+          toast.style.pointerEvents = 'none';
+          document.body.appendChild(toast);
+        }
+        toast.textContent = msg;
+        toast.style.opacity = '1';
+        toast.style.transform = 'translateX(-50%) translateY(0)';
+        clearTimeout(window._toastTimer);
+        window._toastTimer = setTimeout(() => {
+          toast.style.opacity = '0';
+          toast.style.transform = 'translateX(-50%) translateY(20px)';
+        }, 3000);
+      }
+
+      // Initialize on load
+      document.addEventListener('DOMContentLoaded', () => {
+        loadProfileFromStore();
+      });
+    </script>
+</body>
+</html>

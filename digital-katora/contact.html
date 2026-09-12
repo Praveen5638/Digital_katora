@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="hi" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💬 Support & Contact Tapri — Digital Katora</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Unified Design System Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+    
+    <meta name="description" content="Get fast, friendly support for Digital Katora. Payment queries, Katora moderation, UPI setup, and meme feedback.">
+    <meta name="theme-color" content="#6C5CE7">
+
+    <style>
+      /* ═════════════════════════════════════════════════════════════════════
+         CONTACT & SUPPORT CUSTOM STYLES
+         ═════════════════════════════════════════════════════════════════════ */
+      .contact-hero-section {
+        padding: 4rem 1.25rem 2.5rem;
+        position: relative;
+        text-align: center;
+      }
+
+      /* 6 Quick Help Cards Grid */
+      .quick-help-grid {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 1rem;
+        margin: 2rem 0 3.5rem;
+      }
+
+      .quick-help-card {
+        background: var(--bg-surface);
+        border: 1.5px solid var(--border-subtle);
+        border-radius: 20px;
+        padding: 1.25rem 1rem;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .quick-help-card:hover,
+      .quick-help-card.active {
+        transform: translateY(-5px);
+        border-color: var(--primary-light);
+        background: linear-gradient(180deg, rgba(108, 92, 231, 0.12) 0%, var(--bg-surface) 100%);
+        box-shadow: var(--shadow-sm);
+      }
+
+      .quick-help-icon {
+        font-size: 2rem;
+      }
+
+      .quick-help-title {
+        font-size: 0.88rem;
+        font-weight: 700;
+        color: var(--text-primary);
+      }
+
+      .quick-help-desc {
+        font-size: 0.72rem;
+        color: var(--text-muted);
+        line-height: 1.35;
+      }
+
+      /* 2-Column Workspace */
+      .contact-workspace-grid {
+        display: grid;
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: 2.5rem;
+        align-items: start;
+        margin-bottom: 4rem;
+      }
+
+      .contact-form-box {
+        background: var(--bg-surface);
+        border: 1.5px solid var(--border-glow);
+        border-radius: 28px;
+        padding: 2.5rem;
+        box-shadow: var(--shadow-card);
+        position: relative;
+      }
+
+      .support-sidebar-box {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+
+      .support-info-card {
+        background: var(--bg-surface);
+        border: 1.5px solid var(--border-subtle);
+        border-radius: 24px;
+        padding: 2rem;
+      }
+
+      /* Category Dynamic Area */
+      .dynamic-field-block {
+        display: none;
+        background: var(--bg-elevated);
+        border: 1px dashed var(--border-subtle);
+        border-radius: 16px;
+        padding: 1.25rem;
+        margin: 1.25rem 0;
+        animation: slideFeedElastic 0.3s ease;
+      }
+
+      .dynamic-field-block.active {
+        display: block;
+      }
+
+      /* Star Rating */
+      .star-rating-row {
+        display: flex;
+        gap: 0.5rem;
+        font-size: 1.6rem;
+        cursor: pointer;
+        margin-top: 0.35rem;
+      }
+
+      .star-item {
+        transition: transform 0.15s ease;
+        opacity: 0.4;
+      }
+
+      .star-item.active {
+        opacity: 1;
+        transform: scale(1.15);
+      }
+
+      /* Attachment Dropzone */
+      .contact-attachment-dropzone {
+        border: 2px dashed var(--border-subtle);
+        border-radius: 16px;
+        padding: 1.25rem;
+        text-align: center;
+        background: var(--bg-elevated);
+        cursor: pointer;
+        transition: all 0.2s ease;
+        position: relative;
+      }
+
+      .contact-attachment-dropzone:hover {
+        border-color: var(--primary-light);
+      }
+
+      .attachment-preview-box {
+        display: none;
+        align-items: center;
+        justify-content: space-between;
+        background: var(--bg-surface);
+        border: 1px solid var(--border-subtle);
+        border-radius: 12px;
+        padding: 0.75rem 1rem;
+        margin-top: 0.75rem;
+      }
+
+      .attachment-preview-box.active {
+        display: flex;
+      }
+
+      /* Success Screen */
+      .contact-success-card {
+        display: none;
+        text-align: center;
+        padding: 3rem 2rem;
+        animation: slideFeedElastic 0.4s ease;
+      }
+
+      .contact-success-card.active {
+        display: block;
+      }
+
+      @media (max-width: 1100px) {
+        .quick-help-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+        .contact-workspace-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .quick-help-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .contact-form-box {
+          padding: 1.5rem 1.25rem;
+        }
+      }
+    </style>
+</head>
+<body>
+    <!-- Ambient Canvas Background -->
+    <div class="ambient-canvas">
+        <div class="mesh-blob blob-purple"></div>
+        <div class="mesh-blob blob-gold"></div>
+        <div class="mesh-blob blob-coral"></div>
+        <div class="floating-coin-bg" style="top: 15%; left: 8%;">💬</div>
+        <div class="floating-coin-bg" style="top: 55%; right: 10%; animation-delay: -3s;">☕</div>
+        <div class="floating-coin-bg" style="bottom: 18%; left: 14%; animation-delay: -5s;">🛡️</div>
+    </div>
+
+    <!-- 1. UNIFIED NAVBAR -->
+    <nav class="navbar" role="navigation" aria-label="Main Navigation">
+        <div class="container nav-wrap">
+            <a href="index.html" class="brand-logo" aria-label="Digital Katora Home">
+                <div class="logo-bowl-glow">
+                    <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 26px; height: 26px;">
+                        <path d="M4 14C4 22.8 10.2 30 18 30C25.8 30 32 22.8 32 14H4Z" fill="url(#brandBowlGradContact)" stroke="#FFD93D" stroke-width="1.8"/>
+                        <ellipse cx="18" cy="14" rx="14" ry="4" fill="#FFB800" stroke="#FFEAA7" stroke-width="1.2"/>
+                        <circle cx="18" cy="7.5" r="4" fill="#FFD93D" stroke="#E67E22" stroke-width="1"/>
+                        <text x="18" y="9.5" font-size="5" font-weight="bold" fill="#8B4513" text-anchor="middle" font-family="'JetBrains Mono', monospace">₹</text>
+                        <defs>
+                            <linearGradient id="brandBowlGradContact" x1="4" y1="14" x2="32" y2="30" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#6C5CE7"/>
+                                <stop offset="1" stop-color="#FFB800"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <span>Digital <span class="gradient-text">Katora</span></span>
+            </a>
+
+            <!-- Center Pill Navigation -->
+            <div class="nav-center-menu">
+                <a href="katoras.html" class="nav-link-pill">🥣 Katoras</a>
+                <a href="leaderboard.html" class="nav-link-pill">👑 Top Donors</a>
+                <a href="about.html" class="nav-link-pill">💡 How It Works</a>
+                <a href="achievements.html" class="nav-link-pill">🏆 Badges</a>
+                <a href="donation-animation.html" class="nav-link-pill">✨ Magic Demo</a>
+            </div>
+
+            <!-- Right Actions -->
+            <div class="nav-actions">
+                <button class="theme-toggle-btn" id="themeToggleBtn" title="Toggle Theme" aria-label="Toggle Dark/Light Theme">
+                    <span class="theme-icon">🌙</span>
+                </button>
+                <a href="create-katora.html" class="btn btn-primary btn-magnetic nav-cta-btn">
+                    <span>🥣 Create Katora</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 2. HERO SECTION -->
+    <header class="contact-hero-section">
+        <div class="container" style="max-width: 850px;">
+            <div class="hero-badge-pill animate-fade-in" style="margin-bottom: 1.25rem;">
+                <span class="badge-dot"></span>
+                <span>💬 Digital Katora Support & Help Desk 💬</span>
+            </div>
+
+            <h1 class="page-title" style="font-size: clamp(2.3rem, 5vw, 3.8rem); margin-bottom: 1rem;">
+                Katora Atak Gaya? <span class="gradient-text">Bolo Bhai.</span> 😂
+            </h1>
+
+            <p style="color: var(--text-secondary); font-size: 1.15rem; line-height: 1.7; margin: 0 auto;">
+                Koi sawaal, payment problem, Katora issue ya bas feedback dena hai? Yahin batao — hamari team turant madad karegi!
+            </p>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- 3. QUICK HELP CARDS -->
+        <section>
+            <div style="text-align: center; margin-bottom: 1.5rem;">
+                <h3 style="font-size: 1.25rem; margin: 0 0 0.25rem;">Sabse Pehle Ye Dekho 👀</h3>
+                <p style="color: var(--text-muted); font-size: 0.88rem; margin: 0;">Apna topic chuno aur form automatic set ho jayega:</p>
+            </div>
+
+            <div class="quick-help-grid">
+                <!-- Card 1: Katora Issue -->
+                <div class="quick-help-card" onclick="selectQuickCategory('katora')">
+                    <span class="quick-help-icon">🥣</span>
+                    <strong class="quick-help-title">Katora Problem</strong>
+                    <span class="quick-help-desc">Katora edit ya delete karna hai?</span>
+                </div>
+
+                <!-- Card 2: Donation Issue -->
+                <div class="quick-help-card" onclick="selectQuickCategory('payment')">
+                    <span class="quick-help-icon">💰</span>
+                    <strong class="quick-help-title">Donation / Pay</strong>
+                    <span class="quick-help-desc">Payment fail ya pending hui?</span>
+                </div>
+
+                <!-- Card 3: QR / UPI Issue -->
+                <div class="quick-help-card" onclick="selectQuickCategory('qr_upi')">
+                    <span class="quick-help-icon">📷</span>
+                    <strong class="quick-help-title">QR / UPI Problem</strong>
+                    <span class="quick-help-desc">Scanner ya UPI ID update?</span>
+                </div>
+
+                <!-- Card 4: Report Katora -->
+                <div class="quick-help-card" onclick="selectQuickCategory('report')">
+                    <span class="quick-help-icon">🚩</span>
+                    <strong class="quick-help-title">Report a Katora</strong>
+                    <span class="quick-help-desc">Spam ya fake profile flag karo?</span>
+                </div>
+
+                <!-- Card 5: Profile Issue -->
+                <div class="quick-help-card" onclick="selectQuickCategory('profile')">
+                    <span class="quick-help-icon">👤</span>
+                    <strong class="quick-help-title">Profile Problem</strong>
+                    <span class="quick-help-desc">Name ya photo update issue?</span>
+                </div>
+
+                <!-- Card 6: Feedback -->
+                <div class="quick-help-card" onclick="selectQuickCategory('feedback')">
+                    <span class="quick-help-icon">💡</span>
+                    <strong class="quick-help-title">Feedback</strong>
+                    <span class="quick-help-desc">Website ke liye naya idea?</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. CONTACT WORKSPACE -->
+        <section class="contact-workspace-grid">
+            
+            <!-- LEFT: CONTACT FORM -->
+            <div class="contact-form-box">
+                <!-- Form View -->
+                <div id="contactFormContainer">
+                    <h2 style="font-size: 1.6rem; margin: 0 0 0.5rem;">Message Chhod Do 💬</h2>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 2rem;">Apni details daalo, hamari Tapri Team jald reply karegi.</p>
+
+                    <form id="mainSupportForm" onsubmit="handleContactFormSubmit(event)">
+                        <!-- Basic Info Row -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
+                            <div class="form-group">
+                                <label class="form-label" for="contactName">Aapka Naam <span style="color: var(--coral);">*</span></label>
+                                <input type="text" id="contactName" class="form-input" placeholder="e.g. Rahul Sharma" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="contactEmail">Email Address <span style="color: var(--coral);">*</span></label>
+                                <input type="email" id="contactEmail" class="form-input" placeholder="name@example.com" required>
+                            </div>
+                        </div>
+
+                        <!-- Category Selector -->
+                        <div class="form-group" style="margin-bottom: 1.25rem;">
+                            <label class="form-label" for="contactCategory">Kis baare mein baat karni hai? <span style="color: var(--coral);">*</span></label>
+                            <select id="contactCategory" class="form-input" onchange="handleCategoryChange(this.value)" required>
+                                <option value="general">General Question / Baat Cheet 💬</option>
+                                <option value="katora">Katora Issue (Edit/Status) 🥣</option>
+                                <option value="payment">Donation / Payment Problem 💰</option>
+                                <option value="qr_upi">QR Code / UPI Payout Issue 📷</option>
+                                <option value="report">Report a Katora (Spam/Fake) 🚩</option>
+                                <option value="profile">Profile & Account Problem 👤</option>
+                                <option value="feedback">Feedback & Suggestions 💡</option>
+                                <option value="business">Business / Partnership 🤝</option>
+                            </select>
+                        </div>
+
+                        <!-- DYNAMIC FIELD 1: Katora Issue Block -->
+                        <div class="dynamic-field-block" id="block_katora">
+                            <label class="form-label" for="field_katora_id">Katora ID / URL Name</label>
+                            <input type="text" id="field_katora_id" class="form-input" placeholder="e.g. katora-chai-fund ya Rahul's Katora">
+                            <small style="color: var(--text-muted); font-size: 0.75rem; margin-top: 4px; display: block;">
+                                💡 Tip: Aapke katora page ke link mein ID hoti hai.
+                            </small>
+                        </div>
+
+                        <!-- DYNAMIC FIELD 2: Payment Issue Block -->
+                        <div class="dynamic-field-block" id="block_payment">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 0.75rem;">
+                                <div>
+                                    <label class="form-label" for="field_donation_id">Donation / Txn ID</label>
+                                    <input type="text" id="field_donation_id" class="form-input" placeholder="e.g. DKD-104829">
+                                </div>
+                                <div>
+                                    <label class="form-label" for="field_payment_status">Status</label>
+                                    <select id="field_payment_status" class="form-input">
+                                        <option value="pending">⏳ Pending (Paisa kata par nahi dikha)</option>
+                                        <option value="failed">✕ Failed (Transaction fail ho gaya)</option>
+                                        <option value="refund">↩ Refund Related Query</option>
+                                        <option value="unknown">❓ Other / Unknown</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <label class="form-label" for="field_payment_amt">Donation Amount (₹)</label>
+                            <input type="number" id="field_payment_amt" class="form-input" placeholder="e.g. 101">
+                        </div>
+
+                        <!-- DYNAMIC FIELD 3: QR / UPI Issue Block -->
+                        <div class="dynamic-field-block" id="block_qr_upi">
+                            <label class="form-label" for="field_qr_issue_type">Issue Type</label>
+                            <select id="field_qr_issue_type" class="form-input" style="margin-bottom: 0.75rem;">
+                                <option value="qr_scan">📷 QR scan nahi ho raha</option>
+                                <option value="wrong_qr">⚠️ Galat QR upload ho gaya</option>
+                                <option value="upi_change">🆔 UPI ID change karni hai</option>
+                            </select>
+                            <label class="form-label" for="field_qr_katora_id">Katora ID</label>
+                            <input type="text" id="field_qr_katora_id" class="form-input" placeholder="e.g. DK-1042">
+                        </div>
+
+                        <!-- DYNAMIC FIELD 4: Report Katora Block -->
+                        <div class="dynamic-field-block" id="block_report">
+                            <label class="form-label" for="field_report_reason">Report Reason <span style="color: var(--coral);">*</span></label>
+                            <select id="field_report_reason" class="form-input" style="margin-bottom: 0.75rem;">
+                                <option value="spam">🚫 Spam ya Fake Story</option>
+                                <option value="inappropriate">🔞 Offensive Media / Hate Speech</option>
+                                <option value="impersonation">🎭 Kisi aur ki photo chura li</option>
+                                <option value="suspicious_upi">⚠️ Fraud UPI / Payment Details</option>
+                            </select>
+                            <label class="form-label" for="field_report_katora">Reported Katora Name / Link</label>
+                            <input type="text" id="field_report_katora" class="form-input" placeholder="Katora link paste karein">
+                        </div>
+
+                        <!-- DYNAMIC FIELD 5: Feedback & Rating Block -->
+                        <div class="dynamic-field-block" id="block_feedback">
+                            <label class="form-label">Digital Katora ka Experience Kaisa Laga?</label>
+                            <div class="star-rating-row" id="starRatingBox">
+                                <span class="star-item active" onclick="setStarRating(1)">⭐</span>
+                                <span class="star-item active" onclick="setStarRating(2)">⭐</span>
+                                <span class="star-item active" onclick="setStarRating(3)">⭐</span>
+                                <span class="star-item active" onclick="setStarRating(4)">⭐</span>
+                                <span class="star-item active" onclick="setStarRating(5)">⭐</span>
+                            </div>
+                        </div>
+
+                        <!-- DYNAMIC FIELD 6: Business / Partnership Block -->
+                        <div class="dynamic-field-block" id="block_business">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                <div>
+                                    <label class="form-label" for="field_biz_company">Company / Brand Name</label>
+                                    <input type="text" id="field_biz_company" class="form-input" placeholder="e.g. Chai Point">
+                                </div>
+                                <div>
+                                    <label class="form-label" for="field_biz_website">Website / Social URL</label>
+                                    <input type="url" id="field_biz_website" class="form-input" placeholder="https://...">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Main Message Field -->
+                        <div class="form-group" style="margin-bottom: 1.5rem;">
+                            <label class="form-label" for="contactMsg">Message / Problem Detail <span style="color: var(--coral);">*</span></label>
+                            <textarea id="contactMsg" class="form-input" rows="4" placeholder="Yahan apna message thoda detail mein likho..." required style="resize: vertical;"></textarea>
+                        </div>
+
+                        <!-- Optional Attachment Dropzone -->
+                        <div class="form-group" style="margin-bottom: 1.5rem;">
+                            <label class="form-label">Screenshot / Proof Attach Karo (Optional)</label>
+                            <div class="contact-attachment-dropzone" onclick="document.getElementById('contactFileInput').click()">
+                                <input type="file" id="contactFileInput" style="display: none;" accept="image/*" onchange="handleAttachmentUpload(this)">
+                                <div style="font-size: 1.8rem; margin-bottom: 0.25rem;">📎</div>
+                                <div style="font-size: 0.88rem; font-weight: 700; color: var(--text-primary);">Click to upload screenshot</div>
+                                <div style="font-size: 0.75rem; color: var(--text-muted);">PNG, JPG up to 5MB</div>
+                            </div>
+                            <div class="attachment-preview-box" id="attachmentPreviewBox">
+                                <span style="font-size: 0.85rem; color: var(--green-light); font-family: var(--font-mono);" id="attachmentFileName">screenshot.png</span>
+                                <button type="button" class="btn btn-glass btn-sm" onclick="removeAttachment()" style="padding: 2px 8px; font-size: 0.75rem;">✕ Remove</button>
+                            </div>
+                        </div>
+
+                        <!-- Security Sensitive Notice -->
+                        <div style="background: rgba(255, 107, 107, 0.1); border: 1px solid rgba(255, 107, 107, 0.3); border-radius: 12px; padding: 0.75rem 1rem; margin-bottom: 1.75rem; font-size: 0.82rem; color: var(--coral-light); display: flex; align-items: center; gap: 0.5rem;">
+                            <span>⚠️</span>
+                            <span>OTP, UPI PIN, password ya banking credentials kabhi bhi message mein mat bhejna!</span>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn btn-primary btn-magnetic" id="contactSubmitBtn" style="width: 100%; justify-content: center; font-size: 1.05rem; padding: 1rem;">
+                            <span>💬 Message Bhej Do</span>
+                        </button>
+                        
+                        <p style="text-align: center; font-size: 0.78rem; color: var(--text-muted); margin-top: 0.75rem;">
+                            Your message is protected by our <a href="faq.html" style="color: var(--primary-light);">Privacy Policy</a>.
+                        </p>
+                    </form>
+                </div>
+
+                <!-- 17. SUCCESS SCREEN -->
+                <div class="contact-success-card" id="contactSuccessCard">
+                    <div style="font-size: 4rem; margin-bottom: 1rem;">💌✨</div>
+                    <h2 style="font-size: 1.8rem; margin-bottom: 0.5rem;">Message Pahunch Gaya! 💬</h2>
+                    <p style="color: var(--text-secondary); font-size: 1.05rem; line-height: 1.6; margin-bottom: 1.75rem;">
+                        Humne tumhari request receive kar li hai. Hamari team jald hi aapke email par sampark karegi.
+                    </p>
+
+                    <div style="background: var(--bg-elevated); border: 1.5px dashed var(--gold); border-radius: 18px; padding: 1.25rem; margin-bottom: 2rem;">
+                        <div style="font-size: 0.8rem; color: var(--text-muted); font-family: var(--font-mono); margin-bottom: 0.25rem;">SUPPORT TICKET REFERENCE ID</div>
+                        <div style="font-size: 1.4rem; font-weight: 900; font-family: var(--font-mono); color: var(--gold-light);" id="ticketRefId">DK-SUP-10482</div>
+                    </div>
+
+                    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                        <button type="button" class="btn btn-primary btn-magnetic" onclick="copyTicketRef()">
+                            <span>📋 Copy Reference ID</span>
+                        </button>
+                        <button type="button" class="btn btn-glass" onclick="resetContactForm()">
+                            <span>Naya Message Bhejo</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT: SUPPORT SIDEBAR & FAQ SHORTCUT -->
+            <div class="support-sidebar-box">
+                <!-- Mascot Speech Bubble Card -->
+                <div class="support-info-card" style="text-align: center; background: linear-gradient(180deg, var(--bg-surface) 0%, rgba(108, 92, 231, 0.08) 100%);">
+                    <div style="width: 100px; height: 110px; border-radius: 20px; overflow: hidden; margin: 0 auto 1rem; border: 1.5px solid var(--border-glow); background: var(--bg-elevated);">
+                        <img src="mascot-beggar-3d.jpg" alt="Mascot Support" style="width: 100%; height: 100%; object-fit: cover; object-position: center 15%;">
+                    </div>
+                    <div class="card" style="padding: 0.75rem 1rem; background: var(--bg-elevated); border: 1px solid var(--border-subtle); display: inline-block; font-weight: 800; font-size: 0.95rem; color: var(--gold-light); margin-bottom: 0.75rem;">
+                        "Bol bhai, kya scene hai? 😂"
+                    </div>
+                    <p style="color: var(--text-muted); font-size: 0.88rem; line-height: 1.5; margin: 0;">
+                        Chai ka udhaar ho ya katora moderation — Tapri HQ support is always listening!
+                    </p>
+                </div>
+
+                <!-- 20. FAQ SHORTCUT -->
+                <div class="support-info-card">
+                    <h3 style="font-size: 1.2rem; margin: 0 0 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <span>👀</span> Shayad iska answer FAQ mein mil jaye
+                    </h3>
+                    <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">
+                        Most common doubts instant solve ho sakte hain:
+                    </p>
+
+                    <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.5rem;">
+                        <a href="faq.html" style="font-size: 0.88rem; color: var(--primary-light); text-decoration: none; font-weight: 600;">
+                            👉 Katora approve hone mein kitna time lagta hai?
+                        </a>
+                        <a href="faq.html" style="font-size: 0.88rem; color: var(--primary-light); text-decoration: none; font-weight: 600;">
+                            👉 Kya Digital Katora koi commission leta hai?
+                        </a>
+                        <a href="faq.html" style="font-size: 0.88rem; color: var(--primary-light); text-decoration: none; font-weight: 600;">
+                            👉 UPI QR code kaise scan aur verify karein?
+                        </a>
+                    </div>
+
+                    <a href="faq.html" class="btn btn-glass btn-sm" style="width: 100%; justify-content: center; font-weight: 700;">
+                        <span>📋 Saare FAQs Dekho &rarr;</span>
+                    </a>
+                </div>
+
+                <!-- Help Flow Process -->
+                <div class="support-info-card">
+                    <h4 style="font-size: 1rem; margin: 0 0 0.75rem; color: var(--green-light);">⚡ Support Resolution Flow</h4>
+                    <div style="font-size: 0.82rem; color: var(--text-secondary); line-height: 1.8; font-family: var(--font-mono);">
+                        1. Sawaal / Problem Chuno<br>
+                        2. Category select karke details bharo<br>
+                        3. Instant Reference ID receive karo<br>
+                        4. Team review & direct email resolution ✨
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- 5. UNIFIED FOOTER -->
+    <footer class="site-footer">
+        <div class="container footer-grid">
+            <div class="footer-col brand-col">
+                <a href="index.html" class="brand-logo" style="margin-bottom: 1rem; display: inline-flex;">
+                    <div class="logo-bowl-glow">
+                        <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 26px; height: 26px;">
+                            <path d="M4 14C4 22.8 10.2 30 18 30C25.8 30 32 22.8 32 14H4Z" fill="url(#brandBowlGradFooterContact)" stroke="#FFD93D" stroke-width="1.8"/>
+                            <ellipse cx="18" cy="14" rx="14" ry="4" fill="#FFB800" stroke="#FFEAA7" stroke-width="1.2"/>
+                            <circle cx="18" cy="7.5" r="4" fill="#FFD93D" stroke="#E67E22" stroke-width="1"/>
+                            <text x="18" y="9.5" font-size="5" font-weight="bold" fill="#8B4513" text-anchor="middle" font-family="'JetBrains Mono', monospace">₹</text>
+                            <defs>
+                                <linearGradient id="brandBowlGradFooterContact" x1="4" y1="14" x2="32" y2="30" gradientUnits="userSpaceOnUse">
+                                    <stop stop-color="#6C5CE7"/>
+                                    <stop offset="1" stop-color="#FFB800"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <span>Digital <span class="gradient-text">Katora</span></span>
+                </a>
+                <p class="footer-tagline">
+                    India's premier satirical micro-tipping community. Khule paise nahi hain? Digital Katora scan karo!
+                </p>
+                <div class="social-links-row">
+                    <a href="https://instagram.com" target="_blank" class="social-icon-circle" title="Instagram" aria-label="Instagram">
+                        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                    </a>
+                    <a href="https://twitter.com" target="_blank" class="social-icon-circle" title="Twitter / X" aria-label="Twitter">
+                        <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <ul class="footer-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="katoras.html">Explore Katoras</a></li>
+                    <li><a href="create-katora.html">Start a Katora</a></li>
+                    <li><a href="leaderboard.html">Top Donors</a></li>
+                    <li><a href="donation-animation.html">✨ Magic Demo</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Company & Fun</h4>
+                <ul class="footer-links">
+                    <li><a href="about.html">Our Story</a></li>
+                    <li><a href="faq.html">FAQs</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                    <li><a href="admin.html">Admin Panel</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Beggar Wisdom</h4>
+                <div class="card" style="padding: 1.25rem; background: var(--bg-surface); border: 1px solid var(--border-color);">
+                    <p style="font-style: italic; color: var(--gold); font-size: 0.9rem; margin-bottom: 0.5rem;">
+                        "Sharam chhoro, katora jodo! Dost se udhaar maangne se behtar hai public se maang lo."
+                    </p>
+                    <span style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);">— Ancient Tapri Proverb</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="container footer-bottom-flex">
+                <p>© 2025 Digital Katora. Made for fun. ❤️ 100% Satirical Platform.</p>
+                <div class="footer-legal-links">
+                    <a href="faq.html">Privacy & Terms</a>
+                    <a href="contact.html">Report Issue</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MOBILE STICKY BOTTOM NAV -->
+    <nav class="mobile-bottom-nav">
+        <a href="index.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">🏠</span>
+            <span>Home</span>
+        </a>
+        <a href="katoras.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">🥣</span>
+            <span>Katoras</span>
+        </a>
+        <a href="create-katora.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">➕</span>
+            <span>Create</span>
+        </a>
+        <a href="donation-animation.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">✨</span>
+            <span>Demo</span>
+        </a>
+        <a href="leaderboard.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">👑</span>
+            <span>Ranks</span>
+        </a>
+    </nav>
+
+    <!-- Scripts -->
+    <script src="data-store.js"></script>
+    <script src="script.js"></script>
+    <script>
+      let currentStarRating = 5;
+
+      function setStarRating(num) {
+        currentStarRating = num;
+        const stars = document.querySelectorAll('#starRatingBox .star-item');
+        stars.forEach((s, idx) => {
+          if (idx < num) {
+            s.classList.add('active');
+          } else {
+            s.classList.remove('active');
+          }
+        });
+      }
+
+      function selectQuickCategory(cat) {
+        const select = document.getElementById('contactCategory');
+        if (select) {
+          select.value = cat;
+          handleCategoryChange(cat);
+          const formBox = document.querySelector('.contact-form-box');
+          if (formBox) {
+            formBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }
+      }
+
+      function handleCategoryChange(cat) {
+        // Hide all dynamic blocks first
+        document.querySelectorAll('.dynamic-field-block').forEach(b => b.classList.remove('active'));
+
+        // Show matching block
+        const targetBlock = document.getElementById(`block_${cat}`);
+        if (targetBlock) {
+          targetBlock.classList.add('active');
+        }
+      }
+
+      function handleAttachmentUpload(input) {
+        if (input.files && input.files[0]) {
+          const file = input.files[0];
+          const nameEl = document.getElementById('attachmentFileName');
+          const box = document.getElementById('attachmentPreviewBox');
+          if (nameEl) nameEl.textContent = `${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
+          if (box) box.classList.add('active');
+        }
+      }
+
+      function removeAttachment() {
+        const input = document.getElementById('contactFileInput');
+        if (input) input.value = '';
+        const box = document.getElementById('attachmentPreviewBox');
+        if (box) box.classList.remove('active');
+      }
+
+      function handleContactFormSubmit(e) {
+        e.preventDefault();
+        const btn = document.getElementById('contactSubmitBtn');
+        if (btn) {
+          btn.disabled = true;
+          btn.innerHTML = '<span>Sending Message... ⏳</span>';
+        }
+
+        setTimeout(() => {
+          const refNumber = 'DK-SUP-' + Math.floor(10000 + Math.random() * 90000);
+          const refEl = document.getElementById('ticketRefId');
+          if (refEl) refEl.textContent = refNumber;
+
+          const formContainer = document.getElementById('contactFormContainer');
+          const successCard = document.getElementById('contactSuccessCard');
+
+          if (formContainer) formContainer.style.display = 'none';
+          if (successCard) successCard.classList.add('active');
+
+          if (window.DK && window.DK.showToast) {
+            window.DK.showToast(`✓ Ticket ${refNumber} created successfully!`);
+          }
+        }, 600);
+      }
+
+      function copyTicketRef() {
+        const refEl = document.getElementById('ticketRefId');
+        const text = refEl ? refEl.textContent : 'DK-SUP-10482';
+        navigator.clipboard.writeText(text).then(() => {
+          if (window.DK && window.DK.showToast) {
+            window.DK.showToast('✓ Support Reference ID copied!');
+          } else {
+            alert('✓ Reference ID copied: ' + text);
+          }
+        });
+      }
+
+      function resetContactForm() {
+        const formContainer = document.getElementById('contactFormContainer');
+        const successCard = document.getElementById('contactSuccessCard');
+        const form = document.getElementById('mainSupportForm');
+        const btn = document.getElementById('contactSubmitBtn');
+
+        if (form) form.reset();
+        removeAttachment();
+        handleCategoryChange('general');
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = '<span>💬 Message Bhej Do</span>';
+        }
+
+        if (successCard) successCard.classList.remove('active');
+        if (formContainer) formContainer.style.display = 'block';
+      }
+    </script>
+</body>
+</html>
