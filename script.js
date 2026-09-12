@@ -1,3 +1,65 @@
+
+// ═════════════════════════════════════════════════════════════════════
+// ADMIN AUTHENTICATION ENGINE
+// ═════════════════════════════════════════════════════════════════════
+const ADMIN_CREDENTIALS = {
+  username: 'praveen@gareeb.com',
+  password: 'Praveen@ameer.com'
+};
+
+function checkAdminAuth() {
+  if (!window.location.pathname.includes('admin.html')) return true;
+  const isAuth = sessionStorage.getItem('dk_admin_auth') === 'true';
+  const overlay = document.getElementById('adminAuthModalOverlay');
+  if (overlay) {
+    overlay.style.display = isAuth ? 'none' : 'flex';
+  }
+  return isAuth;
+}
+
+window.handleAdminLoginSubmit = function(event) {
+  if (event) event.preventDefault();
+  const userEl = document.getElementById('adminUserInput');
+  const passEl = document.getElementById('adminPassInput');
+  const errEl = document.getElementById('adminLoginError');
+
+  const u = (userEl?.value || '').trim();
+  const p = (passEl?.value || '').trim();
+
+  if (u === ADMIN_CREDENTIALS.username && p === ADMIN_CREDENTIALS.password) {
+    sessionStorage.setItem('dk_admin_auth', 'true');
+    if (errEl) errEl.style.display = 'none';
+    const overlay = document.getElementById('adminAuthModalOverlay');
+    if (overlay) overlay.style.display = 'none';
+    playCoinChime();
+    launchConfetti(0.5, 0.45, 60);
+    showToast('👑 Swagat hai Superadmin Praveen! Moderation Console Unlocked.');
+    if (typeof renderAdminPage === 'function') {
+      renderAdminPage();
+    }
+  } else {
+    if (errEl) {
+      errEl.style.display = 'block';
+      errEl.textContent = '✕ Galat Username ya Password! Kripya sahi credentials dalein.';
+    }
+    showToast('Galat Credentials! Access Denied.', 'error');
+  }
+};
+
+window.toggleAdminPassVisibility = function() {
+  const passEl = document.getElementById('adminPassInput');
+  if (passEl) {
+    passEl.type = passEl.type === 'password' ? 'text' : 'password';
+  }
+};
+
+window.adminLogout = function() {
+  sessionStorage.removeItem('dk_admin_auth');
+  const overlay = document.getElementById('adminAuthModalOverlay');
+  if (overlay) overlay.style.display = 'flex';
+  showToast('Logged out of Admin Console');
+};
+
 /**
  * DIGITAL KATORA — NEO-DESI MOTION & DYNAMIC APPLICATION ENGINE
  * Ultra-Premium Glassmorphism + Authentic Gareeb Ka Katora UI System
@@ -1927,7 +1989,12 @@ function renderKatoraDetailPage() {
   const katoraId = params.get('id');
 
   if (!window.dataStore) return;
-  const katora = katoraId ? window.dataStore.getKatoraById(katoraId) : window.dataStore.getKatoras()[0];
+  let katora = katoraId ? window.dataStore.getKatoraById(katoraId) : window.dataStore.getKatoras()[0];
+  if (!katora && katoraId && window.dataStore.fetchKatoraById) {
+    window.dataStore.fetchKatoraById(katoraId).then(cloudK => {
+      if (cloudK) renderKatoraDetailPage();
+    });
+  }
   
   if (!katora) {
     if (profileHero) {

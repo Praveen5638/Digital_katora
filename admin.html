@@ -18,6 +18,46 @@
     <link rel="stylesheet" href="mobile-responsive.css">
 </head>
 <body>
+
+    <!-- ADMIN AUTH GATEKEEPER MODAL -->
+    <div id="adminAuthModalOverlay" style="position: fixed; inset: 0; background: rgba(10, 10, 20, 0.94); backdrop-filter: blur(14px); z-index: 99999; display: flex; align-items: center; justify-content: center; padding: 1.5rem;">
+        <div style="background: var(--bg-surface); border: 1.5px solid var(--border-glow); border-radius: var(--radius-lg); max-width: 440px; width: 100%; padding: 2.5rem 2rem; box-shadow: 0 25px 70px rgba(0,0,0,0.7); position: relative; text-align: center;">
+            <div style="font-size: 3.2rem; margin-bottom: 0.5rem; animation: floatMascot 3s infinite ease-in-out;">🛡️ 👑</div>
+            <h2 style="font-size: 1.7rem; margin: 0 0 0.35rem; color: var(--text-primary);">
+                Admin <span class="gradient-text">Command Center</span>
+            </h2>
+            <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0 0 1.5rem;">
+                Digital Katora moderation console mein pravesh ke liye credentials darj karein.
+            </p>
+
+            <form id="adminLoginForm" onsubmit="handleAdminLoginSubmit(event)" style="text-align: left; display: flex; flex-direction: column; gap: 1.1rem;">
+                <div>
+                    <label style="font-size: 0.82rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 0.4rem;">ADMIN USERNAME</label>
+                    <input type="email" id="adminUserInput" placeholder="praveen@gareeb.com" required style="width: 100%; height: 48px; padding: 0 1rem; background: var(--bg-elevated); border: 1.5px solid var(--border-subtle); border-radius: var(--radius-md); font-family: var(--font-body); font-size: 0.95rem; color: var(--text-primary); outline: none;">
+                </div>
+                <div>
+                    <label style="font-size: 0.82rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 0.4rem;">ADMIN PASSWORD</label>
+                    <div style="position: relative;">
+                        <input type="password" id="adminPassInput" placeholder="••••••••••••" required style="width: 100%; height: 48px; padding: 0 2.8rem 0 1rem; background: var(--bg-elevated); border: 1.5px solid var(--border-subtle); border-radius: var(--radius-md); font-family: var(--font-body); font-size: 0.95rem; color: var(--text-primary); outline: none;">
+                        <button type="button" onclick="toggleAdminPassVisibility()" style="position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); background: none; border: none; font-size: 1.1rem; cursor: pointer; color: var(--text-muted);" title="Show/Hide Password">👁️</button>
+                    </div>
+                </div>
+
+                <div id="adminLoginError" style="display: none; padding: 0.65rem; background: rgba(255, 107, 107, 0.15); border: 1px solid var(--coral); border-radius: 8px; color: var(--coral-light); font-size: 0.85rem; text-align: center; font-weight: 600;">
+                    ✕ Galat Username ya Password!
+                </div>
+
+                <button type="submit" class="btn btn-primary-gradient btn-lg" style="width: 100%; margin-top: 0.5rem; font-size: 1.05rem; justify-content: center;">
+                    <span>🔐</span> Sign In to Admin Console
+                </button>
+
+                <div style="text-align: center; margin-top: 0.5rem;">
+                    <a href="index.html" style="font-size: 0.85rem; color: var(--text-muted); text-decoration: none;">&larr; Wapas Home Par Jayein</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Ambient Background Blobs -->
     <div class="ambient-canvas">
         <div class="mesh-blob blob-purple"></div>

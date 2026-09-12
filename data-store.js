@@ -218,6 +218,57 @@ class DataStore {
     }
   }
 
+  
+  async fetchKatoraById(id) {
+    if (!id) return null;
+    const local = this.getKatoras().find(k => k.id === id);
+    if (local) return local;
+
+    try {
+      const res = await fetch(`${SUPABASE_CONFIG.url}/rest/v1/katoras?id=eq.${encodeURIComponent(id)}&select=*`, {
+        headers: {
+          'apikey': SUPABASE_CONFIG.key,
+          'Authorization': 'Bearer ' + SUPABASE_CONFIG.key
+        }
+      });
+      if (res.ok) {
+        const list = await res.json();
+        if (list && list.length > 0) {
+          const ck = list[0];
+          const mapped = {
+            id: ck.id,
+            title: ck.title || 'Digital Katora',
+            tagline: ck.tagline || '',
+            creator: ck.creator || 'User',
+            avatar: '🥣',
+            image: ck.image || 'mascot-beggar-3d.jpg',
+            category: ck.category || 'chai',
+            categoryName: ck.category_name || 'Chai & Food',
+            targetAmount: Number(ck.target_amount) || 1000,
+            currentAmount: Number(ck.current_amount) || 0,
+            upiId: ck.upi_id || 'katora@upi',
+            urgent: Boolean(ck.urgent),
+            featured: true,
+            verified: Boolean(ck.verified),
+            status: ck.status || 'active',
+            createdAt: ck.created_at || new Date().toISOString(),
+            story: ck.story || '',
+            customQr: ck.custom_qr || null,
+            socialCheers: [],
+            verifiedDonations: []
+          };
+          const current = this.getKatoras();
+          current.unshift(mapped);
+          localStorage.setItem(this.storageKey, JSON.stringify(current));
+          return mapped;
+        }
+      }
+    } catch (e) {
+      console.warn('Could not fetch katora from cloud:', e);
+    }
+    return null;
+  }
+
   getKatoraById(id) {
     const katoras = this.getKatoras();
     if (!katoras || katoras.length === 0) return null;
@@ -230,7 +281,10 @@ class DataStore {
 
   createKatora(data) {
     const katoras = this.getKatoras();
-    const newId = 'katora-' + Date.now().toString(36) + '-' + Math.random().toString(36).substr(2, 4);
+    const safeCreator = (data.creator || 'gareeb').toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 10) || 'gareeb';
+    const uniqueStamp = Date.now().toString(36);
+    const randomSalt = Math.random().toString(36).substring(2, 6);
+    const newId = `katora-${safeCreator}-${uniqueStamp}-${randomSalt}`;
     
     const categoryNames = {
       'chai': 'Chai & Food',
